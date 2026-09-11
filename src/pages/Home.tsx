@@ -1,5 +1,5 @@
 import { Nav } from "../components/Nav";
-import { AskAssistant } from "../components/AskAssistant";
+// import { AskAssistant } from "../components/AskAssistant";
 import { CookieConsent } from "../components/CookieConsent";
 import { Hero } from "../components/Hero";
 import { LogoMarquee } from "../components/LogoMarquee";
