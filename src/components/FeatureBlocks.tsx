@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useContent } from "../hooks/useContent";
 import { Reveal } from "./Reveal";
 import ringsPattern from "../assets/Group (1).png";
+import multiDeviceAsset from "../assets/multi_device.png";
 
 export function FeatureBlocks() {
   const { t } = useTranslation();
@@ -48,7 +49,7 @@ export function FeatureBlocks() {
                     // initial={{ opacity: 0, y: 16 }}
                     // animate={{ opacity: 1, y: 0 }}
                     // transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                    src="/src/assets/multi_device.png"
+                    src={multiDeviceAsset}
                     alt="Aperçu de l'application TrustSend"
                     className="mx-auto block aspect-[5/4] w-full select-none object-contain"
                   />

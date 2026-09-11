@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useContent } from "../hooks/useContent";
 import type { NavMegaMenu } from "../data/content.fr";
+import cardmaprBg from "../assets/cardmapr-nl-0hs_mYB9KRc-unsplash.jpg";
 
 const BANNER_KEY = "nav-banner-dismissed";
 
@@ -468,7 +469,7 @@ function MegaMenuPanel({
         
         {/* Background Image */}
         <img
-          src="/src/assets/cardmapr-nl-0hs_mYB9KRc-unsplash.jpg"
+          src={cardmaprBg}
           alt=""
           className="
             absolute inset-0

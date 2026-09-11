@@ -6,6 +6,7 @@ import { useContent } from "../hooks/useContent";
 import { Reveal } from "./Reveal";
 import heroAsset from "../assets/hero.png";
 import patternAsset from "../assets/Group.png";
+import bgAsset from "../assets/bg.png";
 
 const SLIDE_COUNT = 2;
 
@@ -156,7 +157,7 @@ export function Hero() {
 
                   <motion.img
                     key={capIndex}
-                    src="/src/assets/bg.png"
+                    src={bgAsset}
                     alt="Aperçu de l'application TrustSend"
                     className="mx-auto block aspect-[5/4] w-full select-none object-contain lg:scale-125 lg:h-[60vh]"
                   />
