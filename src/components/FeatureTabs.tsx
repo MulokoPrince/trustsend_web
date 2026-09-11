@@ -1,0 +1,100 @@
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
+import { useContent } from "../hooks/useContent";
+import { Reveal } from "./Reveal";
+
+export function FeatureTabs() {
+  const { t } = useTranslation();
+  const { featureTabs } = useContent();
+  const [active, setActive] = useState(0);
+  const tab = featureTabs[active];
+
+  return (
+    <section id="solutions" className="py-24 bg-surface">
+      <div className="mx-auto max-w-7xl px-6">
+        <Reveal className="text-center max-w-2xl mx-auto">
+          <h2 className="font-display font-bold text-3xl lg:text-4xl text-ink">
+            {t("featureTabs.title")}
+          </h2>
+          <p className="mt-4 text-muted text-lg">
+            {t("featureTabs.subtitle")}
+          </p>
+        </Reveal>
+
+        <Reveal delay={0.1}>
+          <div className="mt-10 flex flex-wrap justify-center gap-2">
+            {featureTabs.map((t, i) => (
+              <button
+                key={t.id}
+                onClick={() => setActive(i)}
+                className={`relative flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-semibold transition-colors ${
+                  active === i
+                    ? "bg-brand text-white shadow-soft"
+                    : "bg-white text-muted-2 hover:text-ink border border-surface-2"
+                }`}
+              >
+                {t.label}
+                {t.badge && (
+                  <span className="text-[9px] font-bold uppercase bg-accent-light text-accent px-1.5 py-0.5 rounded-full">
+                    {t.badge}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </Reveal>
+
+        <div className="mt-14 grid lg:grid-cols-2 gap-12 items-center ">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={tab.id}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="order-2 lg:order-1"
+            >
+              <div className="h-10 w-10 rounded-xl bg-brand-light flex items-center justify-center mb-4">
+                <img src={tab.icon} alt="" className="h-5 w-5" />
+              </div>
+              <h3 className="font-display font-bold text-2xl lg:text-3xl text-ink">
+                {tab.heading}
+              </h3>
+              <p className="mt-4 text-muted text-lg">{tab.description}</p>
+              <ul className="mt-6 space-y-4">
+                {tab.bullets.map((b) => (
+                  <li key={b.label} className="border-l-2 border-accent-light pl-4">
+                    <p className="font-semibold text-ink">{b.label}</p>
+                    <p className="text-sm text-muted mt-0.5">{b.desc}</p>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </AnimatePresence>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={tab.id + "-mockup"}
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="order-1 lg:order-2"
+            >
+               <motion.img
+                    // key={capIndex}
+                    // initial={{ opacity: 0, y: 16 }}
+                    // animate={{ opacity: 1, y: 0 }}
+                    // transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                    src="/src/assets/virtual_card.png"
+                    alt="Aperçu de l'application TrustSend"
+                    className="mx-auto block aspect-[5/4] w-full select-none object-contain"
+                  />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+    </section>
+  );
+}

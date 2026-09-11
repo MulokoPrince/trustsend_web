@@ -1,0 +1,108 @@
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { useContent } from "../hooks/useContent";
+import { Reveal } from "./Reveal";
+
+export function IndustryGrid() {
+  const { t } = useTranslation();
+  const { industries } = useContent();
+  const [active, setActive] = useState(0);
+  const ind = industries[active];
+
+  return (
+    <section className="py-24">
+      <div className="mx-auto max-w-7xl px-6">
+        <Reveal className="text-center max-w-2xl mx-auto">
+          <h2 className="font-display font-bold text-3xl lg:text-4xl text-ink bg-amber-200/45">
+            {t("industryGrid.title")}
+          </h2>
+          <p className="mt-4 text-muted text-lg">
+            {t("industryGrid.subtitle")}
+          </p>
+        </Reveal>
+
+        <Reveal delay={0.1}>
+          <div className="mt-10 flex flex-wrap justify-center gap-2">
+            {industries.map((i, idx) => (
+              <button
+                key={i.name}
+                onClick={() => setActive(idx)}
+                className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors ${
+                  active === idx
+                    ? "bg-brand text-white shadow-soft"
+                    : "border border-surface-2 bg-white text-muted-2 hover:text-ink"
+                }`}
+              >
+                <img src={i.icon} alt="" className="h-4 w-4" />
+                {i.name}
+              </button>
+            ))}
+          </div>
+        </Reveal>
+
+        <div className="mt-12">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={ind.name}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="relative overflow-hidden rounded bg-white"
+            >
+              {/* ---------- Photo ---------- */}
+              <div className="relative aspect-[4/3] w-full sm:aspect-[2/1] lg:aspect-[21/9]">
+                <img
+                  src={ind.photo}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 hidden bg-gradient-to-r from-ink/60 via-ink/5 to-transparent sm:block" />
+              </div>
+
+              {/* ---------- Contenu : empilé sous la photo en mobile, incrusté dessus à partir de sm ---------- */}
+              <div className="relative p-6 sm:absolute sm:inset-0 sm:flex sm:items-center sm:p-0">
+                <div className="sm:m-8 sm:max-w-md  sm:bg-white sm:p-8 sm:shadow-pop lg:sm:p-9">
+                  <h3 className="font-display text-2xl font-bold leading-tight text-ink lg:text-[1.7rem]">
+                    {ind.headingLead}{" "}
+                    <span className="text-accent">{ind.headingHighlight}</span>
+                  </h3>
+                  <p className="mt-4 text-[15px] leading-relaxed text-muted">
+                    {ind.detail}
+                  </p>
+
+                  <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+                    {ind.logos.map((logo) => (
+                      <span
+                        key={logo}
+                        className="font-display text-sm font-bold text-ink/70"
+                      >
+                        {logo}
+                      </span>
+                    ))}
+                    <span className="text-xs font-semibold text-muted">
+                      {ind.count}
+                    </span>
+                  </div>
+
+                  <a
+                    href="#"
+                    className="group mt-7 inline-flex items-center gap-2 rounded bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+                  >
+                    {t("industryGrid.seeSolutions")}
+                    <ArrowRight
+                      size={16}
+                      className="transition-transform duration-300 group-hover:translate-x-0.5"
+                    />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+    </section>
+  );
+}
