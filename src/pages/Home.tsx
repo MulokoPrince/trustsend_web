@@ -7,6 +7,7 @@ import { PlatformStandards } from "../components/PlatformStandards";
 import { FeatureTabs } from "../components/FeatureTabs";
 import { IndustryGrid } from "../components/IndustryGrid";
 import { FeatureBlocks } from "../components/FeatureBlocks";
+import { AfricaAPIs } from "../components/AfricaAPIs";
 import { DevShowcase } from "../components/DevShowcase";
 import { NoCodeShowcase } from "../components/NoCodeShowcase";
 import { Testimonials } from "../components/Testimonials";
@@ -25,6 +26,7 @@ export function Home() {
         <FeatureTabs />
         <IndustryGrid />
         <FeatureBlocks />
+        <AfricaAPIs />
         <DevShowcase />
         <NoCodeShowcase />
         <Testimonials />

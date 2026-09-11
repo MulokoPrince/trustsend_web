@@ -53,6 +53,57 @@
     "mobileMoneyDesc": "Encaissez et payez directement depuis M-Pesa, Orange Money, MTN MoMo, Airtel Money et bien d'autres, sans compte bancaire.",
     "cta": "Créer un compte business"
   },
+  "africaAPIs": {
+    "eyebrow": "Couverture Panafricaine",
+    "title": "Des APIs de paiement connectées à toute l'Afrique",
+    "subtitle": "Une infrastructure unifiée pour intégrer vos paiements, encaissements et cartes virtuelles à l'échelle du continent.",
+    "description": "Que vous soyez une fintech, une plateforme e-commerce ou une grande entreprise, nos APIs vous permettent d'accéder instantanément à tous les opérateurs de Mobile Money, réseaux bancaires et solutions de paiement locaux partout en Afrique.",
+    "badge": "1 seule intégration continentale",
+    "features": {
+      "coverage": {
+        "title": "Présence dans plus de 20+ pays",
+        "desc": "RDC, Kenya, Côte d'Ivoire, Sénégal, Rwanda, Cameroun, Nigéria, Tanzanie et bien d'autres pays connectés."
+      },
+      "mobileMoney": {
+        "title": "Tous les Mobile Money d'Afrique",
+        "desc": "M-Pesa, Orange Money, Airtel Money, MTN MoMo, Wave et plus avec une seule API normalisée."
+      },
+      "cards": {
+        "title": "Cartes virtuelles & locales",
+        "desc": "Émettez des cartes virtuelles Visa/Mastercard adaptées aux paiements transfrontaliers et locaux."
+      },
+      "reliability": {
+        "title": "Routage intelligent & Haute disponibilité",
+        "desc": "Taux de réussite transactionnel optimisé avec basculement automatique et 99.99% d'uptime."
+      }
+    },
+    "ctaDocs": "Explorer la documentation API",
+    "ctaContact": "Parler à un expert",
+    "stats": {
+      "countries": "20+ Pays",
+      "uptime": "99.99% Uptime",
+      "currencies": "15+ Devises"
+    },
+    "statsLabels": {
+      "countriesSub": "Couverture continentale directe",
+      "uptimeSub": "SLA haute disponibilité",
+      "currenciesSub": "Multi-devises & FX"
+    },
+    "tabs": {
+      "network": "Réseau continental",
+      "api": "Payload API unifié",
+      "operators": "Réseaux de paiement"
+    },
+    "trustBadges": {
+      "pci": "Conforme PCI-DSS Niveau 1",
+      "instant": "Règlement instantané",
+      "failover": "Routage intelligent & Failover"
+    },
+    "codeSnippet": {
+      "copy": "Copier la requête",
+      "copied": "Copié dans le presse-papiers !"
+    }
+  },
   "devShowcase": {
     "eyebrow": "Pour les développeurs",
     "title": "Des outils simples. Des intégrations puissantes.",
@@ -84,7 +135,7 @@
     "cta": "S'inscrire maintenant"
   },
   "footer": {
-    "legal": "TrustSend Technologies Ltd. · Siège social (exemple), Kinshasa, RD Congo · N° Reg. XXXXXXXX",
+    "legal": "TrustSend Technologies Ltd. · Siège social gombe, Kinshasa, RD Congo · N° Reg. 19",
     "rights": "Tous droits réservés.",
     "terms": "Conditions",
     "privacy": "Confidentialité",

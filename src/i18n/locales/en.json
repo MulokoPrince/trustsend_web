@@ -53,6 +53,57 @@
     "mobileMoneyDesc": "Collect and pay out directly from M-Pesa, Orange Money, MTN MoMo, Airtel Money and many more, no bank account needed.",
     "cta": "Create a business account"
   },
+  "africaAPIs": {
+    "eyebrow": "Pan-African Coverage",
+    "title": "Payment APIs connecting all of Africa",
+    "subtitle": "A unified infrastructure to integrate payments, collections, and virtual cards across the entire continent.",
+    "description": "Whether you are a fintech, e-commerce platform, or enterprise, our APIs give you instant access to all Mobile Money operators, banking rails, and local payment methods anywhere in Africa.",
+    "badge": "1 single continental integration",
+    "features": {
+      "coverage": {
+        "title": "Presence in 20+ countries",
+        "desc": "DR Congo, Kenya, Ivory Coast, Senegal, Rwanda, Cameroon, Nigeria, Tanzania, and many more."
+      },
+      "mobileMoney": {
+        "title": "All African Mobile Money",
+        "desc": "M-Pesa, Orange Money, Airtel Money, MTN MoMo, Wave and more via a single normalized API."
+      },
+      "cards": {
+        "title": "Virtual & local cards",
+        "desc": "Issue virtual Visa and Mastercard tailored for cross-border and local pan-African transactions."
+      },
+      "reliability": {
+        "title": "Smart routing & High availability",
+        "desc": "Optimized transaction success rates with automatic failover and 99.99% uptime."
+      }
+    },
+    "ctaDocs": "Explore API Documentation",
+    "ctaContact": "Talk to an expert",
+    "stats": {
+      "countries": "20+ Countries",
+      "uptime": "99.99% Uptime",
+      "currencies": "15+ Currencies"
+    },
+    "statsLabels": {
+      "countriesSub": "Direct continental rails",
+      "uptimeSub": "High availability SLA",
+      "currenciesSub": "Multi-currency & FX"
+    },
+    "tabs": {
+      "network": "Network Coverage",
+      "api": "Unified API Payload",
+      "operators": "Payment Rails"
+    },
+    "trustBadges": {
+      "pci": "PCI-DSS Level 1",
+      "instant": "Instant Settlement",
+      "failover": "Smart Failover Routing"
+    },
+    "codeSnippet": {
+      "copy": "Copy payload",
+      "copied": "Copied to clipboard!"
+    }
+  },
   "devShowcase": {
     "eyebrow": "For developers",
     "title": "Simple tools. Powerful integrations.",
@@ -84,7 +135,7 @@
     "cta": "Sign up now"
   },
   "footer": {
-    "legal": "TrustSend Technologies Ltd. · Registered office (example), Kinshasa, DR Congo · Reg. No. XXXXXXXX",
+    "legal": "TrustSend Technologies Ltd. · Registered office , Kinshasa, DR Congo · Reg. No. 19",
     "rights": "All rights reserved.",
     "terms": "Terms",
     "privacy": "Privacy",
