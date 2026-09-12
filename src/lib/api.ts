@@ -17,8 +17,11 @@ function getCsrfToken(): string | null {
 
 const MUTATING_METHODS = new Set(["post", "put", "patch", "delete"]);
 
+// URL de l'API de production, utilisee si VITE_API_BASE_URL n'est pas defini au build
+const DEFAULT_API_BASE_URL = "https://api.trustsend.africa/api/v1";
+
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL,
   timeout: 15000,
   // The access token lives in an httpOnly cookie the backend sets on login — this app never
   // sees or stores it. `withCredentials` makes the browser attach that cookie (and send/receive
