@@ -15,10 +15,22 @@ export function storeSession(result: LoginResult): void {
   );
 }
 
-// Vide tout le stockage local à la déconnexion (pas seulement les clés de
-// session) : sur un poste partagé, rien ne doit rester après logout.
+// Vide tout le stockage du navigateur à la déconnexion (pas seulement les clés de session) :
+// sur un poste partagé, rien ne doit rester après logout. Les accès sont protégés car
+// localStorage/sessionStorage lèvent une exception en navigation privée ou quand les données
+// de site sont bloquées — un échec de nettoyage ne doit pas casser la déconnexion.
 export function clearSession(): void {
-  localStorage.clear();
+  try {
+    localStorage.clear();
+  } catch {
+    /* stockage indisponible */
+  }
+
+  try {
+    sessionStorage.clear();
+  } catch {
+    /* stockage indisponible */
+  }
 }
 
 export function getStoredBusiness(): Business | null {
