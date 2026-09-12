@@ -1,6 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { Pricing } from "./pages/Pricing";
+import { Agents } from "./pages/Agents";
+import { InternationalTransfer } from "./pages/InternationalTransfer";
+import { VirtualCards } from "./pages/VirtualCards";
+import { Crypto } from "./pages/Crypto";
+import { Merchant } from "./pages/Merchant";
 import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
 import { RequireAuth } from "./components/RequireAuth";
@@ -25,6 +30,11 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/pricing" element={<Pricing />} />
+      <Route path="/agents" element={<Agents />} />
+      <Route path="/transferts-internationaux" element={<InternationalTransfer />} />
+      <Route path="/cartes-virtuelles" element={<VirtualCards />} />
+      <Route path="/cryptomonnaies" element={<Crypto />} />
+      <Route path="/paiement-marchand" element={<Merchant />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route

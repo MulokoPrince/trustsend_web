@@ -10,18 +10,18 @@ export function AfricaAPIs() {
     <section
       id="africa-apis"
       aria-label={t("africaAPIs.title")}
-      className="bg-white py-20 sm:py-24"
+      className="bg-white py-14 sm:py-20 lg:py-24"
     >
       <div className="mx-auto max-w-7xl px-6">
-        <div className="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+        <div className="grid items-center gap-10 sm:gap-14 lg:grid-cols-2 lg:gap-20">
           {/* Content */}
           <div className="max-w-xl">
             <Reveal>
-              <h2 className="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl lg:text-5xl">
+              <h2 className="font-display text-2xl font-bold tracking-tight text-ink sm:text-4xl lg:text-5xl">
                 {t("africaAPIs.title")}
               </h2>
 
-              <p className="mt-5 max-w-lg text-base leading-7 text-muted sm:text-lg">
+              <p className="mt-5 max-w-lg text-[15px] leading-7 text-muted sm:text-lg">
                 {t("africaAPIs.subtitle")}
               </p>
 

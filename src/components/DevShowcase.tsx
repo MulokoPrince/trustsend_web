@@ -13,16 +13,16 @@ export function DevShowcase() {
   const [lang, setLang] = useState(languages[0]);
 
   return (
-    <section id="developers" className="bg-brand py-20 text-white">
+    <section id="developers" className="bg-brand py-14 text-white sm:py-20">
       <div className="mx-auto max-w-6xl px-6">
 
         {/* Header */}
-        <Reveal className="mx-auto mb-12 max-w-2xl text-center">
+        <Reveal className="mx-auto mb-10 max-w-2xl text-center sm:mb-12">
           <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-accent-light">
             {t("devShowcase.eyebrow")}
           </p>
 
-          <h2 className="font-display text-3xl font-bold tracking-tight lg:text-4xl">
+          <h2 className="font-display text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
             {t("devShowcase.title")}
           </h2>
 
@@ -102,7 +102,7 @@ export function DevShowcase() {
               </div>
 
               {/* Code */}
-              <div className="min-h-[280px] overflow-x-auto p-5">
+              <div className="min-h-[220px] overflow-x-auto p-4 sm:min-h-[280px] sm:p-5">
                 <AnimatePresence mode="wait">
                   <motion.pre
                     key={lang}
@@ -110,7 +110,7 @@ export function DevShowcase() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -5 }}
                     transition={{ duration: 0.2 }}
-                    className="text-sm leading-7 text-white/75"
+                    className="text-xs leading-6 text-white/75 sm:text-sm sm:leading-7"
                     style={{ fontFamily: "var(--font-mono)" }}
                   >
                     {codeSamples[lang]}

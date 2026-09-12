@@ -9,21 +9,21 @@ export function FeatureBlocks() {
   const { innovationBlocks, mobileMoneyProviders } = useContent();
 
   return (
-    <section className="bg-surface-2 py-20 sm:py-24">
+    <section className="bg-surface-2 py-14 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-7xl px-6">
         {/* Header */}
-        <Reveal className="mx-auto mb-16 max-w-2xl text-center">
+        <Reveal className="mx-auto mb-10 max-w-2xl text-center sm:mb-16">
           <span className="text-sm font-semibold uppercase tracking-wider text-brand">
             {t("featureBlocks.eyebrow")}
           </span>
 
-          <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          <h2 className="mt-3 font-display text-2xl font-bold tracking-tight text-ink sm:text-4xl">
             {t("featureBlocks.title")}
           </h2>
         </Reveal>
 
         {/* Features */}
-        <div className="space-y-20 lg:space-y-28">
+        <div className="space-y-14 sm:space-y-20 lg:space-y-28">
           {innovationBlocks.map((block, i) => (
             <div
               key={block.name}
@@ -34,7 +34,7 @@ export function FeatureBlocks() {
               {/* Text */}
               <Reveal>
                 <div className="max-w-xl">
-                  <h3 className="font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+                  <h3 className="font-display text-xl font-bold tracking-tight text-ink sm:text-3xl">
                     {block.name}
                   </h3>
 

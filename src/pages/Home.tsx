@@ -14,6 +14,7 @@ import { Testimonials } from "../components/Testimonials";
 import { FAQ } from "../components/FAQ";
 import { CTABanner } from "../components/CTABanner";
 import { Footer } from "../components/Footer";
+import { WhatsAppButton } from "../components/WhatsAppButton";
 
 export function Home() {
   return (
@@ -35,6 +36,7 @@ export function Home() {
       </main>
       <Footer />
       {/* <AskAssistant /> */}
+      <WhatsAppButton />
       <CookieConsent />
     </div>
   );

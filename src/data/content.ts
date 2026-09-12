@@ -412,7 +412,7 @@ export const industries: {
     count: "+ 12 000 commerçants",
     icon: "/assets/icons/products/paymentpages.svg",
     photo:
-      "https://framerusercontent.com/images/0TEFuXH3g6z7mdznP6jJWQlQ7A.webp?width=1183&height=571",
+      "/assets/images/dev-showcase.webp",
     logos: ["Nova", "Loopay", "Bluewave"],
   },
   {
@@ -425,7 +425,7 @@ export const industries: {
     count: "+ 300 établissements",
     icon: "/assets/icons/products/invoices.svg",
     photo:
-      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1400&auto=format&fit=crop",
+      "/assets/images/team-laptop.jpg",
     logos: ["Orbit", "Vantik", "Northstar"],
   },
   {
@@ -438,7 +438,7 @@ export const industries: {
     count: "+ 2 800 familles connectées",
     icon: "/assets/icons/products/capital.svg",
     photo:
-      "https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1400&auto=format&fit=crop",
+      "/assets/images/team-handshake.jpg",
     logos: ["Fintra", "Corelink", "Meridian"],
   },
   {
@@ -451,7 +451,7 @@ export const industries: {
     count: "+ 5 000 agents actifs",
     icon: "/assets/icons/products/route.svg",
     photo:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1400&auto=format&fit=crop",
+      "/assets/images/developer-desk.jpg",
     logos: ["Zenpay", "Cobalt", "Driftly"],
   },
   {
@@ -464,7 +464,7 @@ export const industries: {
     count: "+ 45 000 membres",
     icon: "/assets/icons/products/x-club.svg",
     photo:
-      "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=1400&auto=format&fit=crop",
+      "/assets/images/team-meeting.webp",
     logos: ["Lumen", "Parallel", "Corelink"],
   },
 ];

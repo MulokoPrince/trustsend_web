@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, ChevronLeft, ChevronRight, User } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useContent } from "../hooks/useContent";
 import { Reveal } from "./Reveal";
 import heroAsset from "../assets/hero.png";
 import patternAsset from "../assets/Group.png";
 import bgAsset from "../assets/bg.png";
+import bgAsset2 from "../assets/bg_2.png";
 
 const SLIDE_COUNT = 2;
+const SLIDE_INTERVAL = 8000;
 
 export function Hero() {
   const { t } = useTranslation();
@@ -16,6 +18,7 @@ export function Hero() {
     useContent();
   const [slide, setSlide] = useState(0);
   const [capIndex, setCapIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -25,6 +28,17 @@ export function Hero() {
     return () => clearInterval(t);
   }, []);
 
+  // Défilement automatique des slides, relancé à chaque navigation manuelle
+  useEffect(() => {
+    if (paused) return;
+
+    const t = setInterval(() => {
+      setSlide((s) => (s + 1) % SLIDE_COUNT);
+    }, SLIDE_INTERVAL);
+
+    return () => clearInterval(t);
+  }, [slide, paused]);
+
   const prevSlide = () =>
     setSlide((s) => (s - 1 + SLIDE_COUNT) % SLIDE_COUNT);
 
@@ -32,7 +46,13 @@ export function Hero() {
     setSlide((s) => (s + 1) % SLIDE_COUNT);
 
   return (
-    <section className="relative overflow-hidden pt-30 pb-16">
+    <section
+      className="relative overflow-hidden pt-24 pb-12 sm:pt-28 sm:pb-14 lg:pt-30 lg:pb-16"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={() => setPaused(false)}
+    >
       {/* Navigation gauche */}
       <button
         onClick={prevSlide}
@@ -51,7 +71,7 @@ export function Hero() {
         <ChevronRight size={18} />
       </button>
 
-      <div className="relative mx-auto max-w-7xl px-10 bg-[#020D30]">
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-10 bg-[#020D30]">
         {/* Illustration décorative */}
         <motion.img
           src={heroAsset}
@@ -159,11 +179,11 @@ export function Hero() {
                     key={capIndex}
                     src={bgAsset}
                     alt="Aperçu de l'application TrustSend"
-                    className="mx-auto block aspect-[5/4] w-full select-none object-contain lg:scale-125 lg:h-[60vh]"
+                    className="mx-auto hidden lg:block aspect-[5/4] w-full select-none object-contain lg:scale-125 lg:h-[60vh]"
                   />
 
                   {/* Indicateurs */}
-                  <div className="mt-8 flex justify-center gap-2">
+                  <div className="mt-6 flex justify-center gap-2 sm:mt-8">
                     {heroCapabilities.map((s, i) => (
                       <button
                         key={s.label}
@@ -234,76 +254,18 @@ export function Hero() {
 
               {/* Visuel spotlight */}
               <Reveal delay={0.15}>
-                <div className="relative mx-auto w-full max-w-[340px]">
+                <div className="relative mx-auto w-full max-w-[460px]">
+                  {/* Halo décoratif */}
                   <div
                     aria-hidden
-                    className="absolute -right-6 -top-10 h-64 w-64 bg-brand"
-                    style={{
-                      clipPath:
-                        "polygon(60% 0%, 100% 40%, 55% 100%, 20% 60%)",
-                    }}
+                    className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[85%] w-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-light opacity-70 blur-3xl"
                   />
 
-                  <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden rounded-[32px] border border-surface-2 bg-gradient-to-br from-brand-light to-white">
-                    <User
-                      size={96}
-                      className="text-brand/25"
-                      strokeWidth={1.2}
-                    />
-                  </div>
-
-                  {/* Application */}
-                  <div className="absolute top-6 right-0 w-40 rounded-2xl bg-accent-light p-3 shadow-pop">
-                    <p className="text-xs font-bold text-ink">
-                      {heroSpotlight.appName}
-                    </p>
-
-                    <p className="text-[10px] text-ink/60">
-                      {t("hero.poweredBy")}
-                    </p>
-                  </div>
-
-                  {/* Paiement */}
-                  <div className="absolute bottom-16 -right-6 w-44 rounded-2xl bg-white p-3 shadow-pop">
-                    <div className="flex items-center justify-between">
-                      <p className="text-[11px] text-muted">
-                        {heroSpotlight.productLabel}
-                      </p>
-
-                      <p className="text-xs font-bold text-ink">
-                        {heroSpotlight.price}
-                      </p>
-                    </div>
-
-                    <p className="mt-2 text-[10px] font-semibold text-muted">
-                      Select payment method
-                    </p>
-
-                    <div className="mt-1.5 grid grid-cols-2 gap-1.5">
-                      {["Card", "UPI ID", "Netbanking", "EMI"].map((m) => (
-                        <span
-                          key={m}
-                          className="rounded-md bg-surface px-1.5 py-1 text-center text-[9px] text-ink/70"
-                        >
-                          {m}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Signature */}
-                  <p
-                    className="absolute -bottom-2 left-2 text-3xl text-brand"
-                    style={{
-                      fontFamily: "var(--font-signature)",
-                    }}
-                  >
-                    {heroSpotlight.signature}
-                  </p>
-
-                  <p className="absolute bottom-0 left-2 translate-y-6 text-[10px] font-semibold uppercase tracking-wide text-white/60">
-                    {heroSpotlight.attribution}
-                  </p>
+                  <img
+                    src={bgAsset2}
+                    alt="TrustSend : paiements, cartes et mobile money en Afrique"
+                    className="mx-auto hidden lg:block  aspect-[5/4] w-full select-none object-contain lg:scale-125 lg:h-[60vh]"
+                  />
                 </div>
               </Reveal>
             </motion.div>
@@ -313,7 +275,7 @@ export function Hero() {
               RECOMMENDATIONS
           ========================================================= */}
           <Reveal delay={0.25}>
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-3 rounded border border-surface-2 bg-white px-5 py-4 lg:-mb-20">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-3 rounded border border-surface-2 bg-white px-4 py-3.5 sm:px-5 sm:py-4 lg:-mb-20">
               <span className="flex shrink-0 items-center gap-2 text-sm font-semibold text-ink bg-accent/30 p-2 rounded-full">
                 {t("hero.whatToDo")}
               </span>

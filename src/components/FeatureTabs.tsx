@@ -12,24 +12,24 @@ export function FeatureTabs() {
   const tab = featureTabs[active];
 
   return (
-    <section id="solutions" className="py-24 bg-surface">
+    <section id="solutions" className="py-16 sm:py-20 lg:py-24 bg-surface">
       <div className="mx-auto max-w-7xl px-6">
         <Reveal className="text-center max-w-2xl mx-auto">
-          <h2 className="font-display font-bold text-3xl lg:text-4xl text-ink">
+          <h2 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-ink">
             {t("featureTabs.title")}
           </h2>
-          <p className="mt-4 text-muted text-lg">
+          <p className="mt-4 text-muted text-base sm:text-lg">
             {t("featureTabs.subtitle")}
           </p>
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className="mt-10 flex flex-wrap justify-center gap-2">
+          <div className="mt-8 -mx-5 flex snap-x gap-2 overflow-x-auto px-5 pb-1 sm:mx-0 sm:mt-10 sm:flex-wrap sm:justify-center sm:overflow-visible sm:px-0">
             {featureTabs.map((t, i) => (
               <button
                 key={t.id}
                 onClick={() => setActive(i)}
-                className={`relative flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-semibold transition-colors ${
+                className={`relative flex shrink-0 snap-start items-center gap-1.5 px-4 py-2.5 sm:px-5 rounded-full text-sm font-semibold transition-colors ${
                   active === i
                     ? "bg-brand text-white shadow-soft"
                     : "bg-white text-muted-2 hover:text-ink border border-surface-2"
@@ -46,7 +46,7 @@ export function FeatureTabs() {
           </div>
         </Reveal>
 
-        <div className="mt-14 grid lg:grid-cols-2 gap-12 items-center ">
+        <div className="mt-10 sm:mt-14 grid lg:grid-cols-2 gap-10 sm:gap-12 items-center ">
           <AnimatePresence mode="wait">
             <motion.div
               key={tab.id}
@@ -59,10 +59,10 @@ export function FeatureTabs() {
               <div className="h-10 w-10 rounded-xl bg-brand-light flex items-center justify-center mb-4">
                 <img src={tab.icon} alt="" className="h-5 w-5" />
               </div>
-              <h3 className="font-display font-bold text-2xl lg:text-3xl text-ink">
+              <h3 className="font-display font-bold text-xl sm:text-2xl lg:text-3xl text-ink">
                 {tab.heading}
               </h3>
-              <p className="mt-4 text-muted text-lg">{tab.description}</p>
+              <p className="mt-4 text-muted text-base sm:text-lg">{tab.description}</p>
               <ul className="mt-6 space-y-4">
                 {tab.bullets.map((b) => (
                   <li key={b.label} className="border-l-2 border-accent-light pl-4">

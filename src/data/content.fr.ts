@@ -7,9 +7,10 @@ export type MockupVariant =
 
 export const navLinks = [
   { label: "Paiements", href: "#paiements" },
-  { label: "Transferts", href: "#transferts" },
-  { label: "Épargne & Jeux", href: "#epargne" },
+  { label: "Transferts", href: "/transferts-internationaux" },
+  // { label: "Épargne & Jeux", href: "#epargne" },
   { label: "Partenaires", href: "#partenaires" },
+  { label: "Agents", href: "/agents" },
   { label: "Tarifs", href: "/pricing" },
 
 ];
@@ -49,16 +50,19 @@ export const navMegaMenus: Record<string, NavMegaMenu> = {
         items: [
           {
             label: "Cartes Virtuelles",
+            href: "/cartes-virtuelles",
             desc: "Émettez des cartes Visa/Mastercard virtuelles pour vos paiements en ligne, en quelques secondes.",
             icon: "/assets/icons/products/capital.svg",
           },
           {
             label: "Cryptomonnaies",
+            href: "/cryptomonnaies",
             desc: "Achetez, conservez et dépensez vos cryptos directement depuis votre wallet TrustSend.",
             icon: "/assets/icons/products/x.svg",
           },
           {
             label: "Paiement Marchand",
+            href: "/paiement-marchand",
             desc: "Encaissez vos ventes en boutique avec un QR code ou un lien de paiement partageable.",
             icon: "/assets/icons/products/paymentpages.svg",
           },
@@ -106,6 +110,7 @@ export const navMegaMenus: Record<string, NavMegaMenu> = {
           },
           {
             label: "Transfert International",
+            href: "/transferts-internationaux",
             desc: "Recevez et envoyez de l'argent depuis l'étranger, aussi simplement qu'avec Wave.",
             icon: "/assets/icons/products/capital.svg",
           },
@@ -121,6 +126,7 @@ export const navMegaMenus: Record<string, NavMegaMenu> = {
         items: [
           {
             label: "Dépôt via Agent",
+            href: "/agents",
             desc: "Déposez du cash chez un agent TrustSend proche de vous.",
             icon: "/assets/icons/products/smartcollect.svg",
           },
@@ -131,6 +137,7 @@ export const navMegaMenus: Record<string, NavMegaMenu> = {
           },
           {
             label: "Retrait Agent & Mobile Money",
+            href: "/agents",
             desc: "Retirez votre argent en cash chez un agent ou via Mobile Money.",
             icon: "/assets/icons/products/route.svg",
           },
@@ -205,6 +212,7 @@ export const navMegaMenus: Record<string, NavMegaMenu> = {
         items: [
           {
             label: "Devenir Agent",
+            href: "/agents",
             desc: "Rejoignez le réseau d'agents TrustSend et gagnez une commission sur chaque dépôt et retrait.",
             icon: "/assets/icons/products/route.svg",
           },
@@ -414,7 +422,7 @@ export const industries: {
     count: "+ 12 000 commerçants",
     icon: "/assets/icons/products/paymentpages.svg",
     photo:
-      "https://framerusercontent.com/images/0TEFuXH3g6z7mdznP6jJWQlQ7A.webp?width=1183&height=571",
+      "/assets/images/dev-showcase.webp",
     logos: ["Nova", "Loopay", "Bluewave"],
   },
   {
@@ -427,7 +435,7 @@ export const industries: {
     count: "+ 300 établissements",
     icon: "/assets/icons/products/invoices.svg",
     photo:
-      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1400&auto=format&fit=crop",
+      "/assets/images/team-laptop.jpg",
     logos: ["Orbit", "Vantik", "Northstar"],
   },
   {
@@ -440,7 +448,7 @@ export const industries: {
     count: "+ 2 800 familles connectées",
     icon: "/assets/icons/products/capital.svg",
     photo:
-      "https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1400&auto=format&fit=crop",
+      "/assets/images/team-handshake.jpg",
     logos: ["Fintra", "Corelink", "Meridian"],
   },
   {
@@ -453,7 +461,7 @@ export const industries: {
     count: "+ 5 000 agents actifs",
     icon: "/assets/icons/products/route.svg",
     photo:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1400&auto=format&fit=crop",
+      "/assets/images/developer-desk.jpg",
     logos: ["Zenpay", "Cobalt", "Driftly"],
   },
   {
@@ -466,7 +474,7 @@ export const industries: {
     count: "+ 45 000 membres",
     icon: "/assets/icons/products/x-club.svg",
     photo:
-      "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=1400&auto=format&fit=crop",
+      "/assets/images/team-meeting.webp",
     logos: ["Lumen", "Parallel", "Corelink"],
   },
 ];
@@ -553,11 +561,27 @@ const payment = await TrustSend.payments.create({
 });`,
 };
 
-export const noCodeExamples = [
-  { title: "Lien de frais scolaires", subtitle: "Collectez les frais de scolarité en un lien, sans site web" },
-  { title: "Page boutique", subtitle: "Vendez vos produits avec une page de paiement personnalisée" },
-  { title: "Lien de cotisation Likelemba", subtitle: "Faites cotiser votre groupe d'épargne en un clic" },
-  { title: "Page d'abonnement", subtitle: "Vendez des abonnements récurrents sans code" },
+export const noCodeExamples: { icon: string; title: string; subtitle: string }[] = [
+  {
+    icon: "QrCode",
+    title: "QR code marchand",
+    subtitle: "Encaissez en boutique : le client scanne, vous êtes payé instantanément",
+  },
+  {
+    icon: "Send",
+    title: "Transfert Mobile Money",
+    subtitle: "Envoyez vers M-Pesa, Orange Money, Airtel ou MTN à seulement 1%",
+  },
+  {
+    icon: "Receipt",
+    title: "Factures & frais scolaires",
+    subtitle: "Eau, électricité, TV, scolarité : payez ou collectez sans frais",
+  },
+  {
+    icon: "Users",
+    title: "Likelemba & épargne de groupe",
+    subtitle: "Créez votre groupe, cotisez et suivez chaque tour en toute transparence",
+  },
 ];
 
 // Témoignages fictifs illustrant l'usage des produits TrustSend (cartes,
@@ -775,3 +799,814 @@ export const footerColumns: { title: string; links: { label: string; badge?: str
     links: [{ label: "Support" }, { label: "Centre d'aide" }],
   },
 ];
+
+// ---------------------------------------------------------------------------
+// Page Agents — réseau de dépôt / retrait cash TrustSend
+// ---------------------------------------------------------------------------
+export const agentsPage = {
+  hero: {
+    eyebrow: "Réseau d'agents TrustSend",
+    title: "Transformez votre boutique en",
+    titleAccent: "point cash TrustSend",
+    subtitle:
+      "Traitez les dépôts et retraits de vos clients, encaissez une commission sur chaque opération et attirez du monde dans votre point de vente, chaque jour.",
+    ctaPrimary: "Devenir agent",
+    ctaSecondary: "Parler à un conseiller",
+    stats: [
+      { value: "+ 5 000", label: "agents actifs" },
+      { value: "24 h", label: "pour être validé" },
+      { value: "0 $", label: "de frais d'adhésion" },
+    ],
+  },
+  benefits: {
+    title: "Pourquoi devenir agent",
+    subtitle:
+      "Un revenu complémentaire, sans investissement de départ et sans changer votre façon de travailler.",
+    items: [
+      {
+        icon: "Coins",
+        title: "Commission sur chaque opération",
+        desc: "Dépôt, retrait, transfert : votre commission est calculée et créditée automatiquement.",
+      },
+      {
+        icon: "Users",
+        title: "Plus de passage en boutique",
+        desc: "Les clients qui viennent déposer ou retirer achètent aussi vos produits.",
+      },
+      {
+        icon: "Wallet",
+        title: "Float toujours disponible",
+        desc: "Rechargez votre float par Mobile Money ou virement, à toute heure, depuis l'application.",
+      },
+      {
+        icon: "ShieldCheck",
+        title: "Opérations sécurisées",
+        desc: "Chaque transaction est confirmée par code et tracée dans votre historique.",
+      },
+      {
+        icon: "MapPin",
+        title: "Visible sur la carte",
+        desc: "Votre point de vente apparaît dans l'application pour tous les clients du quartier.",
+      },
+      {
+        icon: "Headphones",
+        title: "Support agent dédié",
+        desc: "Une ligne WhatsApp réservée aux agents, pour débloquer une opération en quelques minutes.",
+      },
+    ],
+  },
+  steps: {
+    eyebrow: "Comment ça marche",
+    title: "Agent en 4 étapes",
+    subtitle: "Aucun matériel spécifique : un téléphone et votre pièce d'identité suffisent.",
+    items: [
+      {
+        title: "Créez votre compte",
+        desc: "Inscrivez-vous en quelques minutes avec votre numéro de téléphone.",
+      },
+      {
+        title: "Validez votre identité",
+        desc: "Envoyez votre pièce d'identité et les informations de votre point de vente (KYC).",
+      },
+      {
+        title: "Chargez votre float",
+        desc: "Alimentez votre solde agent par Mobile Money, virement ou dépôt cash.",
+      },
+      {
+        title: "Servez vos clients",
+        desc: "Dépôts, retraits et transferts : la commission tombe à chaque opération validée.",
+      },
+    ],
+  },
+  earnings: {
+    eyebrow: "Vos revenus",
+    title: "Une commission claire, connue à l'avance",
+    desc: "Vous voyez le montant gagné avant de valider l'opération, et le cumul du jour dans votre tableau de bord agent.",
+    rows: [
+      { label: "Dépôt cash client", value: "0,8 %" },
+      { label: "Retrait cash client", value: "1,0 %" },
+      { label: "Retrait Mobile Money", value: "0,5 %" },
+      { label: "Ouverture de compte", value: "1 $ / compte" },
+    ],
+    note: "Les taux affichés sont indicatifs et peuvent varier selon le pays et le volume mensuel.",
+    providersLabel: "Rechargez votre float via",
+  },
+  testimonial: {
+    quote:
+      "En tant qu'agent TrustSend, je fais des dépôts et des retraits toute la journée. La commission tombe automatiquement, sans calcul à la main.",
+    name: "J. Mwamba",
+    role: "Agent TrustSend, Kinshasa",
+  },
+  faq: {
+    title: "Questions des agents",
+    items: [
+      {
+        q: "Qui peut devenir agent TrustSend ?",
+        a: "Toute personne majeure disposant d'un point de vente ou d'une activité commerciale régulière, avec une pièce d'identité valide.",
+      },
+      {
+        q: "Faut-il un capital de départ ?",
+        a: "L'adhésion est gratuite. Vous avez seulement besoin d'un float, c'est-à-dire du cash et d'un solde TrustSend pour servir vos clients.",
+      },
+      {
+        q: "Quand est versée la commission ?",
+        a: "Elle est créditée sur votre solde agent dès que l'opération est confirmée par le client. Vous pouvez la retirer à tout moment.",
+      },
+      {
+        q: "Que faire en cas d'opération bloquée ?",
+        a: "Contactez le support agent par WhatsApp depuis l'application : la ligne est réservée aux agents et répond en quelques minutes.",
+      },
+    ],
+  },
+  cta: {
+    title: "Prêt à ouvrir votre point cash ?",
+    desc: "Inscrivez-vous aujourd'hui, envoyez vos documents et commencez à servir vos clients dès validation.",
+    primary: "Devenir agent",
+    secondary: "Nous écrire sur WhatsApp",
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Page Transferts internationaux
+// ---------------------------------------------------------------------------
+export const transfersPage = {
+  hero: {
+    eyebrow: "Transferts internationaux",
+    title: "Envoyez de l'argent chez vous,",
+    titleAccent: "en quelques minutes",
+    subtitle:
+      "Vers un Mobile Money, un compte bancaire ou du cash chez un agent, avec un taux clair et des frais annoncés avant l'envoi.",
+    ctaPrimary: "Envoyer de l'argent",
+    ctaSecondary: "Voir les frais",
+    stats: [
+      { value: "20+", label: "pays couverts" },
+      { value: "1 %", label: "de frais à partir de" },
+      { value: "< 5 min", label: "temps de réception moyen" },
+    ],
+  },
+  simulator: {
+    eyebrow: "Simulateur",
+    title: "Combien reçoit votre famille ?",
+    desc: "Estimez en direct le montant reçu. Le taux exact est confirmé avant la validation de l'envoi.",
+    youSend: "Vous envoyez",
+    theyGet: "Votre bénéficiaire reçoit",
+    feeLabel: "Frais TrustSend",
+    rateLabel: "Taux appliqué",
+    deliveryLabel: "Réception estimée",
+    delivery: "moins de 5 minutes",
+    note: "Estimation indicative : le taux et les frais définitifs s'affichent avant confirmation.",
+    cta: "Envoyer maintenant",
+  },
+  channels: {
+    title: "Votre bénéficiaire choisit comment recevoir",
+    subtitle:
+      "Un seul envoi, plusieurs façons de récupérer l'argent, selon ce qui est le plus pratique sur place.",
+    items: [
+      {
+        icon: "Smartphone",
+        title: "Mobile Money",
+        desc: "M-Pesa, Orange Money, MTN MoMo, Airtel Money : l'argent arrive directement sur le numéro.",
+      },
+      {
+        icon: "Wallet",
+        title: "Portefeuille TrustSend",
+        desc: "Réception instantanée dans le wallet, prête à être dépensée ou épargnée.",
+      },
+      {
+        icon: "Landmark",
+        title: "Compte bancaire",
+        desc: "Virement vers les principales banques locales, sans déplacement.",
+      },
+      {
+        icon: "Store",
+        title: "Cash chez un agent",
+        desc: "Retrait en espèces chez l'un des agents TrustSend du quartier.",
+      },
+      {
+        icon: "CreditCard",
+        title: "Carte virtuelle",
+        desc: "Alimentez une carte Visa/Mastercard virtuelle pour les achats en ligne.",
+      },
+      {
+        icon: "Bitcoin",
+        title: "Cryptomonnaies",
+        desc: "Convertissez et recevez en stablecoins depuis votre wallet TrustSend.",
+      },
+    ],
+  },
+  steps: {
+    eyebrow: "Comment ça marche",
+    title: "Trois étapes, c'est tout",
+    items: [
+      {
+        title: "Indiquez le montant",
+        desc: "Choisissez la devise d'envoi et le pays d'arrivée : le montant reçu s'affiche immédiatement.",
+      },
+      {
+        title: "Ajoutez le bénéficiaire",
+        desc: "Numéro Mobile Money, compte bancaire ou identifiant TrustSend : une seule fois, puis enregistré.",
+      },
+      {
+        title: "Payez et suivez",
+        desc: "Réglez par carte, virement ou solde TrustSend et suivez l'envoi jusqu'à la réception.",
+      },
+    ],
+  },
+  corridors: {
+    eyebrow: "Corridors",
+    title: "Les routes les plus utilisées",
+    subtitle: "Des corridors optimisés pour la diaspora, avec un taux clair et une réception rapide.",
+    items: [
+      { from: "France", to: "RD Congo", delay: "< 5 min", fee: "dès 1 %" },
+      { from: "Belgique", to: "Rwanda", delay: "< 5 min", fee: "dès 1 %" },
+      { from: "Canada", to: "Cameroun", delay: "< 10 min", fee: "dès 1,2 %" },
+      { from: "États-Unis", to: "Kenya", delay: "< 10 min", fee: "dès 1,2 %" },
+      { from: "Afrique du Sud", to: "Zimbabwe", delay: "< 5 min", fee: "dès 1 %" },
+      { from: "Émirats arabes unis", to: "Nigeria", delay: "< 15 min", fee: "dès 1,5 %" },
+    ],
+    providersLabel: "Réception Mobile Money chez",
+  },
+  trust: {
+    eyebrow: "Sécurité & conformité",
+    title: "Chaque envoi est protégé de bout en bout",
+    desc: "Vos transferts sont chiffrés, suivis et soumis aux contrôles anti-fraude, du paiement jusqu'à la réception.",
+    items: [
+      { icon: "ShieldCheck", title: "Chiffrement de bout en bout", desc: "Données et opérations protégées aux standards internationaux." },
+      { icon: "BadgeCheck", title: "KYC & conformité", desc: "Vérification d'identité et contrôles AML sur chaque corridor." },
+      { icon: "Bell", title: "Suivi en temps réel", desc: "Notification à chaque étape, pour vous et votre bénéficiaire." },
+      { icon: "Headphones", title: "Support 7j/7", desc: "Une équipe joignable par WhatsApp en cas de question sur un envoi." },
+    ],
+    photo:
+      "/assets/images/team-handshake.jpg",
+  },
+  testimonial: {
+    quote:
+      "Envoyer de l'argent à ma famille prenait des jours avant. Avec le transfert TrustSend, ça arrive en quelques secondes, comme avec Wave.",
+    name: "N. Gitau",
+    role: "Cliente diaspora, Londres",
+    photo:
+      "/assets/images/team-laptop.jpg",
+  },
+  faq: {
+    title: "Questions fréquentes",
+    items: [
+      {
+        q: "Quels sont les frais réels ?",
+        a: "Les frais démarrent à 1 % du montant envoyé et dépendent du corridor et du moyen de paiement. Le montant exact est affiché avant la validation, sans surprise à l'arrivée.",
+      },
+      {
+        q: "Combien de temps prend un transfert ?",
+        a: "La plupart des envois vers un Mobile Money ou un portefeuille TrustSend arrivent en moins de cinq minutes. Les virements bancaires peuvent prendre jusqu'à un jour ouvré.",
+      },
+      {
+        q: "Mon bénéficiaire doit-il avoir un compte TrustSend ?",
+        a: "Non. Il peut recevoir directement sur son Mobile Money, son compte bancaire ou en cash chez un agent TrustSend.",
+      },
+      {
+        q: "Quelle est la limite d'envoi ?",
+        a: "Elle dépend de votre niveau de vérification (KYC). Après validation complète de votre identité, les plafonds sont relevés automatiquement.",
+      },
+    ],
+  },
+  cta: {
+    title: "Votre premier transfert en quelques minutes",
+    desc: "Créez votre compte, ajoutez un bénéficiaire et envoyez dès aujourd'hui, où que soit votre famille.",
+    primary: "Créer mon compte",
+    secondary: "Nous écrire sur WhatsApp",
+  },
+};
+
+export const transferCurrencies: { code: string; label: string; rate: number; symbol: string }[] = [
+  { code: "CDF", label: "Franc congolais", rate: 2850, symbol: "FC" },
+  { code: "KES", label: "Shilling kényan", rate: 129, symbol: "KSh" },
+  { code: "XAF", label: "Franc CFA (CEMAC)", rate: 605, symbol: "FCFA" },
+  { code: "XOF", label: "Franc CFA (UEMOA)", rate: 605, symbol: "FCFA" },
+  { code: "RWF", label: "Franc rwandais", rate: 1310, symbol: "FRw" },
+  { code: "NGN", label: "Naira nigérian", rate: 1480, symbol: "₦" },
+];
+
+// ---------------------------------------------------------------------------
+// Page Cartes virtuelles
+// ---------------------------------------------------------------------------
+export const virtualCardsPage = {
+  hero: {
+    eyebrow: "Cartes virtuelles",
+    title: "Une carte Visa ou Mastercard",
+    titleAccent: "en quelques secondes",
+    subtitle:
+      "Créez, alimentez et bloquez vos cartes virtuelles depuis votre compte TrustSend, pour vos achats en ligne et ceux de votre équipe.",
+  },
+  features: {
+    title: "Tout ce qu'il faut pour payer en ligne",
+    subtitle:
+      "Des cartes pensées pour les abonnements, les achats internationaux et les dépenses d'équipe.",
+    items: [
+      {
+        icon: "Zap",
+        title: "Émission instantanée",
+        desc: "Créez une carte depuis votre tableau de bord et utilisez-la immédiatement.",
+      },
+      {
+        icon: "Globe",
+        title: "Acceptée dans le monde entier",
+        desc: "Payez partout où Visa et Mastercard sont acceptées, en ligne comme en application.",
+      },
+      {
+        icon: "SlidersHorizontal",
+        title: "Plafonds & contrôle",
+        desc: "Fixez une limite par carte, par jour ou par mois, et ajustez-la à tout moment.",
+      },
+      {
+        icon: "Lock",
+        title: "Blocage en un clic",
+        desc: "Gelez ou supprimez une carte instantanément en cas de doute.",
+      },
+      {
+        icon: "Repeat",
+        title: "Cartes jetables ou récurrentes",
+        desc: "Une carte à usage unique pour un achat, une carte dédiée pour chaque abonnement.",
+      },
+      {
+        icon: "Users",
+        title: "Cartes d'équipe",
+        desc: "Donnez une carte à chaque collaborateur et suivez les dépenses au même endroit.",
+      },
+    ],
+  },
+  steps: {
+    eyebrow: "Comment ça marche",
+    title: "Votre première carte en 3 étapes",
+    items: [
+      {
+        title: "Alimentez votre wallet",
+        desc: "Par Mobile Money, chez un agent ou par virement, en dollars comme en monnaie locale.",
+      },
+      {
+        title: "Créez la carte",
+        desc: "Choisissez le réseau, la devise et le plafond : la carte est générée aussitôt.",
+      },
+      {
+        title: "Payez en ligne",
+        desc: "Utilisez le numéro de carte pour vos abonnements, vos achats et vos publicités en ligne.",
+      },
+    ],
+  },
+  useCases: {
+    eyebrow: "Cas d'usage",
+    title: "Pensée pour vos dépenses du quotidien",
+    desc: "Une carte différente pour chaque besoin, pour garder le contrôle sur ce qui est débité.",
+    items: [
+      { title: "Abonnements", desc: "Netflix, Spotify, Canva, ChatGPT : une carte dédiée par abonnement." },
+      { title: "Publicité en ligne", desc: "Meta Ads, Google Ads, TikTok : alimentez la carte au budget prévu." },
+      { title: "Achats internationaux", desc: "Payez vos fournisseurs et vos commandes sur les sites étrangers." },
+      { title: "Outils SaaS", desc: "Hébergement, licences et logiciels facturés au mois pour votre entreprise." },
+    ],
+  },
+  security: {
+    eyebrow: "Sécurité",
+    title: "Vous gardez la main sur chaque paiement",
+    desc: "Chaque opération est notifiée et chaque carte reste sous votre contrôle, du plafond au blocage.",
+    items: [
+      { icon: "ShieldCheck", title: "3-D Secure", desc: "Confirmation des paiements sensibles par code, directement dans l'application." },
+      { icon: "Bell", title: "Notifications en temps réel", desc: "Une alerte à chaque débit, avec le marchand et le montant." },
+      { icon: "EyeOff", title: "Numéros masqués", desc: "Le vrai numéro de votre compte n'est jamais communiqué au marchand." },
+      { icon: "History", title: "Historique détaillé", desc: "Retrouvez chaque transaction par carte, exportable quand vous voulez." },
+    ],
+  },
+  fees: {
+    eyebrow: "Frais",
+    title: "Des frais simples et annoncés",
+    rows: [
+      { label: "Création d'une carte virtuelle", value: "1 $" },
+      { label: "Rechargement de la carte", value: "1,5 %" },
+      { label: "Paiement en ligne", value: "0 $" },
+      { label: "Conversion de devise", value: "1 %" },
+    ],
+    note: "Tarifs indicatifs : le détail s'affiche avant chaque opération dans votre tableau de bord.",
+    networksLabel: "Réseaux disponibles",
+  },
+  coverage: {
+    eyebrow: "Couverture",
+    title: "Créez votre carte depuis toute l'Afrique",
+    desc: "Alimentez votre carte avec le Mobile Money de votre pays et payez en dollars sur les sites du monde entier.",
+    providersLabel: "Rechargement via",
+  },
+  faq: {
+    title: "Questions fréquentes",
+    items: [
+      {
+        q: "Ai-je besoin d'un compte bancaire ?",
+        a: "Non. Votre wallet TrustSend suffit : vous l'alimentez par Mobile Money, chez un agent ou par virement.",
+      },
+      {
+        q: "Puis-je créer plusieurs cartes ?",
+        a: "Oui. Vous pouvez créer une carte par abonnement, par projet ou par collaborateur, et les supprimer quand vous voulez.",
+      },
+      {
+        q: "Dans quelle devise sont les cartes ?",
+        a: "Les cartes sont libellées en dollars américains, avec une conversion claire depuis votre solde en monnaie locale.",
+      },
+      {
+        q: "Que se passe-t-il si un paiement est refusé ?",
+        a: "Vérifiez le solde de la carte et son plafond dans le tableau de bord. Si le problème persiste, le support répond par WhatsApp.",
+      },
+    ],
+  },
+  cta: {
+    title: "Créez votre carte virtuelle maintenant",
+    desc: "Ouvrez un compte, alimentez votre wallet et générez votre première carte en quelques minutes.",
+    primary: "Créer ma carte",
+    secondary: "Nous écrire sur WhatsApp",
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Page Cryptomonnaies
+// ---------------------------------------------------------------------------
+export type CryptoAsset = {
+  id: string;
+  symbol: string;
+  name: string;
+  color: string;
+  logo: string;
+  stable: boolean;
+  network?: string;
+  // Valeurs de repli si l'API de cours n'est pas joignable (mises à jour le 12/09/2026)
+  fallbackPrice: number;
+  fallbackChange: number;
+};
+
+export const cryptoCoins: CryptoAsset[] = [
+  {
+    id: "tether",
+    symbol: "USDT",
+    name: "Tether USD",
+    color: "#26A17B",
+    logo: "/assets/icons/crypto/usdt.svg",
+    stable: true,
+    network: "TRC20 · ERC20",
+    fallbackPrice: 0.9998,
+    fallbackChange: 0.02,
+  },
+  {
+    id: "usd-coin",
+    symbol: "USDC",
+    name: "USD Coin",
+    color: "#2775CA",
+    logo: "/assets/icons/crypto/usdc.svg",
+    stable: true,
+    network: "ERC20 · Solana",
+    fallbackPrice: 0.9999,
+    fallbackChange: 0.01,
+  },
+  {
+    id: "dai",
+    symbol: "DAI",
+    name: "Dai",
+    color: "#F5AC37",
+    logo: "/assets/icons/crypto/dai.svg",
+    stable: true,
+    network: "ERC20",
+    fallbackPrice: 0.9998,
+    fallbackChange: -0.01,
+  },
+  {
+    id: "bitcoin",
+    symbol: "BTC",
+    name: "Bitcoin",
+    color: "#F7931A",
+    logo: "/assets/icons/crypto/btc.svg",
+    stable: false,
+    fallbackPrice: 77334,
+    fallbackChange: 0.11,
+  },
+  {
+    id: "ethereum",
+    symbol: "ETH",
+    name: "Ethereum",
+    color: "#627EEA",
+    logo: "/assets/icons/crypto/eth.svg",
+    stable: false,
+    fallbackPrice: 2532.43,
+    fallbackChange: 2.4,
+  },
+  {
+    id: "binancecoin",
+    symbol: "BNB",
+    name: "BNB",
+    color: "#F3BA2F",
+    logo: "/assets/icons/crypto/bnb.svg",
+    stable: false,
+    fallbackPrice: 734.91,
+    fallbackChange: 3.08,
+  },
+  {
+    id: "solana",
+    symbol: "SOL",
+    name: "Solana",
+    color: "#14F195",
+    logo: "/assets/icons/crypto/sol.svg",
+    stable: false,
+    fallbackPrice: 101.87,
+    fallbackChange: 2.13,
+  },
+  {
+    id: "tron",
+    symbol: "TRX",
+    name: "TRON",
+    color: "#EF0027",
+    logo: "/assets/icons/crypto/trx.svg",
+    stable: false,
+    fallbackPrice: 0.3395,
+    fallbackChange: 0.22,
+  },
+];
+
+export const cryptoPage = {
+  hero: {
+    eyebrow: "Cryptomonnaies",
+    title: "Achetez, conservez et dépensez vos cryptos",
+    titleAccent: "depuis votre wallet",
+    subtitle:
+      "Convertissez votre Mobile Money en Bitcoin, Ethereum ou stablecoins, et revenez en monnaie locale quand vous le souhaitez.",
+  },
+  market: {
+    eyebrow: "Marché",
+    title: "Les actifs disponibles sur TrustSend",
+    subtitle: "Achetez à partir de 1 $, sans passer par un compte bancaire étranger.",
+    stableTitle: "Stablecoins",
+    stableSubtitle:
+      "Indexés sur le dollar américain : la valeur reste stable, même quand la monnaie locale bouge.",
+    pegLabel: "Indexé 1:1 sur le dollar",
+    othersTitle: "Autres actifs",
+    priceLabel: "Prix",
+    change24h: "24 h",
+    liveLabel: "Cours en direct",
+    updatedLabel: "Mis à jour",
+    sourceLabel: "Source : CoinGecko",
+    offlineNote:
+      "Cours de référence affichés : la connexion au flux de prix n'a pas abouti.",
+    note: "Le cours exact, frais inclus, s'affiche avant la validation de chaque ordre.",
+  },
+  features: {
+    title: "Une porte d'entrée simple vers la crypto",
+    subtitle:
+      "Tout se fait depuis le même compte : achat, vente, échange et retrait vers le Mobile Money.",
+    items: [
+      {
+        icon: "ArrowLeftRight",
+        title: "Achat & vente instantanés",
+        desc: "Payez en Mobile Money ou avec votre solde TrustSend et recevez vos cryptos en quelques secondes.",
+      },
+      {
+        icon: "Repeat",
+        title: "Swap entre actifs",
+        desc: "Échangez BTC, ETH, USDT ou USDC entre eux, sans quitter l'application.",
+      },
+      {
+        icon: "ShieldCheck",
+        title: "Stablecoins protégés",
+        desc: "Mettez votre épargne à l'abri de la dépréciation en la convertissant en USDT ou USDC.",
+      },
+      {
+        icon: "Smartphone",
+        title: "Retrait vers Mobile Money",
+        desc: "Revendez vos cryptos et récupérez votre argent sur M-Pesa, Orange Money, MTN ou Airtel.",
+      },
+      {
+        icon: "Send",
+        title: "Envoi à un proche",
+        desc: "Transférez des cryptos vers un autre wallet TrustSend ou une adresse externe.",
+      },
+      {
+        icon: "CreditCard",
+        title: "Dépense par carte",
+        desc: "Convertissez en dollars et alimentez votre carte virtuelle pour payer en ligne.",
+      },
+    ],
+  },
+  steps: {
+    eyebrow: "Comment ça marche",
+    title: "Votre premier achat en 3 étapes",
+    items: [
+      {
+        title: "Vérifiez votre identité",
+        desc: "Un KYC rapide avec votre pièce d'identité, une seule fois.",
+      },
+      {
+        title: "Alimentez votre wallet",
+        desc: "Mobile Money, dépôt chez un agent ou virement : votre solde est prêt en quelques minutes.",
+      },
+      {
+        title: "Passez votre ordre",
+        desc: "Choisissez l'actif et le montant : la crypto arrive immédiatement dans votre wallet.",
+      },
+    ],
+  },
+  stablecoins: {
+    eyebrow: "Stablecoins",
+    title: "Protégez votre épargne de la dévaluation",
+    desc: "En convertissant une partie de votre solde en USDT ou USDC, vous gardez la valeur en dollars tout en restant libre de revenir en monnaie locale à tout moment.",
+    items: [
+      { title: "Indexé sur le dollar", desc: "1 USDT ou 1 USDC vaut environ 1 dollar américain." },
+      { title: "Disponible à tout moment", desc: "Aucune période de blocage : reconvertissez quand vous voulez." },
+      { title: "Transfert instantané", desc: "Envoyez des stablecoins à un proche en quelques secondes." },
+      { title: "Accepté partout", desc: "Utilisez-les pour payer des fournisseurs ou alimenter une carte." },
+    ],
+    photo:
+      "/assets/images/phone-card-crypto.jpg",
+  },
+  security: {
+    eyebrow: "Sécurité",
+    title: "Vos fonds, protégés à chaque étape",
+    desc: "Conservation sécurisée, contrôles anti-fraude et validation de chaque opération sensible.",
+    items: [
+      { icon: "Lock", title: "Conservation sécurisée", desc: "La majorité des actifs est gardée hors ligne, en stockage à froid." },
+      { icon: "BadgeCheck", title: "KYC & conformité", desc: "Vérification d'identité et contrôles AML sur chaque compte." },
+      { icon: "Bell", title: "Alertes en temps réel", desc: "Notification à chaque ordre, retrait ou tentative de connexion." },
+      { icon: "KeyRound", title: "Double authentification", desc: "Confirmez les opérations sensibles par code avant exécution." },
+    ],
+  },
+  fees: {
+    eyebrow: "Frais",
+    title: "Des frais lisibles, affichés avant l'ordre",
+    rows: [
+      { label: "Achat de crypto", value: "1 %" },
+      { label: "Vente vers Mobile Money", value: "1 %" },
+      { label: "Swap entre actifs", value: "0,5 %" },
+      { label: "Conservation dans le wallet", value: "0 $" },
+    ],
+    note: "Les frais de réseau (blockchain) sur les envois externes s'ajoutent et sont affichés avant validation.",
+    providersLabel: "Achat et retrait via",
+  },
+  risk: {
+    title: "Investir comporte un risque",
+    desc: "Les cryptomonnaies sont volatiles : leur valeur peut fortement baisser. N'investissez que ce que vous pouvez vous permettre de perdre. Les stablecoins dépendent de leur émetteur.",
+  },
+  faq: {
+    title: "Questions fréquentes",
+    items: [
+      {
+        q: "Quel est le montant minimum ?",
+        a: "Vous pouvez acheter à partir de 1 $ d'équivalent, payé en Mobile Money ou depuis votre solde TrustSend.",
+      },
+      {
+        q: "Puis-je retirer en monnaie locale ?",
+        a: "Oui. Vendez votre crypto dans l'application et récupérez le montant sur votre Mobile Money ou chez un agent TrustSend.",
+      },
+      {
+        q: "Qui garde mes cryptos ?",
+        a: "Vos actifs sont conservés par TrustSend, majoritairement en stockage à froid, et restent disponibles à la vente ou au retrait à tout moment.",
+      },
+      {
+        q: "Puis-je envoyer vers un wallet externe ?",
+        a: "Oui, vers une adresse compatible. Les frais de réseau s'affichent avant la confirmation de l'envoi.",
+      },
+    ],
+  },
+  cta: {
+    title: "Commencez avec 1 $",
+    desc: "Créez votre compte, vérifiez votre identité et achetez votre première crypto dès aujourd'hui.",
+    primary: "Créer mon compte",
+    secondary: "Nous écrire sur WhatsApp",
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Page Paiement marchand
+// ---------------------------------------------------------------------------
+export const merchantPage = {
+  hero: {
+    eyebrow: "Paiement marchand",
+    title: "Encaissez vos ventes",
+    titleAccent: "sans terminal bancaire",
+    subtitle:
+      "QR code, lien de paiement ou page boutique : vos clients paient par Mobile Money, carte ou solde TrustSend, et vous êtes crédité en temps réel.",
+    photo: "/assets/images/merchant-hero.webp",
+  },
+  channels: {
+    title: "Trois façons d'encaisser, une seule caisse",
+    subtitle:
+      "Choisissez ce qui colle à votre activité : en boutique, sur WhatsApp ou sur votre site.",
+    items: [
+      {
+        icon: "QrCode",
+        title: "QR code en boutique",
+        desc: "Affichez votre QR près de la caisse : le client scanne, saisit le montant et vous recevez une confirmation.",
+      },
+      {
+        icon: "Link2",
+        title: "Lien de paiement",
+        desc: "Envoyez un lien par WhatsApp ou SMS pour vous faire payer à distance, sans site web.",
+      },
+      {
+        icon: "Store",
+        title: "Page boutique",
+        desc: "Créez une page avec vos produits et vos prix, partageable en un lien.",
+      },
+      {
+        icon: "FileText",
+        title: "Factures",
+        desc: "Émettez une facture professionnelle et suivez son règlement en temps réel.",
+      },
+      {
+        icon: "Repeat",
+        title: "Abonnements",
+        desc: "Encaissez automatiquement vos clients récurrents, chaque mois, sans relance.",
+      },
+      {
+        icon: "Code",
+        title: "API & plugins",
+        desc: "Intégrez l'encaissement à votre site ou à votre application avec nos APIs.",
+      },
+    ],
+  },
+  qr: {
+    eyebrow: "QR code",
+    title: "Le client scanne, vous êtes payé",
+    desc: "Pas de terminal à louer, pas de papier à imprimer chaque jour : un seul QR suffit pour toutes vos ventes.",
+    items: [
+      { title: "Affichez votre QR", desc: "Sur le comptoir, la vitrine ou l'écran de votre téléphone." },
+      { title: "Le client scanne", desc: "Depuis TrustSend ou son application Mobile Money habituelle." },
+      { title: "Confirmation immédiate", desc: "Vous et votre caissier recevez la notification au même moment." },
+      { title: "Solde crédité", desc: "L'argent arrive dans votre wallet, prêt à être retiré ou réutilisé." },
+    ],
+    photo: "/assets/images/merchant-qr.webp",
+  },
+  steps: {
+    eyebrow: "Démarrer",
+    title: "Votre caisse prête en 3 étapes",
+    items: [
+      {
+        title: "Créez votre compte marchand",
+        desc: "Inscription avec votre numéro, puis vérification d'identité de votre commerce.",
+      },
+      {
+        title: "Générez votre QR et vos liens",
+        desc: "Depuis le tableau de bord, en quelques secondes et sans frais.",
+      },
+      {
+        title: "Encaissez et suivez",
+        desc: "Chaque vente apparaît dans votre historique, avec le moyen de paiement utilisé.",
+      },
+    ],
+  },
+  manage: {
+    eyebrow: "Gestion",
+    title: "Gardez l'œil sur votre caisse",
+    desc: "Un tableau de bord pensé pour le commerce : ce qui rentre, qui a encaissé, et ce qu'il reste à retirer.",
+    items: [
+      { icon: "BarChart3", title: "Ventes du jour", desc: "Suivez votre chiffre en direct, par jour, par semaine ou par mois." },
+      { icon: "Users", title: "Caissiers", desc: "Donnez un accès à vos employés et voyez qui a encaissé quoi." },
+      { icon: "Download", title: "Exports", desc: "Exportez vos transactions pour votre comptabilité." },
+      { icon: "Bell", title: "Notifications", desc: "Une alerte à chaque encaissement, pour vous et votre équipe." },
+    ],
+    photo: "/assets/images/merchant-shop.webp",
+  },
+  fees: {
+    eyebrow: "Frais",
+    title: "Une commission claire par encaissement",
+    rows: [
+      { label: "Encaissement QR / lien", value: "1 %" },
+      { label: "Encaissement Mobile Money", value: "1,5 %" },
+      { label: "Encaissement par carte", value: "2,5 %" },
+      { label: "Retrait vers Mobile Money ou agent", value: "1 %" },
+    ],
+    note: "Aucun abonnement ni frais d'ouverture : vous ne payez que lorsque vous encaissez.",
+    providersLabel: "Vos clients paient avec",
+  },
+  testimonial: {
+    quote:
+      "Avant, je notais les ventes dans un cahier et je courais après la monnaie. Aujourd'hui, le client scanne le QR et je vois le paiement arriver tout de suite.",
+    name: "M. Nsimba",
+    role: "Commerçante, marché de Kinshasa",
+    photo: "/assets/images/merchant-vendor.webp",
+  },
+  faq: {
+    title: "Questions des marchands",
+    items: [
+      {
+        q: "Faut-il un terminal de paiement ?",
+        a: "Non. Un simple téléphone suffit : le QR code et les liens de paiement remplacent le terminal bancaire.",
+      },
+      {
+        q: "Quand suis-je crédité ?",
+        a: "Immédiatement. Le montant arrive sur votre solde marchand dès la confirmation du paiement par le client.",
+      },
+      {
+        q: "Mes clients doivent-ils avoir TrustSend ?",
+        a: "Non. Ils peuvent payer depuis leur application Mobile Money habituelle, par carte ou depuis leur wallet TrustSend.",
+      },
+      {
+        q: "Puis-je avoir plusieurs points de vente ?",
+        a: "Oui. Créez un QR par boutique ou par caissier et suivez les encaissements séparément dans le tableau de bord.",
+      },
+    ],
+  },
+  cta: {
+    title: "Ouvrez votre compte marchand",
+    desc: "Créez votre compte, générez votre QR et encaissez votre première vente aujourd'hui.",
+    primary: "Créer mon compte marchand",
+    secondary: "Nous écrire sur WhatsApp",
+  },
+};

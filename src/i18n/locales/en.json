@@ -111,8 +111,8 @@
     "example": "example"
   },
   "noCodeShowcase": {
-    "title": "No website? No code? No problem.",
-    "subtitle": "Create a shareable payment link or page in under a minute, no developer needed."
+    "title": "Everything happens from your phone",
+    "subtitle": "Pay, send, get paid or save as a group in seconds — no website and no developer needed."
   },
   "testimonials": {
     "title": "TrustSend grows with you!",
@@ -143,6 +143,15 @@
   },
   "askAssistant": {
     "label": "Ask Zola"
+  },
+  "whatsapp": {
+    "label": "Chat on WhatsApp",
+    "close": "Close",
+    "title": "TrustSend Assistant",
+    "status": "Typically replies in a few minutes",
+    "message": "Hi! A question about payments, APIs or your account? Chat with our team on WhatsApp.",
+    "cta": "Start a chat",
+    "prefill": "Hello TrustSend, I would like some information."
   },
   "login": {
     "backHome": "Back to home",

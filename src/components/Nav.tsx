@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -94,7 +95,7 @@ export function Nav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 z-50 ${
         solid
           ? "border-b border-surface-2/80 bg-white/85 backdrop-blur-md supports-[backdrop-filter]:bg-white/70"
           : "border-b border-transparent bg-transparent"
@@ -108,7 +109,7 @@ export function Nav() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="overflow-hidden bg-accent  text-white"
+            className="overflow-hidden bg-accent  text-white hidden md:block"
           >
             <div className="mx-auto flex max-w-7xl items-center justify-center gap-3 px-6 py-2 text-sm font-medium">
               <span className="text-center">{t("nav.banner.message")}</span>
@@ -136,7 +137,7 @@ export function Nav() {
           to="/"
           className="flex shrink-0 items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-4"
         >
-          <img src="/assets/icons/logo.png" alt="TrustSend" className="h-46 w-auto" />
+          <img src="/assets/icons/logo.png" alt="TrustSend" className="h-28 w-auto sm:h-36 lg:h-46" />
         </Link>
 
         {/* ---------- Navigation, centrée optiquement ---------- */}
@@ -145,7 +146,7 @@ export function Nav() {
             const menu = navMegaMenus[link.label];
             const isActive = activeMenu === link.label;
             return (
-              <a
+              <NavItemLink
                 key={link.label}
                 href={link.href}
                 onMouseEnter={() => {
@@ -172,7 +173,7 @@ export function Nav() {
                     isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                   }`}
                 />
-              </a>
+              </NavItemLink>
             );
           })}
         </nav>
@@ -343,9 +344,9 @@ export function Nav() {
                                   </p>
                                   <div className="mt-2 flex flex-col">
                                     {col.items.map((item) => (
-                                      <a
+                                      <NavItemLink
                                         key={item.label}
-                                        href="#"
+                                        href={item.href}
                                         onClick={() => setOpen(false)}
                                         className="flex items-start gap-3 rounded-lg py-2.5"
                                       >
@@ -369,7 +370,7 @@ export function Nav() {
                                             {item.desc}
                                           </span>
                                         </span>
-                                      </a>
+                                      </NavItemLink>
                                     ))}
                                   </div>
                                 </div>
@@ -408,6 +409,30 @@ export function Nav() {
 }
 
 
+// Rend un lien interne via le router, et un lien externe / ancre via <a>
+function NavItemLink({
+  href,
+  children,
+  ...props
+}: {
+  href?: string;
+  children: ReactNode;
+} & Omit<ComponentPropsWithoutRef<"a">, "href">) {
+  const target = href ?? "#";
+  if (target.startsWith("/")) {
+    return (
+      <Link to={target} {...props}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <a href={target} {...props}>
+      {children}
+    </a>
+  );
+}
+
 function MegaMenuPanel({
   menu,
   onNavigate,
@@ -427,9 +452,9 @@ function MegaMenuPanel({
 
           <div className="mt-3 flex flex-col gap-0.5">
             {col.items.map((item) => (
-              <a
+              <NavItemLink
                 key={item.label}
-                href="#"
+                href={item.href}
                 onClick={onNavigate}
                 className="group flex items-start gap-3 rounded-xl px-2.5 py-2.5 -ml-2.5 transition-colors hover:bg-brand"
               >
@@ -458,7 +483,7 @@ function MegaMenuPanel({
                     {item.desc}
                   </span>
                 </span>
-              </a>
+              </NavItemLink>
             ))}
           </div>
         </div>

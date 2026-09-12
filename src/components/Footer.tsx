@@ -15,7 +15,7 @@ export function Footer() {
   const { t } = useTranslation();
   const { footerColumns } = useContent();
   return (
-    <footer className="pt-20 pb-8 bg-surface border-t border-surface-2">
+    <footer className="pt-14 pb-8 sm:pt-20 bg-surface border-t border-surface-2">
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-10">
           {footerColumns.map((col) => (
@@ -44,13 +44,13 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-16 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-surface-2 pt-8">
+        <div className="mt-12 sm:mt-16 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-surface-2 pt-8">
           <div className="flex items-center gap-2">
              <Link
           to="/"
           className="flex shrink-0 items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-4"
         >
-          <img src="/assets/icons/logo.png" alt="TrustSend" className="h-46 w-auto" />
+          <img src="/assets/icons/logo.png" alt="TrustSend" className="h-28 w-auto sm:h-36 lg:h-46" />
         </Link>
            </div>
 

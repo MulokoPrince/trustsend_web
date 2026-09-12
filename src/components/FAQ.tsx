@@ -11,15 +11,15 @@ export function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="py-24">
+    <section className="py-16 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-3xl px-6">
         <Reveal className="text-center">
-          <h2 className="font-display font-bold text-3xl lg:text-4xl text-ink">
+          <h2 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-ink">
             {t("faq.title")}
           </h2>
         </Reveal>
 
-        <div className="mt-12 divide-y divide-surface-2">
+        <div className="mt-10 sm:mt-12 divide-y divide-surface-2">
           {faqs.map((faq, i) => {
             const isOpen = open === i;
             return (

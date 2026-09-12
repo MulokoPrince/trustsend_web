@@ -12,24 +12,24 @@ export function IndustryGrid() {
   const ind = industries[active];
 
   return (
-    <section className="py-24">
+    <section className="py-16 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-7xl px-6">
         <Reveal className="text-center max-w-2xl mx-auto">
-          <h2 className="font-display font-bold text-3xl lg:text-4xl text-ink bg-amber-200/45">
+          <h2 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-ink bg-amber-200/45">
             {t("industryGrid.title")}
           </h2>
-          <p className="mt-4 text-muted text-lg">
+          <p className="mt-4 text-muted text-base sm:text-lg">
             {t("industryGrid.subtitle")}
           </p>
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className="mt-10 flex flex-wrap justify-center gap-2">
+          <div className="mt-8 -mx-6 flex snap-x gap-2 overflow-x-auto px-6 pb-1 sm:mx-0 sm:mt-10 sm:flex-wrap sm:justify-center sm:overflow-visible sm:px-0">
             {industries.map((i, idx) => (
               <button
                 key={i.name}
                 onClick={() => setActive(idx)}
-                className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors ${
+                className={`flex shrink-0 snap-start items-center gap-2 rounded-full px-4 py-2.5 sm:px-5 text-sm font-semibold transition-colors ${
                   active === idx
                     ? "bg-brand text-white shadow-soft"
                     : "border border-surface-2 bg-white text-muted-2 hover:text-ink"
@@ -42,7 +42,7 @@ export function IndustryGrid() {
           </div>
         </Reveal>
 
-        <div className="mt-12">
+        <div className="mt-10 sm:mt-12">
           <AnimatePresence mode="wait">
             <motion.div
               key={ind.name}
@@ -65,7 +65,7 @@ export function IndustryGrid() {
               {/* ---------- Contenu : empilé sous la photo en mobile, incrusté dessus à partir de sm ---------- */}
               <div className="relative p-6 sm:absolute sm:inset-0 sm:flex sm:items-center sm:p-0">
                 <div className="sm:m-8 sm:max-w-md  sm:bg-white sm:p-8 sm:shadow-pop lg:sm:p-9">
-                  <h3 className="font-display text-2xl font-bold leading-tight text-ink lg:text-[1.7rem]">
+                  <h3 className="font-display text-xl font-bold leading-tight text-ink sm:text-2xl lg:text-[1.7rem]">
                     {ind.headingLead}{" "}
                     <span className="text-accent">{ind.headingHighlight}</span>
                   </h3>

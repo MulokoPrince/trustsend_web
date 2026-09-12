@@ -20,7 +20,7 @@ export function PlatformStandards() {
   const { t } = useTranslation();
   const { platformStandards } = useContent();
   return (
-    <section className="relative overflow-hidden py-24">
+    <section className="relative overflow-hidden py-16 sm:py-20 lg:py-24">
       <motion.img
         src={heroAsset}
         alt=""
@@ -41,26 +41,28 @@ export function PlatformStandards() {
           <span className="text-sm font-semibold uppercase tracking-wide text-brand">
             {t("platformStandards.eyebrow")}
           </span>
-          <h2 className="mt-3 font-display text-3xl font-bold text-ink lg:text-4xl">
+          <h2 className="mt-3 font-display text-2xl font-bold text-ink sm:text-3xl lg:text-4xl">
             {t("platformStandards.title")}
           </h2>
-          <p className="mt-4 text-lg text-muted">
+          <p className="mt-4 text-base text-muted sm:text-lg">
             {t("platformStandards.subtitle")}
           </p>
         </Reveal>
 
-        <div className="mt-16 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-4 sm:mt-14 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {platformStandards.map((item, i) => {
             const Icon = icons[item.icon];
             return (
               <Reveal key={item.label} delay={i * 0.05}>
-                <div className="group flex flex-col items-center text-center">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-light transition-colors group-hover:bg-brand">
-                    <Icon size={20} className="text-brand transition-colors group-hover:text-white" />
+                <div className="group h-full rounded-4xl border border-surface-2 p-6 transition-all hover:border-brand/20 hover:shadow-soft">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-light transition-colors group-hover:bg-brand">
+                    <Icon size={18} className="text-brand transition-colors group-hover:text-white" />
                   </div>
-                  <p className="mt-4 font-display text-base font-semibold leading-snug text-ink">
+                  <h3 className="mt-4 font-display font-semibold leading-snug text-ink">
                     {item.label}
-                  </p>
+                  </h3>
+                  <div className="mt-4 h-2 w-3/4 rounded-full bg-surface-2" />
+                  <div className="mt-2 h-2 w-1/2 rounded-full bg-surface-2" />
                 </div>
               </Reveal>
             );

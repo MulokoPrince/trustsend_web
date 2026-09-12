@@ -24,7 +24,7 @@ export function Testimonials() {
   const current = testimonials[index];
 
   return (
-    <section className="relative overflow-hidden py-24 bg-brand-light/40">
+    <section className="relative overflow-hidden py-16 sm:py-20 lg:py-24 bg-brand-light/40">
       <img
         src={loopPattern}
         alt=""
@@ -33,7 +33,7 @@ export function Testimonials() {
       />
       <div className="relative mx-auto max-w-3xl px-6 text-center">
         <Reveal>
-          <h2 className="font-display font-bold text-3xl lg:text-4xl text-ink">
+          <h2 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-ink">
             {t("testimonials.title")}
           </h2>
           <p className="mt-2 text-muted">
@@ -41,7 +41,7 @@ export function Testimonials() {
           </p>
         </Reveal>
 
-        <div className="relative mt-12">
+        <div className="relative mt-10 sm:mt-12">
           <img
             src="/assets/home/top-quotation.svg"
             alt=""
@@ -56,7 +56,7 @@ export function Testimonials() {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className="mt-4"
             >
-              <p className="text-xl lg:text-2xl font-display text-ink leading-snug">
+              <p className="text-lg sm:text-xl lg:text-2xl font-display text-ink leading-snug">
                 “{current.quote}”
               </p>
               <p className="mt-6 font-semibold text-ink">{current.name}</p>
