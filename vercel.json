@@ -4,6 +4,38 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/login",
+      "has": [{ "type": "host", "value": "www.trustsend.africa" }],
+      "destination": "https://business.trustsend.africa/login",
+      "permanent": false
+    },
+    {
+      "source": "/signup",
+      "has": [{ "type": "host", "value": "www.trustsend.africa" }],
+      "destination": "https://business.trustsend.africa/signup",
+      "permanent": false
+    },
+    {
+      "source": "/dashboard/:path*",
+      "has": [{ "type": "host", "value": "www.trustsend.africa" }],
+      "destination": "https://business.trustsend.africa/dashboard/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "business.trustsend.africa" }],
+      "destination": "/dashboard",
+      "permanent": false
+    },
+    {
+      "source": "/:path(pricing|agents|transferts-internationaux|cartes-virtuelles|cryptomonnaies|paiement-marchand)",
+      "has": [{ "type": "host", "value": "business.trustsend.africa" }],
+      "destination": "https://www.trustsend.africa/:path",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
@@ -24,6 +56,11 @@
         { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
       ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "business.trustsend.africa" }],
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     }
   ]
 }

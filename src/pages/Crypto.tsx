@@ -23,6 +23,7 @@ import { WhatsAppButton } from "../components/WhatsAppButton";
 import { Reveal } from "../components/Reveal";
 import { useTranslation } from "react-i18next";
 import { useContent } from "../hooks/useContent";
+import { businessUrl } from "../lib/domains";
 import type { CryptoAsset } from "../data/content.fr";
 import arcAsset from "../assets/Group (1).png";
 import loopPattern from "../assets/Group (2).png";
@@ -586,7 +587,7 @@ export function Crypto() {
 
               <div className="relative mt-8 flex flex-wrap items-center justify-center gap-3">
                 <a
-                  href="/signup"
+                  href={businessUrl("/signup")}
                   className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-brand transition-colors hover:bg-white/90"
                 >
                   {cta.primary} <ArrowRight size={18} />

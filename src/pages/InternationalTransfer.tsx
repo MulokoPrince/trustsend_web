@@ -20,6 +20,7 @@ import { CookieConsent } from "../components/CookieConsent";
 import { WhatsAppButton } from "../components/WhatsAppButton";
 import { Reveal } from "../components/Reveal";
 import { useContent } from "../hooks/useContent";
+import { businessUrl } from "../lib/domains";
 import transferHero from "../assets/transfer_hero.png";
 import patternAsset from "../assets/Group.png";
 import arcAsset from "../assets/Group (1).png";
@@ -184,7 +185,7 @@ export function InternationalTransfer() {
                   </div>
 
                   <a
-                    href="/signup"
+                    href={businessUrl("/signup")}
                     className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-brand transition-colors hover:bg-white/90"
                   >
                     {simulator.cta} <ArrowRight size={18} />
@@ -455,7 +456,7 @@ export function InternationalTransfer() {
 
               <div className="relative mt-8 flex flex-wrap items-center justify-center gap-3">
                 <a
-                  href="/signup"
+                  href={businessUrl("/signup")}
                   className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-brand transition-colors hover:bg-white/90"
                 >
                   {cta.primary} <ArrowRight size={18} />

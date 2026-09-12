@@ -12,6 +12,7 @@ import {
   X,
 } from "lucide-react";
 import { useContent } from "../hooks/useContent";
+import { AuthLink } from "./AuthLink";
 import type { NavMegaMenu } from "../data/content.fr";
 import cardmaprBg from "../assets/cardmapr-nl-0hs_mYB9KRc-unsplash.jpg";
 
@@ -221,13 +222,13 @@ export function Nav() {
 
           <span aria-hidden className="mx-2 h-4 w-px bg-surface-2" />
 
-          <Link
+          <AuthLink
             to="/login"
             className="rounded-full px-3 py-2 text-sm font-semibold text-ink transition-colors hover:text-brand"
           >
             {t("nav.login")}
-          </Link>
-          <Link
+          </AuthLink>
+          <AuthLink
             to="/signup"
             className="group ml-1 flex items-center gap-1.5 rounded bg-accent px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
           >
@@ -236,7 +237,7 @@ export function Nav() {
               size={15}
               className="transition-transform duration-300 group-hover:translate-x-0.5"
             />
-          </Link>
+          </AuthLink>
         </div>
 
         {/* ---------- Déclencheur mobile ---------- */}
@@ -385,20 +386,20 @@ export function Nav() {
               })}
 
               <div className="mt-5 flex items-center gap-3">
-                <Link
+                <AuthLink
                   to="/login"
                   onClick={() => setOpen(false)}
                   className="flex-1 rounded-full border border-surface-2 py-3 text-center text-sm font-semibold text-ink"
                 >
                   {t("nav.login")}
-                </Link>
-                <Link
+                </AuthLink>
+                <AuthLink
                   to="/signup"
                   onClick={() => setOpen(false)}
                   className="flex-1 rounded-full bg-brand py-3 text-center text-sm font-semibold text-white"
                 >
                   {t("nav.signup")}
-                </Link>
+                </AuthLink>
               </div>
             </div>
           </motion.div>
