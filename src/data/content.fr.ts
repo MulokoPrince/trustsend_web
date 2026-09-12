@@ -11,6 +11,7 @@ export const navLinks = [
   // { label: "Épargne & Jeux", href: "#epargne" },
   { label: "Partenaires", href: "#partenaires" },
   { label: "Agents", href: "/agents" },
+  { label: "Docs", href: "https://docs.trustsend.africa" },
   { label: "Tarifs", href: "/pricing" },
 
 ];
@@ -228,6 +229,7 @@ export const navMegaMenus: Record<string, NavMegaMenu> = {
         items: [
           {
             label: "Documentation API",
+            href: "https://docs.trustsend.africa",
             desc: "Toute la documentation pour intégrer paiements, transferts et cartes virtuelles.",
             icon: "/assets/icons/develop/api.svg",
           },
@@ -705,7 +707,10 @@ export const faqs: { question: string; answer: string }[] = [
   },
 ];
 
-export const footerColumns: { title: string; links: { label: string; badge?: string }[] }[] = [
+export const footerColumns: {
+  title: string;
+  links: { label: string; badge?: string; href?: string }[];
+}[] = [
   {
     title: "Paiements",
     links: [
@@ -753,7 +758,11 @@ export const footerColumns: { title: string; links: { label: string; badge?: str
   },
   {
     title: "Développeurs",
-    links: [{ label: "Documentation" }, { label: "Intégrations" }, { label: "Référence API" }],
+    links: [
+      { label: "Documentation", href: "https://docs.trustsend.africa" },
+      { label: "Intégrations" },
+      { label: "Référence API", href: "https://docs.trustsend.africa" },
+    ],
   },
   {
     title: "Ressources",

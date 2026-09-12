@@ -27,7 +27,10 @@ export function Footer() {
                 {col.links.map((link) => (
                   <li key={link.label}>
                     <a
-                      href="#"
+                      href={link.href ?? "#"}
+                      {...(link.href?.startsWith("http")
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
                       className="text-sm text-muted hover:text-brand transition-colors inline-flex items-center gap-1.5"
                     >
                       {link.label}

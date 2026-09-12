@@ -6,6 +6,7 @@ export const navLinks = [
   // { label: "Savings & Games", href: "#savings" },
   { label: "Partners", href: "#partners" },
   { label: "Agents", href: "/agents" },
+  { label: "Docs", href: "https://docs.trustsend.africa" },
   { label: "Pricing", href: "/pricing" },
 
 ];
@@ -196,6 +197,7 @@ export const navMegaMenus: Record<string, NavMegaMenu> = {
         items: [
           {
             label: "API Documentation",
+            href: "https://docs.trustsend.africa",
             desc: "All the documentation to integrate payments, transfers and virtual cards.",
             icon: "/assets/icons/develop/api.svg",
           },
@@ -672,7 +674,10 @@ export const faqs: { question: string; answer: string }[] = [
   },
 ];
 
-export const footerColumns: { title: string; links: { label: string; badge?: string }[] }[] = [
+export const footerColumns: {
+  title: string;
+  links: { label: string; badge?: string; href?: string }[];
+}[] = [
   {
     title: "Payments",
     links: [
@@ -720,7 +725,11 @@ export const footerColumns: { title: string; links: { label: string; badge?: str
   },
   {
     title: "Developers",
-    links: [{ label: "Documentation" }, { label: "Integrations" }, { label: "API Reference" }],
+    links: [
+      { label: "Documentation", href: "https://docs.trustsend.africa" },
+      { label: "Integrations" },
+      { label: "API Reference", href: "https://docs.trustsend.africa" },
+    ],
   },
   {
     title: "Resources",

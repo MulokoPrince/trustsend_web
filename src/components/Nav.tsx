@@ -427,8 +427,15 @@ function NavItemLink({
       </Link>
     );
   }
+  // Lien externe (documentation, etc.) : nouvel onglet, sans accès à window.opener
+  const external = target.startsWith("http");
+
   return (
-    <a href={target} {...props}>
+    <a
+      href={target}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      {...props}
+    >
       {children}
     </a>
   );
