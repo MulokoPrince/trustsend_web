@@ -37,7 +37,7 @@ export interface Wallet {
   updated_at: string;
 }
 
-export type TransactionType = "mobile_money_deposit" | "mobile_money_payout";
+export type TransactionType = "mobile_money_deposit" | "mobile_money_payout" | "fx_swap";
 export type TransactionStatus = "initiated" | "pending" | "completed" | "failed";
 
 export interface Transaction {
@@ -246,4 +246,25 @@ export interface WebhookDelivery {
   last_error: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface SwapQuote {
+  quote_id: string;
+  from_currency: string;
+  to_currency: string;
+  amount_in: string;
+  amount_out: string;
+  fee: string;
+  fee_currency: string;
+  rate: string;
+  mid_rate: string;
+  margin_bps: number;
+  expires_at: string;
+}
+
+export interface SwapResult extends Omit<SwapQuote, "expires_at"> {
+  transaction_id: string;
+  transaction_uuid: string;
+  status: string;
+  created_at: string;
 }

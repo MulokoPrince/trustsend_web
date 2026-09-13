@@ -17,6 +17,7 @@ import { WalletPage } from "./pages/dashboard/WalletPage";
 import { AddWalletPage } from "./pages/dashboard/AddWalletPage";
 import { DepositPage } from "./pages/dashboard/DepositPage";
 import { WithdrawPage } from "./pages/dashboard/WithdrawPage";
+import { SwapPage } from "./pages/dashboard/SwapPage";
 import { ApiKeysPage } from "./pages/dashboard/ApiKeysPage";
 import { CardsPage } from "./pages/dashboard/CardsPage";
 import { CreateCardPage } from "./pages/dashboard/CreateCardPage";
@@ -73,6 +74,7 @@ function App() {
             <Route path="wallet/new" element={<AddWalletPage />} />
             <Route path="deposit" element={<DepositPage />} />
             <Route path="withdraw" element={<WithdrawPage />} />
+            <Route path="swap" element={<SwapPage />} />
             <Route path="cards" element={<CardsPage />} />
             <Route path="cards/new" element={<CreateCardPage />} />
             <Route path="cards/:id" element={<CardDetailPage />} />

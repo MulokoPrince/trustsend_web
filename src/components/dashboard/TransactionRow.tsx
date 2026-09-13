@@ -1,4 +1,4 @@
-import { ArrowDownToLine, ArrowUpFromLine } from "lucide-react";
+import { ArrowDownToLine, ArrowUpFromLine, Repeat } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { Transaction } from "../../types/dashboard";
 import { formatDateTime, formatMinorUnits } from "../../lib/format";
@@ -32,6 +32,7 @@ function readMetaAmount(metadata: Record<string, unknown>): string | null {
 export function TransactionRow({ tx }: { tx: Transaction }) {
   const { t } = useTranslation();
   const isDeposit = tx.type === "mobile_money_deposit";
+  const isSwap = tx.type === "fx_swap";
   const amount = readMetaAmount(tx.metadata);
 
   return (
@@ -41,16 +42,21 @@ export function TransactionRow({ tx }: { tx: Transaction }) {
           isDeposit ? "bg-accent-light text-accent" : "bg-surface text-muted-2"
         }`}
       >
-        {isDeposit ? <ArrowDownToLine size={16} /> : <ArrowUpFromLine size={16} />}
+        {isSwap ? <Repeat size={16} /> : isDeposit ? <ArrowDownToLine size={16} /> : <ArrowUpFromLine size={16} />}
       </span>
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold text-ink">
-          {isDeposit
-            ? t("dashboard.transactionRow.depositLabel")
-            : t("dashboard.transactionRow.withdrawLabel")}
+          {isSwap
+            ? t("dashboard.transactionRow.swapLabel")
+            : isDeposit
+              ? t("dashboard.transactionRow.depositLabel")
+              : t("dashboard.transactionRow.withdrawLabel")}
         </p>
         <p className="truncate text-xs text-muted">
-          {tx.provider} · #{tx.transaction_id}
+          {isSwap
+            ? `${String(tx.metadata["from_currency"] ?? "")} → ${String(tx.metadata["to_currency"] ?? "")}`
+            : tx.provider}{" "}
+          · #{tx.transaction_id}
         </p>
       </div>
       <div className="shrink-0 text-right">
