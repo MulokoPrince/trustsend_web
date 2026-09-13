@@ -80,7 +80,6 @@ export function DashboardLayout() {
   const showPinBanner = profile.data && !profile.data.pin_set;
   const [langOpen, setLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement | null>(null);
-  // Desktop : rail d'icones replie (comme Gmail). Mobile : tiroir ouvert/ferme.
   const [collapsed, setCollapsed] = useState(readCollapsed);
   const [drawerOpen, setDrawerOpen] = useState(false);
 

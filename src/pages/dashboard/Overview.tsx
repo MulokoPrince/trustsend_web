@@ -83,12 +83,10 @@ const KYC_TONE = {
   },
 } as const;
 
-// Classes partagées façon Gmail : cartes à bord fin, titres de section sobres.
 const card = "rounded-3xl border border-black/[0.08] bg-white";
 const sectionTitle = "font-display text-base font-semibold text-ink";
 
-// Icône représentative par type de document KYC, plutôt qu'un pictogramme
-// générique répété pour chaque pièce.
+
 function documentIcon(doc: string) {
   if (doc === "selfie") return ScanFace;
   if (doc === "proof_of_address") return Home;
@@ -417,7 +415,6 @@ export function Overview() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      {/* En-tête : salutation + actions principales (comme « Nouveau message » dans Gmail) */}
       <Greeting
         actions={
           <div className="flex flex-wrap items-center gap-3">

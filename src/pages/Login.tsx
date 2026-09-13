@@ -5,6 +5,10 @@ import { useTranslation } from "react-i18next";
 import { useLogin, loginErrorMessage } from "../hooks/useLogin";
 import { AuthField } from "../components/auth/AuthField";
 import "../styles/geist.css";
+import { Nav } from "../components/Nav";
+import { WhatsAppButton } from "../components/WhatsAppButton";
+import { CookieConsent } from "../components/CookieConsent";
+import PayAill from "/assets/home/pg-graphic.png"
 
 export function Login() {
   const { t } = useTranslation();
@@ -27,35 +31,19 @@ export function Login() {
   };
 
   return (
+    <>
     <div className="font-geist flex min-h-dvh flex-col items-center justify-center bg-surface-2 px-4 py-6 sm:py-10">
+      <Nav/>
       {/* ---------- Carte de connexion ---------- */}
       <main className="w-full max-w-[28rem] rounded-[28px] bg-white p-6 sm:p-10 min-[52rem]:max-w-[65rem]">
         <div className="grid gap-x-12 gap-y-8 min-[52rem]:grid-cols-2">
           {/* Colonne titre */}
           <div className="min-w-0">
-            <Link to="/" aria-label="TrustSend" className="inline-block">
-              {/* Le PNG est un carré avec beaucoup de marge blanche : on recadre sur le lockup */}
-              <div className="h-9 w-28 overflow-hidden">
-                <img
-                  src="/assets/icons/logo.png"
-                  alt="TrustSend"
-                  className="h-full w-full object-cover object-[center_48%]"
-                />
-              </div>
-            </Link>
 
             <h1 className="mt-6 font-display text-[2rem] leading-tight text-ink sm:text-[2.25rem]">
               {t("login.title")}
             </h1>
             <p className="mt-3 text-base leading-relaxed text-muted-2">{t("login.subtitle")}</p>
-
-            <Link
-              to="/"
-              className="-ms-3 mt-4 inline-flex h-10 items-center gap-1.5 rounded-full px-3 text-sm font-medium text-accent transition-colors hover:bg-brand-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            >
-              <ArrowLeft size={16} aria-hidden className="rtl:rotate-180" />
-              {t("login.backHome")}
-            </Link>
           </div>
 
           {/* Colonne formulaire */}
@@ -163,6 +151,9 @@ export function Login() {
         </a>
         .
       </footer>
+          <WhatsAppButton />
+            <CookieConsent/>
     </div>
+    </>
   );
 }

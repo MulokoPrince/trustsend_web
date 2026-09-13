@@ -6,6 +6,7 @@ import { useSignup, useRequestSignupOtp } from "../hooks/useSignup";
 import { ApiError } from "../lib/api";
 import { AuthField } from "../components/auth/AuthField";
 import "../styles/geist.css";
+import { Nav } from "../components/Nav";
 
 const primaryButtonClasses =
   "ms-auto inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand px-6 text-sm font-semibold text-white transition-colors hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-60";
@@ -132,6 +133,7 @@ export function Signup() {
 
   return (
     <div className="font-geist flex min-h-dvh flex-col items-center justify-center bg-surface-2 px-4 py-6 sm:py-10">
+      <Nav/>
       {signup.isSuccess ? (
         /* ---------- Confirmation ---------- */
         <main className="w-full max-w-[28rem] rounded-[28px] bg-white p-6 text-center sm:p-10">
@@ -160,7 +162,6 @@ export function Signup() {
           <div className="grid gap-x-12 gap-y-8 min-[52rem]:grid-cols-2">
             {/* Colonne titre */}
             <div className="min-w-0">
-              <Logo />
 
               {/* Progression */}
               <div className="mt-6 flex items-center gap-3">
