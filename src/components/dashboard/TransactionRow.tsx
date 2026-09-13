@@ -36,7 +36,7 @@ export function TransactionRow({ tx }: { tx: Transaction }) {
   const amount = readMetaAmount(tx.metadata);
 
   return (
-    <li className="flex items-center gap-4 px-5 py-4">
+    <li className="flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-surface">
       <span
         className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${
           isDeposit ? "bg-accent-light text-accent" : "bg-surface text-muted-2"
@@ -59,7 +59,7 @@ export function TransactionRow({ tx }: { tx: Transaction }) {
           · #{tx.transaction_id}
         </p>
       </div>
-      <div className="shrink-0 text-right">
+      <div className="shrink-0 text-end">
         {amount && (
           <p className={`text-sm font-semibold ${isDeposit ? "text-accent" : "text-ink"}`}>
             {isDeposit ? "+" : "-"}

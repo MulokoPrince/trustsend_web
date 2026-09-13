@@ -25,7 +25,7 @@ import {
   Wallet,
   XCircle,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { useOverview } from "../../hooks/useOverview";
 import { useWallets } from "../../hooks/useWallets";
@@ -69,19 +69,23 @@ const KYC_TONE = {
   not_started: {
     icon: ShieldAlert,
     iconColor: "text-brand",
-    cta: "bg-brand text-white shadow-soft hover:bg-brand-dark",
+    cta: "bg-brand text-white hover:bg-brand-dark",
   },
   pending: {
     icon: Clock3,
     iconColor: "text-amber-600",
-    cta: "border border-surface-2 text-ink hover:border-brand/30",
+    cta: "border border-black/10 text-ink hover:bg-surface",
   },
   rejected: {
     icon: XCircle,
     iconColor: "text-red-600",
-    cta: "bg-red-600 text-white shadow-soft hover:bg-red-700",
+    cta: "bg-red-600 text-white hover:bg-red-700",
   },
 } as const;
+
+// Classes partagées façon Gmail : cartes à bord fin, titres de section sobres.
+const card = "rounded-3xl border border-black/[0.08] bg-white";
+const sectionTitle = "font-display text-base font-semibold text-ink";
 
 // Icône représentative par type de document KYC, plutôt qu'un pictogramme
 // générique répété pour chaque pièce.
@@ -108,11 +112,28 @@ function greetingDate(locale: string) {
   });
 }
 
+function Greeting({ actions }: { actions?: ReactNode }) {
+  const { t, i18n } = useTranslation();
+  const business = getStoredBusiness();
+  return (
+    <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
+      <div className="min-w-0">
+        <h1 className="font-display text-2xl text-ink sm:text-[1.75rem]">
+          {t("dashboard.overview.greeting", {
+            name: business?.name ?? t("dashboard.overview.yourBusiness"),
+          })}
+        </h1>
+        <p className="mt-1 text-sm capitalize text-muted">{greetingDate(i18n.language)}</p>
+      </div>
+      {actions}
+    </div>
+  );
+}
+
 /** Vue affichée tant que le business n'a pas terminé son KYC (accès aux
  * routes financières bloqué côté API tant que le KYC n'est pas approuvé). */
 function KycOnboardingView({ kyc }: { kyc: KycStatusData }) {
-  const { t, i18n } = useTranslation();
-  const business = getStoredBusiness();
+  const { t } = useTranslation();
   const status = kyc.status;
   const tone =
     status === "pending" ? KYC_TONE.pending : status === "rejected" ? KYC_TONE.rejected : KYC_TONE.not_started;
@@ -128,24 +149,17 @@ function KycOnboardingView({ kyc }: { kyc: KycStatusData }) {
   const documents = "documents" in kyc ? kyc.documents : [];
 
   return (
-    <>
-      <div>
-        <h1 className="font-display text-2xl font-bold text-ink">
-          {t("dashboard.overview.greeting", {
-            name: business?.name ?? t("dashboard.overview.yourBusiness"),
-          })}
-        </h1>
-        <p className="mt-1 text-muted">{greetingDate(i18n.language)}</p>
-      </div>
+    <div className="mx-auto max-w-4xl">
+      <Greeting />
 
-      <div className="mt-6 rounded-2xl border border-surface-2 bg-white p-6 lg:p-7">
+      <div className={`mt-6 p-6 lg:p-7 ${card}`}>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="flex items-start gap-3">
-            <tone.icon size={19} className={`mt-0.5 shrink-0 ${tone.iconColor}`} />
+          <div className="flex items-start gap-4">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface-2">
+              <tone.icon size={19} className={tone.iconColor} />
+            </span>
             <div className="min-w-0">
-              <h2 className="font-display text-base font-bold text-ink">
-                {t(`dashboard.overview.kycOnboarding.${status}Title`)}
-              </h2>
+              <h2 className={sectionTitle}>{t(`dashboard.overview.kycOnboarding.${status}Title`)}</h2>
               <p className="mt-1 max-w-md text-sm text-muted">
                 {status === "rejected" && "decision_reason" in kyc && kyc.decision_reason
                   ? kyc.decision_reason
@@ -155,16 +169,16 @@ function KycOnboardingView({ kyc }: { kyc: KycStatusData }) {
           </div>
           <Link
             to="/dashboard/kyc"
-            className={`inline-flex shrink-0 items-center gap-1.5 rounded px-4 py-2.5 text-sm font-semibold transition-colors ${tone.cta}`}
+            className={`inline-flex h-10 shrink-0 items-center gap-1.5 self-start rounded-full px-5 text-sm font-semibold transition-colors ${tone.cta}`}
           >
             {t(`dashboard.overview.kycOnboarding.${status}Cta`)}
-            <ArrowRight size={14} />
+            <ArrowRight size={14} className="rtl:rotate-180" />
           </Link>
         </div>
 
         {/* Progression */}
-        <div className="mt-6 border-t border-surface-2 pt-5">
-          <div className="flex items-center justify-between">
+        <div className="mt-6 rounded-2xl bg-surface-2 p-5">
+          <div className="flex items-center justify-between gap-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-2">
               {t("dashboard.overview.kycOnboarding.stepsTitle")}
             </p>
@@ -172,7 +186,7 @@ function KycOnboardingView({ kyc }: { kyc: KycStatusData }) {
               {completedSteps}/{steps.length}
             </p>
           </div>
-          <div className="mt-2.5 h-1.5 w-full overflow-hidden rounded-full bg-surface">
+          <div className="mt-2.5 h-1.5 w-full overflow-hidden rounded-full bg-white">
             <div
               className={`h-full rounded-full transition-all duration-300 ${
                 status === "rejected" ? "bg-red-500" : "bg-accent"
@@ -202,16 +216,19 @@ function KycOnboardingView({ kyc }: { kyc: KycStatusData }) {
         </div>
 
         {documents.length > 0 && (
-          <div className="mt-6 border-t border-surface-2 pt-5">
+          <div className="mt-6">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-2">
               {t("dashboard.overview.kycOnboarding.documentsTitle")}
             </p>
-            <ul className="mt-3 space-y-2.5">
+            <ul className="mt-3 flex flex-wrap gap-2">
               {documents.map((doc) => {
                 const DocIcon = documentIcon(doc);
                 return (
-                  <li key={doc} className="flex items-center gap-2.5 text-sm text-ink">
-                    <DocIcon size={16} className="shrink-0 text-muted-2" />
+                  <li
+                    key={doc}
+                    className="inline-flex items-center gap-2 rounded-full border border-black/10 px-3 py-1.5 text-sm text-ink"
+                  >
+                    <DocIcon size={15} className="shrink-0 text-muted-2" />
                     {t(`dashboard.kyc.document.${doc}`, { defaultValue: doc })}
                   </li>
                 );
@@ -226,7 +243,7 @@ function KycOnboardingView({ kyc }: { kyc: KycStatusData }) {
       <div className="mt-6">
         <PlanPrompt />
       </div>
-    </>
+    </div>
   );
 }
 
@@ -261,20 +278,20 @@ function PlanPrompt() {
   };
 
   return (
-    <div className="mb-6">
+    <div>
       <button
         type="button"
         onClick={() => setExpanded((e) => !e)}
         aria-expanded={expanded}
-        className="flex w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-surface-2 bg-white px-4 py-3 text-left text-sm transition-colors hover:border-brand/30"
+        className="flex w-full flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl bg-brand-light/60 px-5 py-3.5 text-start text-sm transition-colors hover:bg-brand-light"
       >
-        <CreditCard size={15} className="shrink-0 text-brand" />
-        <span className="font-medium text-ink">{t("dashboard.overview.planGate.bannerTitle")}</span>
-        <span className="text-muted">{t("dashboard.overview.planGate.bannerDesc")}</span>
-        <span className="ml-auto flex shrink-0 items-center gap-1 text-xs font-semibold text-brand">
+        <CreditCard size={16} className="shrink-0 text-brand" />
+        <span className="font-semibold text-ink">{t("dashboard.overview.planGate.bannerTitle")}</span>
+        <span className="text-muted-2">{t("dashboard.overview.planGate.bannerDesc")}</span>
+        <span className="ms-auto flex shrink-0 items-center gap-1 text-sm font-semibold text-brand">
           {expanded ? t("dashboard.overview.planGate.hide") : t("dashboard.overview.planGate.viewPlans")}
           <ChevronDown
-            size={13}
+            size={14}
             className={`transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
           />
         </span>
@@ -298,11 +315,8 @@ function PlanPrompt() {
                   .filter(([, granted]) => granted)
                   .map(([key]) => key);
                 return (
-                  <div
-                    key={plan.id}
-                    className="flex h-full flex-col rounded-2xl border border-surface-2 bg-white p-6"
-                  >
-                    <h3 className="font-display text-lg font-bold text-ink">{plan.name}</h3>
+                  <div key={plan.id} className={`flex h-full flex-col p-6 ${card}`}>
+                    <h3 className="font-display text-lg font-semibold text-ink">{plan.name}</h3>
                     {plan.description && (
                       <p className="mt-1 text-sm text-muted">{plan.description}</p>
                     )}
@@ -333,7 +347,7 @@ function PlanPrompt() {
                       type="button"
                       onClick={() => openPinFor(plan.id)}
                       disabled={subscribe.isPending}
-                      className="mt-6 flex items-center justify-center gap-1.5 rounded bg-brand px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
+                      className="mt-6 flex h-10 items-center justify-center gap-1.5 rounded-full bg-brand px-5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {isSubscribingThis
                         ? t("dashboard.overview.planGate.subscribing")
@@ -360,9 +374,18 @@ function PlanPrompt() {
   );
 }
 
+function Stat({ label, value, hint, accent }: { label: string; value: ReactNode; hint?: string; accent?: boolean }) {
+  return (
+    <div className="min-w-0">
+      <p className="text-xs font-medium text-muted">{label}</p>
+      <p className={`mt-1 font-display text-2xl font-semibold ${accent ? "text-accent" : "text-ink"}`}>{value}</p>
+      {hint && <p className="text-xs text-muted">{hint}</p>}
+    </div>
+  );
+}
+
 export function Overview() {
-  const { t, i18n } = useTranslation();
-  const business = getStoredBusiness();
+  const { t } = useTranslation();
   const overview = useOverview();
   const wallets = useWallets();
   const txs = useTransactions(1, 5);
@@ -370,7 +393,11 @@ export function Overview() {
   const updatesRef = useRef<HTMLDivElement>(null);
 
   const scrollUpdates = (dir: 1 | -1) => {
-    updatesRef.current?.scrollBy({ left: dir * 300, behavior: "smooth" });
+    const el = updatesRef.current;
+    if (!el) return;
+    // En RTL, l'axe de défilement horizontal est inversé.
+    const rtl = getComputedStyle(el).direction === "rtl";
+    el.scrollBy({ left: dir * (rtl ? -1 : 1) * 300, behavior: "smooth" });
   };
 
   const primaryWallet = wallets.data?.[0];
@@ -389,230 +416,201 @@ export function Overview() {
   }
 
   return (
-    <>
-      <PlanPrompt />
-
-      {/* Carte de bienvenue */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand to-brand-dark p-6 text-white lg:p-8">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-10 -top-16 h-56 w-56 rotate-12 rounded-[3rem] bg-white/10 blur-2xl"
-        />
-        <div className="relative text-center">
-          <h1 className="font-display text-2xl font-bold">
-            {t("dashboard.overview.greeting", {
-              name: business?.name ?? t("dashboard.overview.yourBusiness"),
-            })}
-          </h1>
-          <p className="mt-1 text-sm text-white/70">{greetingDate(i18n.language)}</p>
-        </div>
-
-        <div className="relative mt-6 grid gap-6 rounded-2xl bg-white/95 p-6 text-ink lg:grid-cols-[1fr_auto] lg:items-center">
-          <div>
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-muted">{t("dashboard.overview.balanceLabel")}</p>
-              <Link
-                to="/dashboard/wallet/new"
-                className="inline-flex items-center gap-1.5 rounded-full bg-brand-light px-3 py-1.5 text-xs font-semibold text-brand transition-colors hover:bg-brand hover:text-white"
-              >
-                <Plus size={14} />
-                {t("dashboard.overview.addWallet")}
-              </Link>
-            </div>
-            {wallets.isLoading ? (
-              <Loader2 size={22} className="mt-3 animate-spin text-muted" />
-            ) : wallets.isError ? (
-              <p className="mt-2 flex items-center gap-1.5 text-sm text-red-600">
-                <AlertCircle size={15} /> {t("dashboard.overview.balanceError")}
-              </p>
-            ) : primaryWallet ? (
-              <>
-                <p className="mt-2 flex items-center gap-2.5 font-display text-3xl font-bold text-ink lg:text-4xl">
-                  {primaryWallet.flag_url && (
-                    <img
-                      src={primaryWallet.flag_url}
-                      alt=""
-                      className="h-7 w-7 shrink-0 rounded-full object-cover"
-                    />
-                  )}
-                  {formatMinorUnits(primaryWallet.balance, primaryWallet.currency_code)}
-                </p>
-                {wallets.data && wallets.data.length > 1 && (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {wallets.data.slice(1).map((w) => (
-                      <span
-                        key={w.id}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-surface px-3 py-1 text-xs font-medium text-muted-2"
-                      >
-                        {w.flag_url && (
-                          <img src={w.flag_url} alt="" className="h-4 w-4 rounded-full object-cover" />
-                        )}
-                        {formatMinorUnits(w.balance, w.currency_code)}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </>
-            ) : (
-              <p className="mt-2 text-sm text-muted">
-                {t("dashboard.overview.noWallet")}{" "}
-                <Link to="/dashboard/wallet/new" className="font-semibold text-brand hover:text-brand-dark">
-                  {t("dashboard.overview.addOne")}
-                </Link>
-              </p>
-            )}
-
-            <div className="mt-5 flex flex-wrap gap-2.5">
-              <Link
-                to="/dashboard/deposit"
-                className="inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
-              >
-                <ArrowDownToLine size={15} />
-                {t("dashboard.overview.deposit")}
-              </Link>
-              <Link
-                to="/dashboard/withdraw"
-                className="inline-flex items-center gap-2 rounded-full border border-surface-2 px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-brand/30"
-              >
-                <ArrowUpFromLine size={15} />
-                {t("dashboard.overview.withdraw")}
-              </Link>
-            </div>
-          </div>
-
-          <div className="hidden shrink-0 items-center justify-center lg:flex">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-light">
-              <Wallet size={28} className="text-brand" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Actualités clés */}
-      <div className="mt-8">
-        <h2 className="font-display font-semibold text-ink">
-          {t("dashboard.overview.keyUpdates")} <span className="text-muted">({keyUpdates.length})</span>
-        </h2>
-
-        <div
-          ref={updatesRef}
-          className="mask-fade-x mt-4 flex gap-4 overflow-x-auto scroll-smooth pb-1"
-        >
-          {keyUpdates.map((u) => (
-            <div
-              key={u.titleKey}
-              className="w-72 shrink-0 rounded-2xl border border-surface-2 bg-white p-4"
+    <div className="mx-auto max-w-6xl">
+      {/* En-tête : salutation + actions principales (comme « Nouveau message » dans Gmail) */}
+      <Greeting
+        actions={
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              to="/dashboard/deposit"
+              className="inline-flex h-12 items-center gap-2.5 rounded-2xl bg-brand-light px-5 text-sm font-semibold text-brand shadow-card transition-shadow hover:shadow-pop"
             >
-              <span
-                className={`flex h-9 w-9 items-center justify-center rounded-full ${toneClasses[u.tone]}`}
-              >
-                <u.icon size={16} />
-              </span>
-              <p className="mt-3 text-sm font-semibold text-ink">
-                {t(`dashboard.overview.${u.titleKey}`)}
-              </p>
-              <p className="mt-1 text-xs leading-relaxed text-muted">
-                {t(`dashboard.overview.${u.descKey}`)}
-              </p>
-            </div>
-          ))}
-        </div>
+              <ArrowDownToLine size={18} />
+              {t("dashboard.overview.deposit")}
+            </Link>
+            <Link
+              to="/dashboard/withdraw"
+              className="inline-flex h-10 items-center gap-2 rounded-full border border-black/10 px-4 text-sm font-semibold text-ink transition-colors hover:bg-surface"
+            >
+              <ArrowUpFromLine size={16} />
+              {t("dashboard.overview.withdraw")}
+            </Link>
+          </div>
+        }
+      />
 
-        <div className="mt-3 flex gap-2">
-          <button
-            onClick={() => scrollUpdates(-1)}
-            aria-label={t("dashboard.overview.prev")}
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-surface-2 bg-white text-muted-2 transition-colors hover:text-ink"
-          >
-            <ChevronLeft size={16} />
-          </button>
-          <button
-            onClick={() => scrollUpdates(1)}
-            aria-label={t("dashboard.overview.next")}
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-surface-2 bg-white text-muted-2 transition-colors hover:text-ink"
-          >
-            <ChevronRight size={16} />
-          </button>
-        </div>
+      <div className="mt-6">
+        <PlanPrompt />
       </div>
 
-      {/* Aperçu des paiements */}
-      <div className="mt-8 rounded-2xl border border-surface-2 bg-white p-5 lg:p-6">
-        <div className="flex items-center justify-between">
-          <h2 className="font-display font-semibold text-ink">{t("dashboard.overview.paymentsOverview")}</h2>
-          <span className="text-sm text-muted">{t("dashboard.overview.last30days")}</span>
-        </div>
+      <div className="mt-4 grid gap-4 xl:grid-cols-3">
+        {/* Solde */}
+        <section className="rounded-3xl bg-surface-2 p-6 xl:col-span-2">
+          <div className="flex items-center justify-between gap-4">
+            <p className="flex items-center gap-2 text-sm font-medium text-muted-2">
+              <Wallet size={16} />
+              {t("dashboard.overview.balanceLabel")}
+            </p>
+            <Link
+              to="/dashboard/wallet/new"
+              className="inline-flex h-8 items-center gap-1.5 rounded-full bg-white px-3 text-xs font-semibold text-brand transition-colors hover:bg-brand hover:text-white"
+            >
+              <Plus size={14} />
+              {t("dashboard.overview.addWallet")}
+            </Link>
+          </div>
 
-        {overview.isLoading ? (
-          <Loader2 size={22} className="mt-5 animate-spin text-muted" />
-        ) : overview.isError ? (
-          <p className="mt-5 flex items-center gap-1.5 text-sm text-red-600">
-            <AlertCircle size={15} /> {t("dashboard.overview.overviewError")}
-          </p>
-        ) : (
-          last30 && (
-            <div className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-4">
-              <div>
-                <p className="text-xs font-medium text-muted">{t("dashboard.overview.successfulDeposits")}</p>
-                <p className="mt-1.5 font-display text-xl font-bold text-ink">
-                  {last30.deposits.completed}
-                </p>
-                <span className="text-xs text-muted">{t("dashboard.overview.outOf", { total: last30.deposits.total })}</span>
+          {wallets.isLoading ? (
+            <Loader2 size={22} className="mt-4 animate-spin text-muted" />
+          ) : wallets.isError ? (
+            <p className="mt-4 flex items-center gap-1.5 text-sm text-red-600">
+              <AlertCircle size={15} /> {t("dashboard.overview.balanceError")}
+            </p>
+          ) : primaryWallet ? (
+            <>
+              <p className="mt-4 flex flex-wrap items-center gap-3 font-display text-3xl font-bold text-ink lg:text-4xl">
+                {primaryWallet.flag_url && (
+                  <img src={primaryWallet.flag_url} alt="" className="h-8 w-8 shrink-0 rounded-full object-cover" />
+                )}
+                {formatMinorUnits(primaryWallet.balance, primaryWallet.currency_code)}
+              </p>
+              {wallets.data && wallets.data.length > 1 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {wallets.data.slice(1).map((w) => (
+                    <span
+                      key={w.id}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-medium text-muted-2"
+                    >
+                      {w.flag_url && <img src={w.flag_url} alt="" className="h-4 w-4 rounded-full object-cover" />}
+                      {formatMinorUnits(w.balance, w.currency_code)}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
+            <p className="mt-4 text-sm text-muted">
+              {t("dashboard.overview.noWallet")}{" "}
+              <Link to="/dashboard/wallet/new" className="font-semibold text-brand hover:text-brand-dark">
+                {t("dashboard.overview.addOne")}
+              </Link>
+            </p>
+          )}
+        </section>
+
+        {/* Aperçu des paiements */}
+        <section className={`p-6 ${card}`}>
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <h2 className={sectionTitle}>{t("dashboard.overview.paymentsOverview")}</h2>
+            <span className="text-xs text-muted">{t("dashboard.overview.last30days")}</span>
+          </div>
+
+          {overview.isLoading ? (
+            <Loader2 size={22} className="mt-5 animate-spin text-muted" />
+          ) : overview.isError ? (
+            <p className="mt-5 flex items-center gap-1.5 text-sm text-red-600">
+              <AlertCircle size={15} /> {t("dashboard.overview.overviewError")}
+            </p>
+          ) : (
+            last30 && (
+              <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4 xl:grid-cols-2">
+                <Stat
+                  label={t("dashboard.overview.successfulDeposits")}
+                  value={last30.deposits.completed}
+                  hint={t("dashboard.overview.outOf", { total: last30.deposits.total })}
+                />
+                <Stat
+                  label={t("dashboard.overview.successfulWithdrawals")}
+                  value={last30.payouts.completed}
+                  hint={t("dashboard.overview.outOf", { total: last30.payouts.total })}
+                />
+                <Stat
+                  label={t("dashboard.overview.depositSuccessRate")}
+                  value={`${last30.deposit_success_rate_percent ?? "—"}%`}
+                  accent
+                />
+                <Stat
+                  label={t("dashboard.overview.withdrawalSuccessRate")}
+                  value={`${last30.payout_success_rate_percent ?? "—"}%`}
+                  accent
+                />
               </div>
-              <div>
-                <p className="text-xs font-medium text-muted">{t("dashboard.overview.successfulWithdrawals")}</p>
-                <p className="mt-1.5 font-display text-xl font-bold text-ink">
-                  {last30.payouts.completed}
-                </p>
-                <span className="text-xs text-muted">{t("dashboard.overview.outOf", { total: last30.payouts.total })}</span>
-              </div>
-              <div>
-                <p className="text-xs font-medium text-muted">{t("dashboard.overview.depositSuccessRate")}</p>
-                <p className="mt-1.5 font-display text-xl font-bold text-accent">
-                  {last30.deposit_success_rate_percent ?? "—"}%
-                </p>
-              </div>
-              <div>
-                <p className="text-xs font-medium text-muted">{t("dashboard.overview.withdrawalSuccessRate")}</p>
-                <p className="mt-1.5 font-display text-xl font-bold text-accent">
-                  {last30.payout_success_rate_percent ?? "—"}%
-                </p>
-              </div>
-            </div>
-          )
-        )}
+            )
+          )}
+        </section>
       </div>
 
-      {/* Transactions récentes */}
-      <div className="mt-6 rounded-2xl border border-surface-2 bg-white">
-        <div className="flex items-center justify-between border-b border-surface-2 px-5 py-4">
-          <h2 className="font-display font-semibold text-ink">{t("dashboard.overview.recentTransactions")}</h2>
+      {/* Transactions récentes : liste façon boîte de réception */}
+      <section className={`mt-4 overflow-hidden ${card}`}>
+        <div className="flex items-center justify-between gap-4 px-5 py-4">
+          <h2 className={sectionTitle}>{t("dashboard.overview.recentTransactions")}</h2>
           <Link
             to="/dashboard/transactions"
-            className="text-sm font-semibold text-brand hover:text-brand-dark"
+            className="inline-flex h-9 items-center rounded-full px-3 text-sm font-semibold text-brand transition-colors hover:bg-brand-light"
           >
             {t("dashboard.overview.seeAll")}
           </Link>
         </div>
 
         {txs.isLoading ? (
-          <p className="flex items-center gap-2 px-5 py-6 text-sm text-muted">
+          <p className="flex items-center gap-2 border-t border-black/[0.06] px-5 py-6 text-sm text-muted">
             <Loader2 size={16} className="animate-spin" /> {t("dashboard.loading")}
           </p>
         ) : txs.isError ? (
-          <p className="flex items-center gap-1.5 px-5 py-6 text-sm text-red-600">
+          <p className="flex items-center gap-1.5 border-t border-black/[0.06] px-5 py-6 text-sm text-red-600">
             <AlertCircle size={15} /> {t("dashboard.overview.transactionsError")}
           </p>
         ) : txs.data && txs.data.data.length > 0 ? (
-          <ul className="divide-y divide-surface-2">
+          <ul className="divide-y divide-black/[0.06] border-t border-black/[0.06]">
             {txs.data.data.map((tx) => (
               <TransactionRow key={tx.transaction_id} tx={tx} />
             ))}
           </ul>
         ) : (
-          <p className="px-5 py-6 text-sm text-muted">{t("dashboard.overview.noTransactions")}</p>
+          <p className="border-t border-black/[0.06] px-5 py-6 text-sm text-muted">
+            {t("dashboard.overview.noTransactions")}
+          </p>
         )}
-      </div>
-    </>
+      </section>
+
+      {/* Actualités clés */}
+      <section className="mt-8">
+        <div className="flex items-center justify-between gap-4">
+          <h2 className={sectionTitle}>
+            {t("dashboard.overview.keyUpdates")} <span className="font-normal text-muted">({keyUpdates.length})</span>
+          </h2>
+          <div className="flex gap-1">
+            <button
+              onClick={() => scrollUpdates(-1)}
+              aria-label={t("dashboard.overview.prev")}
+              className="flex h-9 w-9 items-center justify-center rounded-full text-muted-2 transition-colors hover:bg-black/[0.06] hover:text-ink"
+            >
+              <ChevronLeft size={18} className="rtl:rotate-180" />
+            </button>
+            <button
+              onClick={() => scrollUpdates(1)}
+              aria-label={t("dashboard.overview.next")}
+              className="flex h-9 w-9 items-center justify-center rounded-full text-muted-2 transition-colors hover:bg-black/[0.06] hover:text-ink"
+            >
+              <ChevronRight size={18} className="rtl:rotate-180" />
+            </button>
+          </div>
+        </div>
+
+        <div ref={updatesRef} className="mt-3 flex gap-4 overflow-x-auto scroll-smooth pb-2">
+          {keyUpdates.map((u) => (
+            <div key={u.titleKey} className="flex w-72 shrink-0 gap-3 rounded-2xl bg-surface-2 p-4">
+              <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${toneClasses[u.tone]}`}>
+                <u.icon size={16} />
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-ink">{t(`dashboard.overview.${u.titleKey}`)}</p>
+                <p className="mt-1 text-xs leading-relaxed text-muted">{t(`dashboard.overview.${u.descKey}`)}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }
