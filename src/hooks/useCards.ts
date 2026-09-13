@@ -41,11 +41,11 @@ export function useCardTransactions(id: number | undefined) {
     queryKey: [...CARDS_KEY, id, "transactions"],
     enabled: id !== undefined,
     queryFn: async () => {
-      const { data } = await api.get<{ data: CardTransaction[] }>(
-        `/business/dashboard/cards/${id}/transactions`,
-        { params: last90Days() },
-      );
-      return data.data;
+      // L'API renvoie une page ({ transactions, total, page, pageSize }), pas un tableau.
+      const { data } = await api.get<{
+        data: CardTransaction[] | { transactions?: CardTransaction[] };
+      }>(`/business/dashboard/cards/${id}/transactions`, { params: last90Days() });
+      return Array.isArray(data.data) ? data.data : (data.data?.transactions ?? []);
     },
   });
 }
