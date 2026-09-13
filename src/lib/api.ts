@@ -1,4 +1,5 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
+import { getStoredCsrfToken } from "./session";
 
 /** Reads the CSRF cookie the backend pairs with the httpOnly access-token cookie — deliberately
  * NOT httpOnly (unlike the access token itself) so this same-origin JS can read it and echo it
@@ -11,6 +12,10 @@ import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
  * Adonis's own cookie decoding, since a browser reading `document.cookie` could never replicate
  * that anyway — both sides must treat the value as an opaque string. */
 function getCsrfToken(): string | null {
+  // Source principale : le jeton renvoyé par la connexion (le cookie reste illisible depuis un
+  // autre sous-domaine que l'API). Le cookie ne sert qu'en local, quand tout tourne sur le même hôte.
+  const stored = getStoredCsrfToken();
+  if (stored) return stored;
   const match = document.cookie.match(/(?:^|;\s*)business_csrf_token=([^;]+)/);
   return match ? match[1] : null;
 }
