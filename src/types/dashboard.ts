@@ -10,9 +10,22 @@ export interface Overview {
   last_30_days: OverviewBucket;
 }
 
+export interface Currency {
+  code: string;
+  name: string;
+  symbol: string | null;
+  decimals: number;
+  country_code: string | null;
+  logo_url: string;
+  is_active: boolean;
+}
+
 export interface Wallet {
   id: number;
   currency_code: string;
+  logo_url?: string;
+  currency?: Currency;
+  /** Ancien nom de logo_url, conservé par l'API pour compatibilité. */
   flag_url?: string;
   balance: string;
   status: string;

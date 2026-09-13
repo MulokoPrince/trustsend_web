@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { AlertCircle, Loader2, Plus, Wallet } from "lucide-react";
+import { AlertCircle, Loader2, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useWallets } from "../../hooks/useWallets";
 import { formatMinorUnits } from "../../lib/format";
+import { WalletLogo } from "../../components/dashboard/WalletLogo";
 
 export function WalletPage() {
   const { t } = useTranslation();
@@ -37,9 +38,7 @@ export function WalletPage() {
           {wallets.data.map((w) => (
             <div key={w.id} className="rounded-2xl border border-surface-2 bg-white p-5">
               <div className="flex items-center justify-between">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-light text-brand">
-                  <Wallet size={18} />
-                </span>
+                <WalletLogo wallet={w} />
                 <span
                   className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
                     w.status === "active"
@@ -51,7 +50,10 @@ export function WalletPage() {
                 </span>
               </div>
 
-              <p className="mt-4 text-sm text-muted">{w.currency_code}</p>
+              <p className="mt-4 text-sm text-muted">
+                {w.currency_code}
+                {w.currency?.name && <span className="text-muted-2"> · {w.currency.name}</span>}
+              </p>
               <p className="mt-1 font-display text-2xl font-bold text-ink">
                 {formatMinorUnits(w.balance, w.currency_code)}
               </p>

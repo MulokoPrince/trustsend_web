@@ -426,7 +426,7 @@
     "addWallet": {
       "backToWallet": "Retour au portefeuille",
       "title": "Ajouter un portefeuille",
-      "subtitle": "Choisissez un pays et une devise pour créer un nouveau portefeuille.",
+      "subtitle": "Choisissez la devise du nouveau portefeuille.",
       "yourWallets": "Vos portefeuilles",
       "walletsError": "Impossible de charger vos portefeuilles.",
       "noWallets": "Aucun portefeuille pour le moment — ajoutez-en un ci-dessous.",
@@ -434,11 +434,13 @@
       "alreadyExists": "Un portefeuille {{currency}} existait déjà.",
       "createError": "Impossible de créer ce portefeuille, veuillez réessayer.",
       "addCurrency": "Ajouter une devise",
-      "addCurrencySubtitle": "Disponible selon les opérateurs mobile money pris en charge par pays.",
-      "loadingCountries": "Chargement des pays…",
-      "countriesError": "Impossible de charger les pays.",
-      "noProviders": "Aucun opérateur disponible pour le moment.",
-      "added": "Ajouté"
+      "addCurrencySubtitle": "Devises actuellement ouvertes sur TrustSend.",
+      "added": "Ajouté",
+      "searchCurrency": "Rechercher une devise",
+      "loadingCurrencies": "Chargement des devises…",
+      "currenciesError": "Impossible de charger les devises.",
+      "noCurrencies": "Aucune devise disponible pour le moment.",
+      "noMatch": "Aucune devise ne correspond à « {{query}} »."
     },
     "deposit": {
       "title": "Dépôt",

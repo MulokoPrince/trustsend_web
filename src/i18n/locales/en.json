@@ -426,7 +426,7 @@
     "addWallet": {
       "backToWallet": "Back to wallet",
       "title": "Add a wallet",
-      "subtitle": "Choose a country and a currency to create a new wallet.",
+      "subtitle": "Choose the currency of your new wallet.",
       "yourWallets": "Your wallets",
       "walletsError": "Couldn't load your wallets.",
       "noWallets": "No wallets yet — add one below.",
@@ -434,11 +434,13 @@
       "alreadyExists": "A {{currency}} wallet already existed.",
       "createError": "Couldn't create this wallet, please try again.",
       "addCurrency": "Add a currency",
-      "addCurrencySubtitle": "Available based on mobile money operators supported per country.",
-      "loadingCountries": "Loading countries…",
-      "countriesError": "Couldn't load the countries.",
-      "noProviders": "No operators available yet.",
-      "added": "Added"
+      "addCurrencySubtitle": "Currencies currently open on TrustSend.",
+      "added": "Added",
+      "searchCurrency": "Search a currency",
+      "loadingCurrencies": "Loading currencies…",
+      "currenciesError": "Couldn't load the currencies.",
+      "noCurrencies": "No currency available yet.",
+      "noMatch": "No currency matches “{{query}}”."
     },
     "deposit": {
       "title": "Deposit",

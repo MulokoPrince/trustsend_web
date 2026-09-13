@@ -1,20 +1,29 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { AlertCircle, ArrowLeft, CheckCircle2, Loader2, Plus, Wallet } from "lucide-react";
+import { AlertCircle, ArrowLeft, CheckCircle2, Loader2, Plus, Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { usePaymentMethods } from "../../hooks/usePaymentMethods";
+import { useCurrencies } from "../../hooks/useCurrencies";
 import { useWallets, useCreateWallet } from "../../hooks/useWallets";
 import { formatMinorUnits } from "../../lib/format";
+import { WalletLogo } from "../../components/dashboard/WalletLogo";
 
 export function AddWalletPage() {
-  const { t, i18n } = useTranslation();
-  const lang = i18n.language.startsWith("en") ? "en" : "fr";
-  const methods = usePaymentMethods();
+  const { t } = useTranslation();
+  const currencies = useCurrencies();
   const wallets = useWallets();
   const createWallet = useCreateWallet();
   const [pendingCurrency, setPendingCurrency] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
 
   const existingCurrencies = new Set(wallets.data?.map((w) => w.currency_code));
+
+  const visibleCurrencies = useMemo(() => {
+    const term = query.trim().toLowerCase();
+    if (!term) return currencies.data ?? [];
+    return (currencies.data ?? []).filter(
+      (c) => c.code.toLowerCase().includes(term) || c.name.toLowerCase().includes(term),
+    );
+  }, [currencies.data, query]);
 
   const addCurrency = (currency: string) => {
     setPendingCurrency(currency);
@@ -34,9 +43,7 @@ export function AddWalletPage() {
       <h1 className="mt-3 font-display text-2xl font-bold text-ink">
         {t("dashboard.addWallet.title")}
       </h1>
-      <p className="mt-1 text-muted">
-        {t("dashboard.addWallet.subtitle")}
-      </p>
+      <p className="mt-1 text-muted">{t("dashboard.addWallet.subtitle")}</p>
 
       {/* ---------- Portefeuilles déjà ajoutés ---------- */}
       <div className="mt-8">
@@ -60,26 +67,16 @@ export function AddWalletPage() {
                 key={w.id}
                 className="flex items-center gap-3 rounded-2xl border border-surface-2 bg-white px-4 py-3"
               >
-                {w.flag_url ? (
-                  <img src={w.flag_url} alt="" className="h-8 w-8 rounded-full object-cover" />
-                ) : (
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-light text-brand">
-                    <Wallet size={15} />
-                  </span>
-                )}
+                <WalletLogo wallet={w} className="h-8 w-8" />
                 <div>
                   <p className="text-sm font-semibold text-ink">{w.currency_code}</p>
-                  <p className="text-xs text-muted">
-                    {formatMinorUnits(w.balance, w.currency_code)}
-                  </p>
+                  <p className="text-xs text-muted">{formatMinorUnits(w.balance, w.currency_code)}</p>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="mt-4 text-sm text-muted">
-            {t("dashboard.addWallet.noWallets")}
-          </p>
+          <p className="mt-4 text-sm text-muted">{t("dashboard.addWallet.noWallets")}</p>
         )}
       </div>
 
@@ -99,80 +96,78 @@ export function AddWalletPage() {
         </p>
       )}
 
-      {/* ---------- Sélection pays / devise ---------- */}
+      {/* ---------- Choix de la devise ---------- */}
       <div className="mt-10 border-t border-surface-2 pt-8">
-        <h2 className="font-display font-semibold text-ink">{t("dashboard.addWallet.addCurrency")}</h2>
-        <p className="mt-1 text-sm text-muted">
-          {t("dashboard.addWallet.addCurrencySubtitle")}
-        </p>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="font-display font-semibold text-ink">{t("dashboard.addWallet.addCurrency")}</h2>
+            <p className="mt-1 text-sm text-muted">{t("dashboard.addWallet.addCurrencySubtitle")}</p>
+          </div>
+          <label className="relative block sm:w-64">
+            <span className="sr-only">{t("dashboard.addWallet.searchCurrency")}</span>
+            <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={t("dashboard.addWallet.searchCurrency")}
+              className="w-full rounded border border-surface-2 bg-white py-2 pl-9 pr-3 text-sm text-ink outline-none transition-colors focus:border-brand"
+            />
+          </label>
+        </div>
 
-        {methods.isLoading ? (
+        {currencies.isLoading ? (
           <p className="mt-6 flex items-center gap-2 text-sm text-muted">
-            <Loader2 size={16} className="animate-spin" /> {t("dashboard.addWallet.loadingCountries")}
+            <Loader2 size={16} className="animate-spin" /> {t("dashboard.addWallet.loadingCurrencies")}
           </p>
-        ) : methods.isError ? (
+        ) : currencies.isError ? (
           <p className="mt-6 flex items-center gap-1.5 text-sm text-red-600">
-            <AlertCircle size={15} /> {t("dashboard.addWallet.countriesError")}
+            <AlertCircle size={15} /> {t("dashboard.addWallet.currenciesError")}
           </p>
-        ) : !methods.data?.active_configuration?.countries?.length ? (
-          <p className="mt-6 text-sm text-muted">{t("dashboard.addWallet.noProviders")}</p>
+        ) : !currencies.data?.length ? (
+          <p className="mt-6 text-sm text-muted">{t("dashboard.addWallet.noCurrencies")}</p>
+        ) : visibleCurrencies.length === 0 ? (
+          <p className="mt-6 text-sm text-muted">{t("dashboard.addWallet.noMatch", { query: query.trim() })}</p>
         ) : (
-          <div className="mt-6 space-y-4">
-            {methods.data.active_configuration.countries.map((country) => {
-              const currencies = Array.from(
-                new Map(
-                  country.providers.flatMap((p) =>
-                    p.currencies.map((c) => [c.currency, c.displayName] as const),
-                  ),
-                ),
-              );
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {visibleCurrencies.map((currency) => {
+              const alreadyAdded = existingCurrencies.has(currency.code);
+              const isPending = pendingCurrency === currency.code && createWallet.isPending;
               return (
-                <div
-                  key={country.country}
-                  className="rounded-2xl border border-surface-2 bg-white p-5"
+                <button
+                  key={currency.code}
+                  type="button"
+                  disabled={alreadyAdded || createWallet.isPending}
+                  onClick={() => addCurrency(currency.code)}
+                  className={`flex items-center gap-3 rounded-2xl border bg-white px-4 py-3 text-left transition-colors ${
+                    alreadyAdded
+                      ? "cursor-not-allowed border-surface-2 opacity-70"
+                      : "border-surface-2 hover:border-brand hover:bg-brand-light/40 disabled:cursor-wait"
+                  }`}
                 >
-                  <div className="flex items-center gap-2.5">
-                    <img
-                      src={country.flag}
-                      alt=""
-                      className="h-6 w-6 shrink-0 rounded-full object-cover"
-                    />
-                    <h3 className="font-display font-semibold text-ink">
-                      {country.displayName[lang]}
-                    </h3>
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap gap-2.5">
-                    {currencies.map(([currency, displayName]) => {
-                      const alreadyAdded = existingCurrencies.has(currency);
-                      const isPending =
-                        pendingCurrency === currency && createWallet.isPending;
-                      return (
-                        <button
-                          key={currency}
-                          type="button"
-                          disabled={alreadyAdded || createWallet.isPending}
-                          onClick={() => addCurrency(currency)}
-                          title={displayName}
-                          className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
-                            alreadyAdded
-                              ? "cursor-not-allowed border-surface-2 bg-surface text-accent"
-                              : "border-surface-2 text-ink hover:border-brand hover:bg-brand-light hover:text-brand"
-                          }`}
-                        >
-                          {alreadyAdded ? (
-                            <CheckCircle2 size={15} />
-                          ) : isPending ? (
-                            <Loader2 size={15} className="animate-spin" />
-                          ) : (
-                            <Plus size={15} />
-                          )}
-                          {currency}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+                  <img
+                    src={currency.logo_url}
+                    alt=""
+                    loading="lazy"
+                    className="h-9 w-9 shrink-0 rounded-full border border-surface-2 object-cover"
+                  />
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-semibold text-ink">
+                      {currency.code}
+                      {currency.symbol && <span className="ml-1.5 font-normal text-muted">{currency.symbol}</span>}
+                    </span>
+                    <span className="block truncate text-xs text-muted">{currency.name}</span>
+                  </span>
+                  {alreadyAdded ? (
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-accent">
+                      <CheckCircle2 size={15} /> {t("dashboard.addWallet.added")}
+                    </span>
+                  ) : isPending ? (
+                    <Loader2 size={16} className="animate-spin text-brand" />
+                  ) : (
+                    <Plus size={16} className="text-muted-2" />
+                  )}
+                </button>
               );
             })}
           </div>
