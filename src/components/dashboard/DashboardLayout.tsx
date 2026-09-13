@@ -14,6 +14,7 @@ import {
   Home,
   KeyRound,
   LogOut,
+  Menu,
   Repeat,
   Search,
   Settings,
@@ -59,6 +60,16 @@ const navSections: { headingKey?: string; items: NavItem[] }[] = [
   },
 ];
 
+const COLLAPSED_KEY = "dashboard.sidebarCollapsed";
+
+function readCollapsed() {
+  try {
+    return localStorage.getItem(COLLAPSED_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
 export function DashboardLayout() {
   const { t, i18n } = useTranslation();
   const business = getStoredBusiness();
@@ -69,6 +80,9 @@ export function DashboardLayout() {
   const showPinBanner = profile.data && !profile.data.pin_set;
   const [langOpen, setLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement | null>(null);
+  // Desktop : rail d'icones replie (comme Gmail). Mobile : tiroir ouvert/ferme.
+  const [collapsed, setCollapsed] = useState(readCollapsed);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
     if (!langOpen) return;
@@ -81,6 +95,26 @@ export function DashboardLayout() {
     return () => document.removeEventListener("mousedown", onClick);
   }, [langOpen]);
 
+  useEffect(() => {
+    setDrawerOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(COLLAPSED_KEY, collapsed ? "1" : "0");
+    } catch {
+      /* stockage indisponible */
+    }
+  }, [collapsed]);
+
+  const toggleMenu = () => {
+    if (window.matchMedia("(min-width: 64rem)").matches) {
+      setCollapsed((c) => !c);
+    } else {
+      setDrawerOpen((o) => !o);
+    }
+  };
+
   const switchLang = (lng: "fr" | "en") => {
     i18n.changeLanguage(lng);
     setLangOpen(false);
@@ -90,143 +124,206 @@ export function DashboardLayout() {
     logout.mutate(undefined, { onSettled: () => navigate("/login") });
   };
 
-  return (
-    <div className="font-geist flex min-h-screen bg-surface">
-      {/* ---------- Sidebar ---------- */}
-      <aside className="hidden w-64 shrink-0 flex-col bg-[#020D30] lg:sticky lg:top-0 lg:flex lg:h-screen">
-        <nav className="flex-1 space-y-6 overflow-y-auto px-4 py-8">
-          {navSections.map((section, i) => (
-            <div key={i}>
-              {section.headingKey && (
-                <p className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wider text-white/40">
+  const renderNav = (rail: boolean) => (
+    <>
+      <nav className="flex-1 overflow-y-auto pe-3 pb-4">
+        {navSections.map((section, i) => (
+          <div key={i} className={i > 0 ? "mt-4" : undefined}>
+            {section.headingKey &&
+              (rail ? (
+                <div className="mx-auto mb-2 h-px w-8 bg-black/10" />
+              ) : (
+                <p className="mb-1 ps-7 text-[11px] font-semibold uppercase tracking-wider text-muted">
                   {t(`dashboard.nav.${section.headingKey}`)}
                 </p>
-              )}
-              <div className="space-y-1">
-                {section.items.map((item) => {
-                  const active = item.to === location.pathname;
-                  const className = `flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors ${
-                    active
-                      ? "bg-white/15 text-white shadow-sm"
-                      : "text-white/60 hover:bg-white/10 hover:text-white"
-                  }`;
-                  const label = t(`dashboard.nav.${item.key}`);
-                  return item.to ? (
-                    <Link key={item.key} to={item.to} className={className}>
-                      <item.icon size={18} strokeWidth={1.75} className="shrink-0" />
-                      <span>{label}</span>
-                    </Link>
-                  ) : (
-                    <a key={item.key} href="#" className={className}>
-                      <item.icon size={18} strokeWidth={1.75} className="shrink-0" />
-                      <span>{label}</span>
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-        </nav>
-
-        <div className="border-t border-white/10 p-4">
-          <button
-            onClick={handleLogout}
-            disabled={logout.isPending}
-            className="flex w-full items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-60"
-          >
-            <LogOut size={18} strokeWidth={1.75} className="shrink-0" />
-            <span>{logout.isPending ? t("dashboard.loggingOut") : t("dashboard.logout")}</span>
-          </button>
-        </div>
-      </aside>
-
-      {/* ---------- Contenu ---------- */}
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-20 items-center justify-between gap-6 border-b border-black/[0.06] bg-white px-6 lg:px-8">
-          {/* Logo dans le header */}
-          <Link to="/dashboard" className="flex shrink-0 items-center">
-            <img
-              src="/assets/icons/logo.png"
-              alt="TrustSend"
-              className="h-40 w-auto object-contain"
-            />
-          </Link>
-
-          <div className="relative hidden max-w-md flex-1 sm:block">
-            <Search
-              size={16}
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted"
-            />
-            <input
-              type="search"
-              placeholder={t("dashboard.searchPlaceholder")}
-              className="w-full rounded-full border border-black/10 bg-white py-2 pl-10 pr-4 text-sm text-ink outline-none transition-colors placeholder:text-muted/70 hover:border-black/20 focus:border-brand focus:ring-4 focus:ring-brand-light"
-            />
-          </div>
-
-          <div className="ml-auto flex items-center gap-2">
-            <span className="hidden items-center gap-1.5 rounded-full border border-black/10 px-3 py-1.5 text-sm font-medium text-ink sm:inline-flex">
-              <span className="h-2 w-2 rounded-full bg-accent" />
-              {t("dashboard.liveMode")}
-            </span>
-            <button
-              aria-label={t("dashboard.activity")}
-              className="hidden h-9 w-9 items-center justify-center rounded-full text-muted-2 transition-colors hover:bg-surface hover:text-ink sm:flex"
-            >
-              <Activity size={18} />
-            </button>
-            <NotificationBell />
-
-            <div className="relative" ref={langRef}>
-              <button
-                onClick={() => setLangOpen((o) => !o)}
-                aria-expanded={langOpen}
-                className="flex items-center gap-1 rounded-full px-2.5 py-2 text-sm font-medium text-muted-2 transition-colors hover:bg-surface hover:text-ink"
-              >
-                {i18n.language.startsWith("en") ? "EN" : "FR"}{" "}
-                <ChevronDown size={14} className="opacity-60" />
-              </button>
-              <AnimatePresence>
-                {langOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute right-0 top-full z-20 mt-2 w-28 overflow-hidden rounded-xl border border-surface-2 bg-white py-1 shadow-pop"
+              ))}
+            <div className="space-y-0.5">
+              {section.items.map((item) => {
+                const active = item.to === location.pathname;
+                const label = t(`dashboard.nav.${item.key}`);
+                const className = `flex h-9 items-center gap-4 text-sm transition-colors ${
+                  rail
+                    ? "mx-auto w-12 justify-center rounded-full"
+                    : "rounded-e-full ps-7 pe-4"
+                } ${
+                  active
+                    ? "bg-brand-light font-semibold text-brand"
+                    : "font-medium text-ink hover:bg-black/[0.05]"
+                }`;
+                const content = (
+                  <>
+                    <item.icon size={18} strokeWidth={active ? 2.25 : 1.75} className="shrink-0" />
+                    {rail ? <span className="sr-only">{label}</span> : <span className="truncate">{label}</span>}
+                  </>
+                );
+                return item.to ? (
+                  <Link
+                    key={item.key}
+                    to={item.to}
+                    title={rail ? label : undefined}
+                    aria-current={active ? "page" : undefined}
+                    className={className}
                   >
-                    <button
-                      onClick={() => switchLang("fr")}
-                      className={`block w-full px-3 py-2 text-left text-sm font-medium hover:bg-surface ${
-                        i18n.language.startsWith("fr") ? "text-brand" : "text-ink"
-                      }`}
-                    >
-                      Français
-                    </button>
-                    <button
-                      onClick={() => switchLang("en")}
-                      className={`block w-full px-3 py-2 text-left text-sm font-medium hover:bg-surface ${
-                        i18n.language.startsWith("en") ? "text-brand" : "text-ink"
-                      }`}
-                    >
-                      English
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                    {content}
+                  </Link>
+                ) : (
+                  <a key={item.key} href="#" title={rail ? label : undefined} className={className}>
+                    {content}
+                  </a>
+                );
+              })}
             </div>
-
-            <Link
-              to="/dashboard/profile"
-              aria-label={t("dashboard.account")}
-              className="flex h-9 w-9 items-center justify-center rounded-full text-muted-2 transition-colors hover:bg-brand-light hover:text-brand"
-            >
-              <CircleUserRound size={20} />
-            </Link>
           </div>
-        </header>
+        ))}
+      </nav>
 
-        <main className="flex-1 px-5 py-6 lg:px-8 lg:py-8">
+      <div className="pe-3 pb-4">
+        <button
+          onClick={handleLogout}
+          disabled={logout.isPending}
+          title={rail ? t("dashboard.logout") : undefined}
+          className={`flex h-9 items-center gap-4 text-sm font-medium text-muted-2 transition-colors hover:bg-black/[0.05] hover:text-ink disabled:opacity-60 ${
+            rail ? "mx-auto w-12 justify-center rounded-full" : "w-full rounded-e-full ps-7 pe-4"
+          }`}
+        >
+          <LogOut size={18} strokeWidth={1.75} className="shrink-0" />
+          <span className={rail ? "sr-only" : "truncate"}>
+            {logout.isPending ? t("dashboard.loggingOut") : t("dashboard.logout")}
+          </span>
+        </button>
+      </div>
+    </>
+  );
+
+  return (
+    <div className="font-geist flex h-screen flex-col bg-surface-2">
+      {/* ---------- Header pleine largeur ---------- */}
+      <header className="flex h-16 shrink-0 items-center gap-4 pe-4">
+        <div className="flex shrink-0 items-center gap-1 ps-2 lg:w-60">
+          <button
+            onClick={toggleMenu}
+            aria-label={t("dashboard.menu")}
+            aria-expanded={drawerOpen || !collapsed}
+            className="flex h-12 w-12 items-center justify-center rounded-full text-muted-2 transition-colors hover:bg-black/[0.06] hover:text-ink"
+          >
+            <Menu size={20} />
+          </button>
+          <Link to="/dashboard" className="flex h-12 items-center overflow-hidden">
+            <img src="/assets/icons/logo.png" alt="TrustSend" className="h-40 w-auto object-contain" />
+          </Link>
+        </div>
+
+        <div className="relative hidden max-w-3xl flex-1 sm:block">
+          <Search
+            size={18}
+            className="pointer-events-none absolute start-4 top-1/2 -translate-y-1/2 text-muted-2"
+          />
+          <input
+            type="search"
+            placeholder={t("dashboard.searchPlaceholder")}
+            className="h-12 w-full rounded-full border border-transparent bg-brand-light/70 ps-12 pe-4 text-sm text-ink outline-none transition-colors placeholder:text-muted-2 hover:bg-brand-light focus:border-black/10 focus:bg-white focus:shadow-card"
+          />
+        </div>
+
+        <div className="ms-auto flex items-center gap-1">
+          <span className="me-2 hidden items-center gap-1.5 rounded-full border border-black/10 bg-white px-3 py-1.5 text-sm font-medium text-ink md:inline-flex">
+            <span className="h-2 w-2 rounded-full bg-accent" />
+            {t("dashboard.liveMode")}
+          </span>
+          <button
+            aria-label={t("dashboard.activity")}
+            className="hidden h-10 w-10 items-center justify-center rounded-full text-muted-2 transition-colors hover:bg-black/[0.06] hover:text-ink sm:flex"
+          >
+            <Activity size={18} />
+          </button>
+          <NotificationBell />
+
+          <div className="relative" ref={langRef}>
+            <button
+              onClick={() => setLangOpen((o) => !o)}
+              aria-expanded={langOpen}
+              className="flex h-10 items-center gap-1 rounded-full px-3 text-sm font-medium text-muted-2 transition-colors hover:bg-black/[0.06] hover:text-ink"
+            >
+              {i18n.language.startsWith("en") ? "EN" : "FR"}{" "}
+              <ChevronDown size={14} className="opacity-60" />
+            </button>
+            <AnimatePresence>
+              {langOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute end-0 top-full z-40 mt-2 min-w-28 overflow-hidden rounded-xl border border-surface-2 bg-white py-1 shadow-pop"
+                >
+                  <button
+                    onClick={() => switchLang("fr")}
+                    className={`block w-full px-3 py-2 text-start text-sm font-medium hover:bg-surface ${
+                      i18n.language.startsWith("fr") ? "text-brand" : "text-ink"
+                    }`}
+                  >
+                    Français
+                  </button>
+                  <button
+                    onClick={() => switchLang("en")}
+                    className={`block w-full px-3 py-2 text-start text-sm font-medium hover:bg-surface ${
+                      i18n.language.startsWith("en") ? "text-brand" : "text-ink"
+                    }`}
+                  >
+                    English
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <Link
+            to="/dashboard/profile"
+            aria-label={t("dashboard.account")}
+            className="ms-1 flex h-10 w-10 items-center justify-center rounded-full bg-brand text-white transition-opacity hover:opacity-90"
+          >
+            <CircleUserRound size={20} />
+          </Link>
+        </div>
+      </header>
+
+      <div className="flex min-h-0 flex-1">
+        {/* ---------- Sidebar desktop (repliable en rail) ---------- */}
+        <aside
+          className={`hidden shrink-0 flex-col transition-[width] duration-200 lg:flex ${
+            collapsed ? "w-[72px]" : "w-64"
+          }`}
+        >
+          {renderNav(collapsed)}
+        </aside>
+
+        {/* ---------- Tiroir mobile ---------- */}
+        <AnimatePresence>
+          {drawerOpen && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                onClick={() => setDrawerOpen(false)}
+                className="fixed inset-0 z-30 bg-black/30 lg:hidden"
+              />
+              <motion.aside
+                initial={{ x: "-100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "-100%" }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="fixed inset-y-0 start-0 z-40 flex w-72 max-w-[85vw] flex-col bg-surface-2 pt-4 shadow-pop lg:hidden"
+              >
+                {renderNav(false)}
+              </motion.aside>
+            </>
+          )}
+        </AnimatePresence>
+
+        {/* ---------- Contenu : carte blanche arrondie ---------- */}
+        <main className="min-w-0 flex-1 overflow-y-auto bg-white px-5 py-6 sm:me-4 sm:mb-4 sm:rounded-2xl lg:px-8 lg:py-8">
           {showPinBanner && (
             <Link
               to="/dashboard/profile"
@@ -235,9 +332,9 @@ export function DashboardLayout() {
               <KeyRound size={15} className="shrink-0 text-amber-600" />
               <span className="font-medium text-ink">{t("dashboard.pinBanner.title")}</span>
               <span className="text-muted">{t("dashboard.pinBanner.desc")}</span>
-              <span className="ml-auto flex shrink-0 items-center gap-1 text-xs font-semibold text-amber-600">
+              <span className="ms-auto flex shrink-0 items-center gap-1 text-xs font-semibold text-amber-600">
                 {t("dashboard.pinBanner.cta")}
-                <ArrowRight size={13} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+                <ArrowRight size={13} className="transition-transform duration-200 group-hover:translate-x-0.5 rtl:rotate-180" />
               </span>
             </Link>
           )}

@@ -1,10 +1,23 @@
-// Les montants de l'API sont en plus petite unité (ex. centimes), sous forme
-// de string (bigint côté serveur). On suppose 2 décimales par défaut.
+// Décimales ISO 4217 d'une devise (0 pour XAF, RWF, BIF…, 2 pour USD ou CDF), plafonnées à 2.
+export function currencyDecimals(currencyCode: string): number {
+  try {
+    const digits = new Intl.NumberFormat("en", { style: "currency", currency: currencyCode })
+      .resolvedOptions().maximumFractionDigits;
+    return Math.min(digits ?? 2, 2);
+  } catch {
+    return 2;
+  }
+}
+
+// Les montants de l'API sont en centièmes de la devise pour TOUTES les devises, sous
+// forme de string (bigint côté serveur) : "100" vaut 1 USD comme 1 XAF. Seul
+// l'affichage suit les décimales de la devise.
 export function formatMinorUnits(amount: string, currencyCode: string): string {
+  const decimals = currencyDecimals(currencyCode);
   const value = Number(amount) / 100;
   return `${value.toLocaleString("fr-FR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
   })} ${currencyCode}`;
 }
 

@@ -108,11 +108,17 @@ export function MobileMoneyForm({
     [wallets, currencyCode],
   );
 
+  // Décimales acceptées par l'opérateur pour cette devise (0 pour XAF, XOF…).
+  const amountDecimals = activeConfig ? Math.min(decimalsCount(activeConfig.decimalsInAmount), 2) : 2;
+
+  // L'API attend des centièmes pour toutes les devises : 100 XAF → "10000". La saisie est
+  // arrondie au pas de l'opérateur, qui refuserait une fraction d'unité.
   const requestedMinorAmount = useMemo(() => {
     if (!activeConfig || !amount) return null;
-    const decimals = decimalsCount(activeConfig.decimalsInAmount);
-    return Math.round(Number(amount) * 10 ** decimals);
-  }, [activeConfig, amount]);
+    const major = Number(amount);
+    if (!Number.isFinite(major) || major <= 0) return null;
+    return Math.round(major * 10 ** amountDecimals) * 10 ** (2 - amountDecimals);
+  }, [activeConfig, amount, amountDecimals]);
 
   const insufficientBalance =
     operation === "PAYOUT" &&
@@ -319,7 +325,7 @@ export function MobileMoneyForm({
           id="amount"
           type="number"
           min="0"
-          step="any"
+          step={activeConfig ? String(10 ** -amountDecimals) : "any"}
           required
           disabled={!activeConfig}
           value={amount}
