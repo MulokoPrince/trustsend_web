@@ -12,6 +12,7 @@ export interface Overview {
 
 export interface Currency {
   code: string;
+  numeric_code: string | null;
   name: string;
   symbol: string | null;
   decimals: number;
