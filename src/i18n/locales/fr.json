@@ -329,6 +329,9 @@
           "webhooks": "Webhooks en temps réel",
           "wallet": {
             "multi_currency": "Portefeuilles multi-devises"
+          },
+          "cards": {
+            "issuing": "Cartes virtuelles"
           }
         }
       }
@@ -725,5 +728,18 @@
       "desc": "Environnement de test : l'argent est fictif et aucune opération n'est réelle.",
       "cta": "Passer en production"
     }
+  },
+  "pricing": {
+    "level": "Niveau {{level}}",
+    "featured": "Couverture complète",
+    "once": "une seule fois",
+    "free": "Gratuit",
+    "maintenance": "+ {{amount}} / mois de maintenance",
+    "noMaintenance": "Sans frais de maintenance",
+    "choose": "Choisir le niveau {{level}}",
+    "featureScoped": "{{feature}} : {{scope}}",
+    "loading": "Chargement des offres…",
+    "error": "Impossible de charger les offres pour le moment. Réessayez dans quelques instants.",
+    "empty": "Aucune offre n'est disponible pour le moment."
   }
 }
