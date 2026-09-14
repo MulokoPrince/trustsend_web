@@ -104,6 +104,8 @@ export interface Profile {
   status: string;
   webhook_url: string | null;
   pin_set: boolean;
+  /** Environnement de l'API qui a répondu ; absent sur une API antérieure à la sandbox. */
+  environment?: "sandbox" | "production";
   created_at: string;
 }
 

@@ -31,6 +31,7 @@ import { useOverview } from "../../hooks/useOverview";
 import { useWallets } from "../../hooks/useWallets";
 import { useTransactions } from "../../hooks/useTransactions";
 import { useKycStatus } from "../../hooks/useKyc";
+import { isSandbox } from "../../lib/domains";
 import { planErrorMessage, usePlans, useSubscribePlan } from "../../hooks/usePlans";
 import { getStoredBusiness } from "../../lib/session";
 import { formatMinorUnits } from "../../lib/format";
@@ -420,7 +421,9 @@ export function Overview() {
     );
   }
 
-  if (kyc.data && kyc.data.status !== "approved") {
+  // En sandbox, le compte est actif dès l'inscription, sans KYC : l'écran d'attente de
+  // vérification bloquerait l'accès au tableau de bord.
+  if (!isSandbox && kyc.data && kyc.data.status !== "approved") {
     return <KycOnboardingView kyc={kyc.data} />;
   }
 
@@ -447,9 +450,12 @@ export function Overview() {
         }
       />
 
-      <div className="mt-6">
-        <PlanPrompt />
-      </div>
+      {/* En sandbox, toutes les fonctionnalités sont ouvertes : rien à souscrire. */}
+      {!isSandbox && (
+        <div className="mt-6">
+          <PlanPrompt />
+        </div>
+      )}
 
       <div className="mt-4 grid gap-4 xl:grid-cols-3">
         {/* Solde */}

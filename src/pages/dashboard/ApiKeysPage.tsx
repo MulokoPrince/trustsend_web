@@ -3,6 +3,7 @@ import { AlertCircle, Copy, KeyRound, Loader2, Plus, Trash2 } from "lucide-react
 import { useTranslation } from "react-i18next";
 import { useApiKeys, useCreateApiKey, useRevokeApiKey } from "../../hooks/useApiKeys";
 import { formatDateTime } from "../../lib/format";
+import { SANDBOX_API_BASE_URL, isSandbox } from "../../lib/domains";
 
 export function ApiKeysPage() {
   const { t } = useTranslation();
@@ -37,6 +38,16 @@ export function ApiKeysPage() {
           {create.isPending ? t("dashboard.apiKeys.generating") : t("dashboard.apiKeys.generate")}
         </button>
       </div>
+
+      {isSandbox && (
+        <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm">
+          <p className="font-semibold text-amber-800">{t("dashboard.apiKeys.sandboxTitle")}</p>
+          <p className="mt-1 text-amber-800/80">{t("dashboard.apiKeys.sandboxDesc")}</p>
+          <code className="mt-3 block truncate rounded border border-amber-200 bg-white px-3.5 py-2.5 text-ink">
+            {SANDBOX_API_BASE_URL}
+          </code>
+        </div>
+      )}
 
       {create.isSuccess && create.data && (
         <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5">

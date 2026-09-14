@@ -30,6 +30,18 @@
       "permanent": false
     },
     {
+      "source": "/",
+      "has": [{ "type": "host", "value": "sandbox.trustsend.africa" }],
+      "destination": "/dashboard",
+      "permanent": false
+    },
+    {
+      "source": "/:path(pricing|agents|transferts-internationaux|cartes-virtuelles|cryptomonnaies|paiement-marchand)",
+      "has": [{ "type": "host", "value": "sandbox.trustsend.africa" }],
+      "destination": "https://www.trustsend.africa/:path",
+      "permanent": false
+    },
+    {
       "source": "/:path(pricing|agents|transferts-internationaux|cartes-virtuelles|cryptomonnaies|paiement-marchand)",
       "has": [{ "type": "host", "value": "business.trustsend.africa" }],
       "destination": "https://www.trustsend.africa/:path",
@@ -60,6 +72,11 @@
     {
       "source": "/(.*)",
       "has": [{ "type": "host", "value": "business.trustsend.africa" }],
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "sandbox.trustsend.africa" }],
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     }
   ]

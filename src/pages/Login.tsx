@@ -1,8 +1,9 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AlertCircle, Eye, EyeOff, ShieldCheck } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, FlaskConical, ShieldCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLogin, loginErrorMessage } from "../hooks/useLogin";
+import { isSandbox } from "../lib/domains";
 import { AuthField } from "../components/auth/AuthField";
 import "../styles/geist.css";
 import { Nav } from "../components/Nav";
@@ -43,6 +44,12 @@ export function Login() {
               {t("login.title")}
             </h1>
             <p className="mt-3 text-base leading-relaxed text-muted-2">{t("login.subtitle")}</p>
+            {isSandbox && (
+              <p className="mt-4 flex items-start gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+                <FlaskConical size={15} aria-hidden className="mt-0.5 shrink-0" />
+                {t("login.sandboxNotice")}
+              </p>
+            )}
           </div>
 
           {/* Colonne formulaire */}

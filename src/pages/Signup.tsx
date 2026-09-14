@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { AlertCircle, ArrowLeft, CheckCircle2, Eye, EyeOff, ShieldCheck } from "lucide-react";
+import { AlertCircle, ArrowLeft, CheckCircle2, Eye, EyeOff, FlaskConical, ShieldCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useSignup, useRequestSignupOtp } from "../hooks/useSignup";
 import { ApiError } from "../lib/api";
+import { isSandbox } from "../lib/domains";
 import { AuthField } from "../components/auth/AuthField";
 import "../styles/geist.css";
 import { Nav } from "../components/Nav";
@@ -145,7 +146,8 @@ export function Signup() {
             {t("signup.successCreated")}
           </h1>
           <p className="mt-3 text-base leading-relaxed text-muted-2">
-            {t("signup.successPendingBody", {
+            {/* En sandbox, le compte est actif tout de suite : pas d'attente de validation. */}
+            {t(isSandbox ? "signup.sandboxSuccessBody" : "signup.successPendingBody", {
               name: signup.data.name,
               email: signup.data.email,
             })}
@@ -184,6 +186,12 @@ export function Signup() {
                 {heading.title}
               </h1>
               <p className="mt-3 break-words text-base leading-relaxed text-muted-2">{heading.subtitle}</p>
+              {isSandbox && (
+                <p className="mt-4 flex items-start gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+                  <FlaskConical size={15} aria-hidden className="mt-0.5 shrink-0" />
+                  {t("signup.sandboxNotice")}
+                </p>
+              )}
 
               {step === "otp" ? (
                 <button type="button" onClick={onChangeEmail} className={`${textButtonClasses} mt-2`}>

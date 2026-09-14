@@ -4,25 +4,13 @@ import { AlertCircle, ArrowUpDown, CheckCircle2, Loader2, Plus, RefreshCw } from
 import { useTranslation } from "react-i18next";
 import { useWallets } from "../../hooks/useWallets";
 import { swapErrorMessage, useExecuteSwap, useSwapQuote } from "../../hooks/useSwap";
-import { formatMinorUnits } from "../../lib/format";
+import { formatMinorUnits, toMinorUnits } from "../../lib/format";
 import { ApiError } from "../../lib/api";
 import { WalletLogo } from "../../components/dashboard/WalletLogo";
 import { PinModal } from "../../components/dashboard/PinModal";
 import type { SwapQuote, SwapResult, Wallet } from "../../types/dashboard";
 
 const QUOTE_DEBOUNCE_MS = 450;
-
-// Les montants de l'API sont en centièmes pour toutes les devises ; une devise sans
-// décimales (XAF, RWF…) n'accepte que des unités entières.
-function toMinorUnits(input: string, decimals: number): string | null {
-  const allowed = Math.min(Math.max(decimals, 0), 2);
-  const normalized = input.trim().replace(",", ".");
-  const pattern = allowed === 0 ? /^\d+$/ : new RegExp(`^\\d+(\\.\\d{1,${allowed}})?$`);
-  if (!pattern.test(normalized)) return null;
-  const [whole, fraction = ""] = normalized.split(".");
-  const minor = BigInt(whole) * 100n + BigInt(fraction.padEnd(2, "0") || "0");
-  return minor > 0n ? minor.toString() : null;
-}
 
 function formatRate(rate: string, locale: string): string {
   return Number(rate).toLocaleString(locale, { maximumFractionDigits: 6 });
