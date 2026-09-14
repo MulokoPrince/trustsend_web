@@ -203,6 +203,7 @@ export const navMegaMenus: Record<string, NavMegaMenu> = {
           },
           {
             label: "Webhooks",
+            href: "https://docs.trustsend.africa/webhooks",
             desc: "Get real-time notifications for every transaction.",
             icon: "/assets/icons/develop/docs.svg",
           },
