@@ -395,7 +395,23 @@
       "submitDesc": "Indiquez le type de document à vérifier pour lancer le processus KYC.",
       "submit": "Soumettre",
       "submitting": "Envoi…",
-      "submitError": "Impossible de soumettre la vérification."
+      "submitError": "Impossible de soumettre la vérification.",
+      "clickToUpload": "Cliquez pour choisir un fichier ou glissez-le ici",
+      "fileFormats": "PDF, JPG ou PNG · 10 Mo max",
+      "secureNote": "Vos documents sont chiffrés et servent uniquement à la vérification.",
+      "documentsTitle": "Documents envoyés",
+      "documentsLabel": "Documents à fournir",
+      "documentsProgress": "{{done}} sur {{total}} ajouté(s)",
+      "retry": "Réessayer",
+      "rejectionReason": "Motif du rejet",
+      "rejectedHint": "Corrigez les points signalés puis soumettez à nouveau vos documents ci-dessous.",
+      "verificationTypeDesc": {
+        "document": "Certificat d'enregistrement ou d'identification fiscale",
+        "identity": "Passeport, carte d'identité ou permis de conduire",
+        "address": "Facture ou relevé récent à votre adresse",
+        "liveness": "Une photo de vous prise sur le moment",
+        "pep_screening": "Contrôle automatique, aucun document requis"
+      }
     },
     "notifications": {
       "title": "Notifications",
@@ -675,7 +691,15 @@
       "pinMismatch": "Les deux codes PIN ne correspondent pas.",
       "changePin": "Changer le PIN",
       "changingPin": "Changement…",
-      "pinChangeSuccess": "Code PIN changé avec succès."
+      "pinChangeSuccess": "Code PIN changé avec succès.",
+      "welcome": "Bienvenue, {{name}}",
+      "welcomeDesc": "Gérez vos informations, la sécurité de votre compte et vos paramètres.",
+      "accountInfoDesc": "Informations utilisées pour identifier votre entreprise sur TumaPlus.",
+      "securityDesc": "Paramètres et recommandations pour protéger votre compte.",
+      "email": "E-mail",
+      "password": "Mot de passe",
+      "notSet": "Non défini",
+      "cancel": "Annuler"
     }
   }
 }

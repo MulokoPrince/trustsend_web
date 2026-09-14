@@ -7,18 +7,22 @@ import {
 } from "react";
 import {
   AlertCircle,
-  Briefcase,
+  AlertTriangle,
+  Building2,
   Calendar,
   Check,
-  CheckCircle2,
+  ChevronRight,
   Copy,
   Hash,
   KeyRound,
   Loader2,
+  Lock,
+  Mail,
   Phone,
   ShieldCheck,
   UserRound,
   Webhook as WebhookIcon,
+  X,
   type LucideIcon,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -33,32 +37,30 @@ import { ApiError } from "../../lib/api";
 import "../../styles/geist.css";
 
 /* -------------------------------------------------------------------------- */
-/*  Primitives                                                                 */
+/*  Primitives (style Google Account / Material 3)                             */
 /* -------------------------------------------------------------------------- */
 
 type FieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> & {
   id: string;
   label: string;
-  icon?: LucideIcon;
   onValue: (value: string) => void;
 };
 
-function Field({ id, label, icon: Icon, onValue, ...input }: FieldProps) {
+function Field({ id, label, onValue, ...input }: FieldProps) {
   return (
-    <div>
-      <label
-        htmlFor={id}
-        className="mb-1.5 flex items-center gap-1.5 text-sm font-semibold text-ink"
-      >
-        {Icon && <Icon size={13} className="text-muted" />}
-        {label}
-      </label>
+    <div className="relative">
       <input
         id={id}
         onChange={(e) => onValue(e.currentTarget.value)}
-        className="w-full rounded-lg border border-black/10 bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-muted/70 hover:border-black/20 focus:border-brand focus:ring-4 focus:ring-brand-light"
+        className="peer h-14 w-full rounded-md border border-[#747775] bg-white px-4 text-[15px] text-[#1f1f1f] outline-none transition-colors placeholder:text-[#747775] hover:border-[#1f1f1f] focus:border-2 focus:border-accent focus:px-[15px]"
         {...input}
       />
+      <label
+        htmlFor={id}
+        className="pointer-events-none absolute left-3 top-0 -translate-y-1/2 bg-white px-1 text-xs text-[#444746] peer-focus:text-accent"
+      >
+        {label}
+      </label>
     </div>
   );
 }
@@ -78,82 +80,123 @@ function PinField(props: Omit<FieldProps, "type" | "inputMode">) {
   );
 }
 
-function Alert({ tone, children }: { tone: "error" | "success"; children: ReactNode }) {
-  const Icon = tone === "error" ? AlertCircle : CheckCircle2;
+function ErrorText({ children }: { children: ReactNode }) {
   return (
-    <p
-      className={`flex items-center gap-2 rounded-lg border px-3.5 py-2.5 text-sm ${
-        tone === "error"
-          ? "border-red-200 bg-red-50 text-red-700"
-          : "border-accent-light bg-accent-light/40 text-accent"
-      }`}
-    >
-      <Icon size={15} className="shrink-0" />
+    <p className="flex items-center gap-2 text-sm text-[#b3261e]">
+      <AlertCircle size={16} className="shrink-0" />
       {children}
     </p>
   );
 }
 
-function Card({
-  icon: Icon,
-  title,
-  description,
-  badge,
-  warn,
-  children,
-}: {
-  icon: LucideIcon;
-  title: string;
-  description?: string;
-  badge?: ReactNode;
-  warn?: boolean;
-  children: ReactNode;
-}) {
-  return (
-    <section className="rounded-xl border border-black/10 bg-white p-6 sm:p-7">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <span
-            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
-              warn ? "bg-amber-100 text-amber-600" : "bg-brand-light text-brand"
-            }`}
-          >
-            <Icon size={16} />
-          </span>
-          <div>
-            <h2 className="font-display font-semibold text-ink">{title}</h2>
-            {description && <p className="text-xs text-muted">{description}</p>}
-          </div>
-        </div>
-        {badge}
-      </div>
-      {children}
-    </section>
-  );
-}
-
-function SubmitButton({
+function Button({
   pending,
-  variant = "primary",
+  variant = "filled",
+  type = "submit",
+  onClick,
   children,
 }: {
-  pending: boolean;
-  variant?: "primary" | "ghost";
+  pending?: boolean;
+  variant?: "filled" | "text";
+  type?: "submit" | "button";
+  onClick?: () => void;
   children: ReactNode;
 }) {
   return (
     <button
-      type="submit"
+      type={type}
+      onClick={onClick}
       disabled={pending}
-      className={`inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors disabled:opacity-60 ${
-        variant === "primary"
-          ? "bg-brand text-white hover:bg-brand-dark"
-          : "border border-black/10 text-ink hover:border-black/20"
+      className={`inline-flex h-10 items-center gap-2 rounded-full px-6 text-sm font-medium transition-colors disabled:opacity-60 ${
+        variant === "filled"
+          ? "bg-accent text-white hover:bg-accent/90 hover:shadow-sm"
+          : "text-accent hover:bg-accent/[0.08]"
       }`}
     >
       {pending && <Loader2 size={14} className="animate-spin" />}
       {children}
     </button>
+  );
+}
+
+function Card({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: string;
+  children: ReactNode;
+}) {
+  return (
+    <section className="overflow-hidden rounded-2xl border border-[#dadce0] bg-white">
+      <header className="px-6 pb-2 pt-6">
+        <h2 className="text-[22px] leading-7 text-[#1f1f1f]">{title}</h2>
+        {description && <p className="mt-1 text-sm text-[#444746]">{description}</p>}
+      </header>
+      <div className="mt-2">{children}</div>
+    </section>
+  );
+}
+
+function Row({
+  icon: Icon,
+  label,
+  value,
+  warn,
+  open,
+  onToggle,
+  trailing,
+  children,
+}: {
+  icon: LucideIcon;
+  label: string;
+  value: ReactNode;
+  warn?: boolean;
+  open?: boolean;
+  onToggle?: () => void;
+  trailing?: ReactNode;
+  children?: ReactNode;
+}) {
+  const interactive = Boolean(onToggle);
+  const content = (
+    <>
+      <Icon
+        size={20}
+        className={`shrink-0 ${warn ? "text-[#b06000]" : "text-[#444746]"}`}
+      />
+      <div className="grid min-w-0 flex-1 gap-0.5 sm:grid-cols-[180px_1fr] sm:items-center sm:gap-6">
+        <span className="text-xs font-medium uppercase tracking-wide text-[#444746] sm:text-[13px] sm:normal-case sm:tracking-normal">
+          {label}
+        </span>
+        <span className="truncate text-[15px] text-[#1f1f1f]">{value}</span>
+      </div>
+      {trailing}
+      {interactive && (
+        <ChevronRight
+          size={20}
+          className={`shrink-0 text-[#444746] transition-transform ${open ? "rotate-90" : ""}`}
+        />
+      )}
+    </>
+  );
+
+  return (
+    <div className="border-t border-[#dadce0]">
+      {interactive ? (
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-expanded={open}
+          className="flex min-h-16 w-full items-center gap-5 px-6 py-3 text-left transition-colors hover:bg-[#1f1f1f]/[0.04]"
+        >
+          {content}
+        </button>
+      ) : (
+        <div className="flex min-h-16 items-center gap-5 px-6 py-3">{content}</div>
+      )}
+      {open && children && <div className="px-6 pb-6 pt-2 sm:pl-[68px]">{children}</div>}
+    </div>
   );
 }
 
@@ -170,6 +213,8 @@ const STATUS_KEYS: Record<string, string> = {
 const errorText = (error: unknown, fallback: string) =>
   error instanceof ApiError ? error.message : fallback;
 
+type Editing = "name" | "phone" | "webhook_url" | "pin" | "password" | null;
+
 export function ProfilePage() {
   const { t } = useTranslation();
   const profile = useProfile();
@@ -179,20 +224,30 @@ export function ProfilePage() {
   const changePin = useChangePin();
 
   const [tab, setTab] = useState<"general" | "security">("general");
+  const [editing, setEditing] = useState<Editing>(null);
+  const [toast, setToast] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", webhook_url: "" });
   const [pw, setPw] = useState({ current_password: "", new_password: "" });
   const [pin, setPinForm] = useState({ current: "", next: "", confirm: "" });
   const [pinMismatch, setPinMismatch] = useState(false);
 
-  useEffect(() => {
+  const resetForm = () => {
     if (!profile.data) return;
     setForm({
       name: profile.data.name,
       phone: profile.data.phone,
       webhook_url: profile.data.webhook_url ?? "",
     });
-  }, [profile.data]);
+  };
+
+  useEffect(resetForm, [profile.data]);
+
+  useEffect(() => {
+    if (!toast) return;
+    const id = setTimeout(() => setToast(null), 4000);
+    return () => clearTimeout(id);
+  }, [toast]);
 
   if (profile.isLoading) {
     return (
@@ -221,6 +276,20 @@ export function ProfilePage() {
     .join("")
     .toUpperCase();
 
+  const toggle = (key: Exclude<Editing, null>) => {
+    updateProfile.reset();
+    changePassword.reset();
+    pinMutation.reset();
+    setPinMismatch(false);
+    resetForm();
+    setEditing((current) => (current === key ? null : key));
+  };
+
+  const close = () => {
+    resetForm();
+    setEditing(null);
+  };
+
   const copyCode = () =>
     navigator.clipboard.writeText(account.code).then(() => {
       setCopied(true);
@@ -229,17 +298,29 @@ export function ProfilePage() {
 
   const onSaveProfile = (e: FormEvent) => {
     e.preventDefault();
-    updateProfile.mutate({
-      name: form.name,
-      phone: form.phone,
-      webhook_url: form.webhook_url || undefined,
-    });
+    updateProfile.mutate(
+      {
+        name: form.name,
+        phone: form.phone,
+        webhook_url: form.webhook_url || undefined,
+      },
+      {
+        onSuccess: () => {
+          setEditing(null);
+          setToast(t("dashboard.profile.updateSuccess"));
+        },
+      },
+    );
   };
 
   const onSavePassword = (e: FormEvent) => {
     e.preventDefault();
     changePassword.mutate(pw, {
-      onSuccess: () => setPw({ current_password: "", new_password: "" }),
+      onSuccess: () => {
+        setPw({ current_password: "", new_password: "" });
+        setEditing(null);
+        setToast(t("dashboard.profile.passwordSuccess"));
+      },
     });
   };
 
@@ -250,13 +331,38 @@ export function ProfilePage() {
       return;
     }
     setPinMismatch(false);
-    const reset = { onSuccess: () => setPinForm({ current: "", next: "", confirm: "" }) };
+    const done = {
+      onSuccess: () => {
+        setPinForm({ current: "", next: "", confirm: "" });
+        setEditing(null);
+        setToast(
+          pinSet
+            ? t("dashboard.profile.pinChangeSuccess")
+            : t("dashboard.profile.pinSetSuccess"),
+        );
+      },
+    };
     if (pinSet) {
-      changePin.mutate({ current_pin: pin.current, new_pin: pin.next }, reset);
+      changePin.mutate({ current_pin: pin.current, new_pin: pin.next }, done);
     } else {
-      setPin.mutate(pin.next, reset);
+      setPin.mutate(pin.next, done);
     }
   };
+
+  const profileField = (key: "name" | "phone" | "webhook_url", field: ReactNode) => (
+    <form onSubmit={onSaveProfile} className="space-y-4">
+      {field}
+      {updateProfile.isError && <ErrorText>{t("dashboard.profile.updateError")}</ErrorText>}
+      <div className="flex justify-end gap-2">
+        <Button type="button" variant="text" onClick={close}>
+          {t("dashboard.profile.cancel")}
+        </Button>
+        <Button pending={updateProfile.isPending && editing === key}>
+          {updateProfile.isPending ? t("dashboard.profile.saving") : t("dashboard.profile.save")}
+        </Button>
+      </div>
+    </form>
+  );
 
   const tabs = [
     { key: "general" as const, label: t("dashboard.profile.general"), icon: UserRound },
@@ -264,196 +370,283 @@ export function ProfilePage() {
   ];
 
   return (
-    <div className="font-geist max-w-3xl">
+    <div className="font-geist mx-auto max-w-3xl">
       {/* ---------- En-tête ---------- */}
-      <header className="relative overflow-hidden rounded-xl bg-[#020D30] px-6 py-8 sm:px-9">
-        <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4">
-            <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-white/10 font-display text-xl font-bold text-white">
-              {initials}
-            </span>
-            <div>
-              <h1 className="font-display text-2xl font-bold text-white">{account.name}</h1>
-              <p className="mt-1 text-sm text-white/60">{account.email}</p>
-              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-white/60">
-                <button
-                  type="button"
-                  onClick={copyCode}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-2.5 py-1 font-medium text-white/80 transition-colors hover:bg-white/10"
-                >
-                  <Hash size={12} />
-                  {account.code}
-                  {copied ? <Check size={12} className="text-accent-light" /> : <Copy size={12} />}
-                </button>
-                <span className="inline-flex items-center gap-1.5">
-                  <Calendar size={12} />
-                  {t("dashboard.profile.memberSince", {
-                    year: new Date(account.created_at).getFullYear(),
-                  })}
-                </span>
-              </div>
-            </div>
-          </div>
+      <header className="flex flex-col items-center pt-4 text-center">
+        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-accent text-4xl font-medium text-white">
+          {initials}
+        </span>
+        <h1 className="mt-4 text-[28px] leading-9 text-[#1f1f1f]">
+          {t("dashboard.profile.welcome", { name: account.name })}
+        </h1>
+        <p className="mt-1 text-base text-[#444746]">{t("dashboard.profile.welcomeDesc")}</p>
 
-          <span className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-full bg-accent-light px-3.5 py-1.5 text-xs font-semibold text-accent sm:self-center">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-sm">
+          <span className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-[#c4c7c5] px-3 text-[#444746]">
+            <span
+              className={`h-2 w-2 rounded-full ${
+                account.status === "active"
+                  ? "bg-[#146c2e]"
+                  : account.status === "pending"
+                    ? "bg-[#b06000]"
+                    : "bg-[#b3261e]"
+              }`}
+            />
             {t(`dashboard.profile.${STATUS_KEYS[account.status] ?? "statusActive"}`)}
+          </span>
+          <span className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-[#c4c7c5] px-3 text-[#444746]">
+            <Calendar size={14} />
+            {t("dashboard.profile.memberSince", {
+              year: new Date(account.created_at).getFullYear(),
+            })}
           </span>
         </div>
       </header>
 
       {/* ---------- Onglets ---------- */}
-      <nav className="mt-6 flex gap-1 border-b border-black/10">
-        {tabs.map((item) => (
-          <button
-            key={item.key}
-            type="button"
-            onClick={() => setTab(item.key)}
-            className={`flex items-center gap-1.5 border-b-2 px-4 py-3 text-sm font-semibold transition-colors ${
-              tab === item.key
-                ? "border-brand text-ink"
-                : "border-transparent text-muted-2 hover:text-ink"
-            }`}
-          >
-            <item.icon size={15} />
-            {item.label}
-          </button>
-        ))}
+      <nav className="mt-8 flex justify-center border-b border-[#dadce0]">
+        {tabs.map((item) => {
+          const active = tab === item.key;
+          return (
+            <button
+              key={item.key}
+              type="button"
+              onClick={() => {
+                setTab(item.key);
+                setEditing(null);
+              }}
+              className={`relative flex h-12 items-center gap-2 px-6 text-sm font-medium transition-colors hover:bg-[#1f1f1f]/[0.04] ${
+                active ? "text-accent" : "text-[#444746]"
+              }`}
+            >
+              <item.icon size={18} />
+              {item.label}
+              {active && (
+                <span className="absolute inset-x-4 bottom-0 h-[3px] rounded-t-full bg-accent" />
+              )}
+            </button>
+          );
+        })}
       </nav>
 
       {/* ---------- Contenu ---------- */}
-      <div className="mt-6 space-y-6">
+      <div className="mt-8 space-y-6 pb-16">
         {tab === "general" && (
-          <Card icon={Briefcase} title={t("dashboard.profile.accountInfo")}>
-            <form onSubmit={onSaveProfile} className="mt-6 space-y-4">
-              <Field
-                id="name"
-                label={t("dashboard.profile.companyName")}
-                required
-                value={form.name}
-                onValue={(name) => setForm((f) => ({ ...f, name }))}
-              />
+          <Card
+            title={t("dashboard.profile.accountInfo")}
+            description={t("dashboard.profile.accountInfoDesc")}
+          >
+            <Row
+              icon={Building2}
+              label={t("dashboard.profile.companyName")}
+              value={account.name}
+              open={editing === "name"}
+              onToggle={() => toggle("name")}
+            >
+              {profileField(
+                "name",
+                <Field
+                  id="name"
+                  label={t("dashboard.profile.companyName")}
+                  required
+                  autoFocus
+                  value={form.name}
+                  onValue={(name) => setForm((f) => ({ ...f, name }))}
+                />,
+              )}
+            </Row>
 
-              <div className="grid gap-4 sm:grid-cols-2">
+            <Row
+              icon={Mail}
+              label={t("dashboard.profile.email")}
+              value={account.email}
+              trailing={
+                <span title={t("dashboard.profile.emailLocked")}>
+                  <Lock size={16} className="shrink-0 text-[#747775]" />
+                </span>
+              }
+            />
+
+            <Row
+              icon={Phone}
+              label={t("dashboard.profile.phone")}
+              value={account.phone}
+              open={editing === "phone"}
+              onToggle={() => toggle("phone")}
+            >
+              {profileField(
+                "phone",
                 <Field
                   id="phone"
                   type="tel"
-                  icon={Phone}
                   label={t("dashboard.profile.phone")}
                   required
+                  autoFocus
                   value={form.phone}
                   onValue={(phone) => setForm((f) => ({ ...f, phone }))}
-                />
+                />,
+              )}
+            </Row>
+
+            <Row
+              icon={WebhookIcon}
+              label={t("dashboard.profile.webhookUrl")}
+              value={
+                account.webhook_url || (
+                  <span className="text-[#747775]">{t("dashboard.profile.notSet")}</span>
+                )
+              }
+              open={editing === "webhook_url"}
+              onToggle={() => toggle("webhook_url")}
+            >
+              {profileField(
+                "webhook_url",
                 <Field
                   id="webhook_url"
                   type="url"
-                  icon={WebhookIcon}
                   label={t("dashboard.profile.webhookUrl")}
                   placeholder="https://maboutique.com/hook"
+                  autoFocus
                   value={form.webhook_url}
                   onValue={(webhook_url) => setForm((f) => ({ ...f, webhook_url }))}
-                />
-              </div>
-
-              <p className="text-xs text-muted">{t("dashboard.profile.emailLocked")}</p>
-
-              {updateProfile.isError && (
-                <Alert tone="error">{t("dashboard.profile.updateError")}</Alert>
+                />,
               )}
-              {updateProfile.isSuccess && (
-                <Alert tone="success">{t("dashboard.profile.updateSuccess")}</Alert>
-              )}
+            </Row>
 
-              <SubmitButton pending={updateProfile.isPending}>
-                {updateProfile.isPending
-                  ? t("dashboard.profile.saving")
-                  : t("dashboard.profile.save")}
-              </SubmitButton>
-            </form>
+            <Row
+              icon={Hash}
+              label={t("dashboard.profile.businessCode")}
+              value={<span className="font-mono">{account.code}</span>}
+              trailing={
+                <button
+                  type="button"
+                  onClick={copyCode}
+                  aria-label={t("dashboard.profile.copied")}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[#444746] transition-colors hover:bg-[#1f1f1f]/[0.08]"
+                >
+                  {copied ? <Check size={18} className="text-[#146c2e]" /> : <Copy size={18} />}
+                </button>
+              }
+            />
           </Card>
         )}
 
         {tab === "security" && (
           <>
+            {!pinSet && (
+              <div className="flex items-start gap-4 rounded-2xl bg-[#fef7e0] px-6 py-5">
+                <AlertTriangle size={22} className="mt-0.5 shrink-0 text-[#b06000]" />
+                <div className="flex-1">
+                  <p className="text-[15px] font-medium text-[#1f1f1f]">
+                    {t("dashboard.profile.pinNotConfigured")}
+                  </p>
+                  <p className="mt-0.5 text-sm text-[#444746]">
+                    {t("dashboard.profile.pinDescNotSet")}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => editing !== "pin" && toggle("pin")}
+                    className="mt-2 -ml-3 inline-flex h-9 items-center rounded-full px-3 text-sm font-medium text-accent hover:bg-accent/[0.08]"
+                  >
+                    {t("dashboard.profile.setPin")}
+                  </button>
+                </div>
+              </div>
+            )}
+
             <Card
-              icon={ShieldCheck}
-              warn={!pinSet}
-              title={t("dashboard.profile.pinTitle")}
-              description={
-                pinSet
-                  ? t("dashboard.profile.pinDescSet")
-                  : t("dashboard.profile.pinDescNotSet")
-              }
-              badge={
-                <span
-                  className={`inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-[11px] font-semibold ${
-                    pinSet ? "bg-accent-light text-accent" : "bg-amber-50 text-amber-600"
-                  }`}
-                >
-                  {pinSet
-                    ? t("dashboard.profile.pinConfigured")
-                    : t("dashboard.profile.pinNotConfigured")}
-                </span>
-              }
+              title={t("dashboard.profile.security")}
+              description={t("dashboard.profile.securityDesc")}
             >
-              <form onSubmit={onSavePin} className="mt-6 space-y-4">
-                <div className="grid gap-4 sm:grid-cols-2">
+              <Row
+                icon={ShieldCheck}
+                warn={!pinSet}
+                label={t("dashboard.profile.pinTitle")}
+                value={
+                  pinSet ? (
+                    <span className="inline-flex items-center gap-1.5">
+                      <Check size={16} className="text-[#146c2e]" />
+                      {t("dashboard.profile.pinConfigured")}
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 text-[#b06000]">
+                      <X size={16} />
+                      {t("dashboard.profile.pinNotConfigured")}
+                    </span>
+                  )
+                }
+                open={editing === "pin"}
+                onToggle={() => toggle("pin")}
+              >
+                <form onSubmit={onSavePin} className="space-y-4">
+                  <p className="text-sm text-[#444746]">
+                    {pinSet
+                      ? t("dashboard.profile.pinDescSet")
+                      : t("dashboard.profile.pinDescNotSet")}
+                  </p>
                   {pinSet && (
                     <PinField
                       id="current_pin"
                       label={t("dashboard.profile.currentPinLabel")}
+                      autoFocus
                       value={pin.current}
                       onValue={(current) => setPinForm((p) => ({ ...p, current }))}
                     />
                   )}
-                  <PinField
-                    id="new_pin"
-                    label={t("dashboard.profile.newPinLabel")}
-                    value={pin.next}
-                    onValue={(next) => setPinForm((p) => ({ ...p, next }))}
-                  />
-                  <PinField
-                    id="confirm_pin"
-                    label={t("dashboard.profile.confirmPinLabel")}
-                    value={pin.confirm}
-                    onValue={(confirm) => setPinForm((p) => ({ ...p, confirm }))}
-                  />
-                </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <PinField
+                      id="new_pin"
+                      label={t("dashboard.profile.newPinLabel")}
+                      autoFocus={!pinSet}
+                      value={pin.next}
+                      onValue={(next) => setPinForm((p) => ({ ...p, next }))}
+                    />
+                    <PinField
+                      id="confirm_pin"
+                      label={t("dashboard.profile.confirmPinLabel")}
+                      value={pin.confirm}
+                      onValue={(confirm) => setPinForm((p) => ({ ...p, confirm }))}
+                    />
+                  </div>
 
-                {pinMismatch && <Alert tone="error">{t("dashboard.profile.pinMismatch")}</Alert>}
-                {pinMutation.isError && (
-                  <Alert tone="error">
-                    {errorText(pinMutation.error, t("dashboard.profile.updateError"))}
-                  </Alert>
-                )}
-                {pinMutation.isSuccess && (
-                  <Alert tone="success">
-                    {pinSet
-                      ? t("dashboard.profile.pinChangeSuccess")
-                      : t("dashboard.profile.pinSetSuccess")}
-                  </Alert>
-                )}
+                  {pinMismatch && <ErrorText>{t("dashboard.profile.pinMismatch")}</ErrorText>}
+                  {pinMutation.isError && (
+                    <ErrorText>
+                      {errorText(pinMutation.error, t("dashboard.profile.updateError"))}
+                    </ErrorText>
+                  )}
 
-                <SubmitButton pending={pinMutation.isPending} variant={pinSet ? "ghost" : "primary"}>
-                  {pinSet
-                    ? pinMutation.isPending
-                      ? t("dashboard.profile.changingPin")
-                      : t("dashboard.profile.changePin")
-                    : pinMutation.isPending
-                      ? t("dashboard.profile.settingPin")
-                      : t("dashboard.profile.setPin")}
-                </SubmitButton>
-              </form>
-            </Card>
+                  <div className="flex justify-end gap-2">
+                    <Button type="button" variant="text" onClick={close}>
+                      {t("dashboard.profile.cancel")}
+                    </Button>
+                    <Button pending={pinMutation.isPending}>
+                      {pinSet
+                        ? pinMutation.isPending
+                          ? t("dashboard.profile.changingPin")
+                          : t("dashboard.profile.changePin")
+                        : pinMutation.isPending
+                          ? t("dashboard.profile.settingPin")
+                          : t("dashboard.profile.setPin")}
+                    </Button>
+                  </div>
+                </form>
+              </Row>
 
-            <Card icon={KeyRound} title={t("dashboard.profile.changePassword")}>
-              <form onSubmit={onSavePassword} className="mt-6 space-y-4">
-                <div className="grid gap-4 sm:grid-cols-2">
+              <Row
+                icon={KeyRound}
+                label={t("dashboard.profile.password")}
+                value={<span className="tracking-widest">••••••••</span>}
+                open={editing === "password"}
+                onToggle={() => toggle("password")}
+              >
+                <form onSubmit={onSavePassword} className="space-y-4">
                   <Field
                     id="current_password"
                     type="password"
                     label={t("dashboard.profile.currentPassword")}
                     required
+                    autoFocus
                     value={pw.current_password}
                     onValue={(current_password) => setPw((f) => ({ ...f, current_password }))}
                   />
@@ -466,25 +659,44 @@ export function ProfilePage() {
                     value={pw.new_password}
                     onValue={(new_password) => setPw((f) => ({ ...f, new_password }))}
                   />
-                </div>
 
-                {changePassword.isError && (
-                  <Alert tone="error">{t("dashboard.profile.passwordError")}</Alert>
-                )}
-                {changePassword.isSuccess && (
-                  <Alert tone="success">{t("dashboard.profile.passwordSuccess")}</Alert>
-                )}
+                  {changePassword.isError && (
+                    <ErrorText>{t("dashboard.profile.passwordError")}</ErrorText>
+                  )}
 
-                <SubmitButton pending={changePassword.isPending} variant="ghost">
-                  {changePassword.isPending
-                    ? t("dashboard.profile.changingPassword")
-                    : t("dashboard.profile.changePasswordSubmit")}
-                </SubmitButton>
-              </form>
+                  <div className="flex justify-end gap-2">
+                    <Button type="button" variant="text" onClick={close}>
+                      {t("dashboard.profile.cancel")}
+                    </Button>
+                    <Button pending={changePassword.isPending}>
+                      {changePassword.isPending
+                        ? t("dashboard.profile.changingPassword")
+                        : t("dashboard.profile.changePasswordSubmit")}
+                    </Button>
+                  </div>
+                </form>
+              </Row>
             </Card>
           </>
         )}
       </div>
+
+      {/* ---------- Snackbar ---------- */}
+      {toast && (
+        <div
+          role="status"
+          className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-4 rounded-md bg-[#303030] py-3 pl-4 pr-2 text-sm text-[#f2f2f2] shadow-pop sm:left-6 sm:translate-x-0"
+        >
+          {toast}
+          <button
+            type="button"
+            onClick={() => setToast(null)}
+            className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-white/10"
+          >
+            <X size={16} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

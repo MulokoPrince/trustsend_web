@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   AlertCircle,
   AlertTriangle,
@@ -36,7 +36,7 @@ import { getStoredBusiness } from "../../lib/session";
 import { formatMinorUnits } from "../../lib/format";
 import { TransactionRow } from "../../components/dashboard/TransactionRow";
 import { PinModal } from "../../components/dashboard/PinModal";
-import type { KycStatusData } from "../../types/dashboard";
+import type { KycStatusData, Plan } from "../../types/dashboard";
 
 const keyUpdates = [
   {
@@ -252,6 +252,8 @@ function PlanPrompt() {
   const { t } = useTranslation();
   const plans = usePlans();
   const subscribe = useSubscribePlan();
+  const wallets = useWallets();
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState<number | null>(null);
   const [pinModalOpen, setPinModalOpen] = useState(false);
@@ -260,8 +262,17 @@ function PlanPrompt() {
     if (subscribe.isSuccess) setPinModalOpen(false);
   }, [subscribe.isSuccess]);
 
-  const openPinFor = (planId: number) => {
-    setSelectedPlanId(planId);
+  const openPinFor = (plan: Plan) => {
+    // Wallet vide (ou absent / insuffisant dans la devise du plan) : inutile de
+    // demander le PIN, on envoie directement vers la page de dépôt.
+    if (wallets.data) {
+      const wallet = wallets.data.find((w) => w.currency_code === plan.currency_code);
+      if (!wallet || Number(wallet.balance) < Number(plan.price)) {
+        navigate("/dashboard/deposit");
+        return;
+      }
+    }
+    setSelectedPlanId(plan.id);
     setPinModalOpen(true);
   };
 
@@ -343,7 +354,7 @@ function PlanPrompt() {
 
                     <button
                       type="button"
-                      onClick={() => openPinFor(plan.id)}
+                      onClick={() => openPinFor(plan)}
                       disabled={subscribe.isPending}
                       className="mt-6 flex h-10 items-center justify-center gap-1.5 rounded-full bg-brand px-5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
                     >

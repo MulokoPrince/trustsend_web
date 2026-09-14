@@ -395,7 +395,23 @@
       "submitDesc": "Choose the document type to verify to start the KYC process.",
       "submit": "Submit",
       "submitting": "Submitting…",
-      "submitError": "Couldn't submit your verification."
+      "submitError": "Couldn't submit your verification.",
+      "clickToUpload": "Click to choose a file or drag it here",
+      "fileFormats": "PDF, JPG or PNG · 10 MB max",
+      "secureNote": "Your documents are encrypted and only used for verification.",
+      "documentsTitle": "Submitted documents",
+      "documentsLabel": "Documents to provide",
+      "documentsProgress": "{{done}} of {{total}} added",
+      "retry": "Try again",
+      "rejectionReason": "Reason for rejection",
+      "rejectedHint": "Fix the issues mentioned and submit your documents again below.",
+      "verificationTypeDesc": {
+        "document": "Business registration or tax identification certificate",
+        "identity": "Passport, ID card or driver's license",
+        "address": "Recent bill or statement showing your address",
+        "liveness": "A live photo of yourself",
+        "pep_screening": "Automatic check, no document needed"
+      }
     },
     "notifications": {
       "title": "Notifications",
@@ -675,7 +691,15 @@
       "pinMismatch": "The two PIN codes don't match.",
       "changePin": "Change PIN",
       "changingPin": "Changing…",
-      "pinChangeSuccess": "PIN code changed successfully."
+      "pinChangeSuccess": "PIN code changed successfully.",
+      "welcome": "Welcome, {{name}}",
+      "welcomeDesc": "Manage your info, account security and settings.",
+      "accountInfoDesc": "Details used to identify your business on TumaPlus.",
+      "securityDesc": "Settings and recommendations to help keep your account secure.",
+      "email": "Email",
+      "password": "Password",
+      "notSet": "Not set",
+      "cancel": "Cancel"
     }
   }
 }
