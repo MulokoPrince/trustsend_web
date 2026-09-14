@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AlertCircle, ArrowLeft, Eye, EyeOff, ShieldCheck } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLogin, loginErrorMessage } from "../hooks/useLogin";
 import { AuthField } from "../components/auth/AuthField";
@@ -8,7 +8,6 @@ import "../styles/geist.css";
 import { Nav } from "../components/Nav";
 import { WhatsAppButton } from "../components/WhatsAppButton";
 import { CookieConsent } from "../components/CookieConsent";
-import PayAill from "/assets/home/pg-graphic.png"
 
 export function Login() {
   const { t } = useTranslation();
