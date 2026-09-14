@@ -329,6 +329,9 @@
           "webhooks": "Real-time webhooks",
           "wallet": {
             "multi_currency": "Multi-currency wallets"
+          },
+          "cards": {
+            "issuing": "Virtual cards"
           }
         }
       }
@@ -725,5 +728,18 @@
       "desc": "Test environment: money is fictitious and no operation is real.",
       "cta": "Go to production"
     }
+  },
+  "pricing": {
+    "level": "Level {{level}}",
+    "featured": "Full coverage",
+    "once": "one-time",
+    "free": "Free",
+    "maintenance": "+ {{amount}} / month maintenance",
+    "noMaintenance": "No maintenance fee",
+    "choose": "Choose level {{level}}",
+    "featureScoped": "{{feature}}: {{scope}}",
+    "loading": "Loading plans…",
+    "error": "Plans could not be loaded right now. Please try again in a moment.",
+    "empty": "No plan is available at the moment."
   }
 }

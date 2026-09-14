@@ -166,8 +166,10 @@ export interface KycSubmitResult {
   submitted_at: string;
 }
 
-// { "mobile_money.deposits": true, ... } — clé de feature -> accordée ou non.
-export type PlanFeatures = Record<string, boolean>;
+// Clé de feature -> `true` (sans restriction) ou limitée à des pays (ISO alpha-3) et/ou des
+// devises. Une clé absente = fonctionnalité non incluse. Même forme que app/models/plan.ts côté API.
+export type PlanFeatureRestriction = true | { currencies?: string[]; countries?: string[] };
+export type PlanFeatures = Record<string, PlanFeatureRestriction>;
 
 export interface Plan {
   id: number;
