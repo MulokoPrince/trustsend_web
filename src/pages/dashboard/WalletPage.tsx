@@ -1,28 +1,45 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { AlertCircle, Loader2, Plus } from "lucide-react";
+import { AlertCircle, FlaskConical, Loader2, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useWallets } from "../../hooks/useWallets";
 import { formatMinorUnits } from "../../lib/format";
+import { isSandbox } from "../../lib/domains";
 import { WalletLogo } from "../../components/dashboard/WalletLogo";
+import { SandboxFundDialog } from "../../components/dashboard/SandboxFundDialog";
 
 export function WalletPage() {
   const { t } = useTranslation();
   const wallets = useWallets();
+  const [fundOpen, setFundOpen] = useState(false);
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-display text-2xl font-bold text-ink">{t("dashboard.wallet.title")}</h1>
           <p className="mt-1 text-muted">{t("dashboard.wallet.subtitle")}</p>
         </div>
-        <Link
-          to="/dashboard/wallet/new"
-          className="inline-flex items-center gap-2 rounded bg-brand px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
-        >
-          <Plus size={16} />
-          {t("dashboard.wallet.addWallet")}
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          {isSandbox && (
+            <button
+              type="button"
+              onClick={() => setFundOpen(true)}
+              disabled={!wallets.data?.length}
+              className="inline-flex items-center gap-2 rounded border border-amber-300 bg-amber-50 px-4 py-2.5 text-sm font-semibold text-amber-800 transition-colors hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <FlaskConical size={16} />
+              {t("dashboard.wallet.fund.button")}
+            </button>
+          )}
+          <Link
+            to="/dashboard/wallet/new"
+            className="inline-flex items-center gap-2 rounded bg-brand px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+          >
+            <Plus size={16} />
+            {t("dashboard.wallet.addWallet")}
+          </Link>
+        </div>
       </div>
 
       {wallets.isLoading ? (
@@ -91,6 +108,14 @@ export function WalletPage() {
         </div>
       ) : (
         <p className="mt-6 text-sm text-muted">{t("dashboard.wallet.none")}</p>
+      )}
+
+      {isSandbox && (
+        <SandboxFundDialog
+          open={fundOpen}
+          onClose={() => setFundOpen(false)}
+          wallets={wallets.data ?? []}
+        />
       )}
     </div>
   );

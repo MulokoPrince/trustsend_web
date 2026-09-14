@@ -178,7 +178,8 @@
     "errorInvalidCredentials": "Incorrect email or password.",
     "errorPending": "Your account isn't active yet. It must be approved before you can log in.",
     "errorLocked": "Too many attempts. Try again in 15 minutes.",
-    "errorGeneric": "Something went wrong, please try again."
+    "errorGeneric": "Something went wrong, please try again.",
+    "sandboxNotice": "You are signing in to the sandbox, TrustSend's test environment."
   },
   "signup": {
     "title": "Create your account",
@@ -217,7 +218,9 @@
     "successPendingBody": "{{name}} has been registered with the email {{email}}. Your account must be approved before you can log in.",
     "backToLogin": "Back to login",
     "quote": "\"Within a week, we were already managing our cards, transfers and team savings from a single TrustSend account.\"",
-    "quoteAttribution": "Alice N. — Founder, TrustSend"
+    "quoteAttribution": "Alice N. — Founder, TrustSend",
+    "sandboxNotice": "Sandbox account: activated immediately, fictitious money. For a real account, sign up at business.trustsend.africa.",
+    "sandboxSuccessBody": "Your sandbox account {{name}} is active. Sign in with {{email}} to generate a test API key."
   },
   "dashboard": {
     "logout": "Log out",
@@ -440,7 +443,19 @@
       "none": "No active wallet yet.",
       "perTransaction": "Per transaction",
       "dailyLimit": "Daily limit",
-      "monthlyLimit": "Monthly limit"
+      "monthlyLimit": "Monthly limit",
+      "fund": {
+        "button": "Add test funds",
+        "title": "Add funds to a wallet",
+        "desc": "Add fictitious money to test withdrawals, swaps and cards.",
+        "wallet": "Wallet",
+        "amount": "Amount",
+        "submit": "Add funds",
+        "submitting": "Adding funds…",
+        "cancel": "Cancel",
+        "invalidAmount": "Enter an amount greater than zero.",
+        "success": "{{amount}} added to your wallet."
+      }
     },
     "addWallet": {
       "backToWallet": "Back to wallet",
@@ -625,7 +640,9 @@
       "none": "No API keys yet.",
       "createdOn": "Created on {{date}}",
       "usedOn": " · Used on {{date}}",
-      "revoke": "Revoke"
+      "revoke": "Revoke",
+      "sandboxTitle": "Sandbox keys",
+      "sandboxDesc": "Keys generated here start with ts_sandbox_ and only work with the sandbox API:"
     },
     "webhooks": {
       "title": "Webhooks",
@@ -700,6 +717,13 @@
       "password": "Password",
       "notSet": "Not set",
       "cancel": "Cancel"
+    },
+    "sandboxMode": "Sandbox mode",
+    "environmentMismatch": "Warning: this dashboard and the API are not in the same environment (sandbox / production). Do not perform any operation and contact support.",
+    "sandboxBanner": {
+      "title": "Sandbox",
+      "desc": "Test environment: money is fictitious and no operation is real.",
+      "cta": "Go to production"
     }
   }
 }

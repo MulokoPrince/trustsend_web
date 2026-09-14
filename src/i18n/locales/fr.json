@@ -178,7 +178,8 @@
     "errorInvalidCredentials": "E-mail ou mot de passe incorrect.",
     "errorPending": "Votre compte n'est pas encore actif. Il doit être approuvé avant de pouvoir vous connecter.",
     "errorLocked": "Trop de tentatives. Réessayez dans 15 minutes.",
-    "errorGeneric": "Une erreur est survenue, veuillez réessayer."
+    "errorGeneric": "Une erreur est survenue, veuillez réessayer.",
+    "sandboxNotice": "Vous vous connectez à la sandbox, l'environnement de test de TrustSend."
   },
   "signup": {
     "title": "Créer un compte",
@@ -217,7 +218,9 @@
     "successPendingBody": "{{name}} a été enregistré avec l'e-mail {{email}}. Votre compte doit être approuvé avant de pouvoir vous connecter.",
     "backToLogin": "Retour à la connexion",
     "quote": "\"En une semaine, on gérait déjà nos cartes, nos transferts et notre épargne d'équipe depuis un seul compte TrustSend.\"",
-    "quoteAttribution": "Alice N. — Fondatrice, TrustSend"
+    "quoteAttribution": "Alice N. — Fondatrice, TrustSend",
+    "sandboxNotice": "Compte sandbox : activé immédiatement, argent fictif. Pour un vrai compte, inscrivez-vous sur business.trustsend.africa.",
+    "sandboxSuccessBody": "Votre compte sandbox {{name}} est actif. Connectez-vous avec {{email}} pour générer une clé API de test."
   },
   "dashboard": {
     "logout": "Déconnexion",
@@ -440,7 +443,19 @@
       "none": "Aucun portefeuille actif pour le moment.",
       "perTransaction": "Par transaction",
       "dailyLimit": "Limite journalière",
-      "monthlyLimit": "Limite mensuelle"
+      "monthlyLimit": "Limite mensuelle",
+      "fund": {
+        "button": "Créditer (test)",
+        "title": "Créditer un portefeuille",
+        "desc": "Ajoutez de l'argent fictif pour tester retraits, échanges et cartes.",
+        "wallet": "Portefeuille",
+        "amount": "Montant",
+        "submit": "Créditer",
+        "submitting": "Crédit en cours…",
+        "cancel": "Annuler",
+        "invalidAmount": "Saisissez un montant supérieur à zéro.",
+        "success": "{{amount}} crédités sur votre portefeuille."
+      }
     },
     "addWallet": {
       "backToWallet": "Retour au portefeuille",
@@ -625,7 +640,9 @@
       "none": "Aucune clé API pour le moment.",
       "createdOn": "Créée le {{date}}",
       "usedOn": " · Utilisée le {{date}}",
-      "revoke": "Révoquer"
+      "revoke": "Révoquer",
+      "sandboxTitle": "Clés sandbox",
+      "sandboxDesc": "Les clés générées ici commencent par ts_sandbox_ et ne fonctionnent qu'avec l'API sandbox :"
     },
     "webhooks": {
       "title": "Webhooks",
@@ -700,6 +717,13 @@
       "password": "Mot de passe",
       "notSet": "Non défini",
       "cancel": "Annuler"
+    },
+    "sandboxMode": "Mode Sandbox",
+    "environmentMismatch": "Attention : cet espace et l'API ne sont pas dans le même environnement (sandbox / production). N'effectuez aucune opération et contactez le support.",
+    "sandboxBanner": {
+      "title": "Sandbox",
+      "desc": "Environnement de test : l'argent est fictif et aucune opération n'est réelle.",
+      "cta": "Passer en production"
     }
   }
 }

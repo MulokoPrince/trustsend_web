@@ -11,6 +11,7 @@ import {
   ChevronDown,
   CircleUserRound,
   CreditCard,
+  FlaskConical,
   Home,
   KeyRound,
   LogOut,
@@ -19,6 +20,7 @@ import {
   Search,
   Settings,
   ShieldCheck,
+  TriangleAlert,
   Wallet,
   Webhook as WebhookIcon,
 } from "lucide-react";
@@ -27,6 +29,7 @@ import { useLogout } from "../../hooks/useLogout";
 import { useProfile } from "../../hooks/useProfile";
 import { getStoredBusiness } from "../../lib/session";
 import { NotificationBell } from "./NotificationBell";
+import { BUSINESS_ORIGIN, isSandbox } from "../../lib/domains";
 import "../../styles/geist.css";
 
 type NavItem = { key: string; icon: typeof Home; to?: string };
@@ -60,6 +63,14 @@ const navSections: { headingKey?: string; items: NavItem[] }[] = [
   },
 ];
 
+// En sandbox, le compte est actif sans vérification : l'entrée KYC n'a rien à proposer.
+const visibleNavSections = isSandbox
+  ? navSections.map((section) => ({
+      ...section,
+      items: section.items.filter((item) => item.key !== "kyc"),
+    }))
+  : navSections;
+
 const COLLAPSED_KEY = "dashboard.sidebarCollapsed";
 
 function readCollapsed() {
@@ -78,6 +89,10 @@ export function DashboardLayout() {
   const location = useLocation();
   const profile = useProfile();
   const showPinBanner = profile.data && !profile.data.pin_set;
+  // L'hôte décide de l'API appelée ; la réponse de l'API dit dans quel environnement elle tourne.
+  // S'ils divergent, l'utilisateur doit le savoir avant de faire quoi que ce soit.
+  const environmentMismatch =
+    !!profile.data?.environment && (profile.data.environment === "sandbox") !== isSandbox;
   const [langOpen, setLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement | null>(null);
   const [collapsed, setCollapsed] = useState(readCollapsed);
@@ -126,7 +141,7 @@ export function DashboardLayout() {
   const renderNav = (rail: boolean) => (
     <>
       <nav className="flex-1 overflow-y-auto pe-3 pb-4">
-        {navSections.map((section, i) => (
+        {visibleNavSections.map((section, i) => (
           <div key={i} className={i > 0 ? "mt-4" : undefined}>
             {section.headingKey &&
               (rail ? (
@@ -226,8 +241,8 @@ export function DashboardLayout() {
 
         <div className="ms-auto flex items-center gap-1">
           <span className="me-2 hidden items-center gap-1.5 rounded-full border border-black/10 bg-white px-3 py-1.5 text-sm font-medium text-ink md:inline-flex">
-            <span className="h-2 w-2 rounded-full bg-accent" />
-            {t("dashboard.liveMode")}
+            <span className={`h-2 w-2 rounded-full ${isSandbox ? "bg-amber-500" : "bg-accent"}`} />
+            {isSandbox ? t("dashboard.sandboxMode") : t("dashboard.liveMode")}
           </span>
           <button
             aria-label={t("dashboard.activity")}
@@ -323,6 +338,29 @@ export function DashboardLayout() {
 
         {/* ---------- Contenu : carte blanche arrondie ---------- */}
         <main className="min-w-0 flex-1 overflow-y-auto bg-white px-5 py-6 sm:me-4 sm:mb-4 sm:rounded-2xl lg:px-8 lg:py-8">
+          {environmentMismatch && (
+            <div
+              role="alert"
+              className="mb-6 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700"
+            >
+              <TriangleAlert size={15} className="shrink-0" />
+              {t("dashboard.environmentMismatch")}
+            </div>
+          )}
+          {isSandbox && (
+            <a
+              href={`${BUSINESS_ORIGIN}/signup`}
+              className="group mb-6 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm transition-colors hover:border-amber-300"
+            >
+              <FlaskConical size={15} className="shrink-0 text-amber-600" />
+              <span className="font-medium text-ink">{t("dashboard.sandboxBanner.title")}</span>
+              <span className="text-muted">{t("dashboard.sandboxBanner.desc")}</span>
+              <span className="ms-auto flex shrink-0 items-center gap-1 text-xs font-semibold text-amber-700">
+                {t("dashboard.sandboxBanner.cta")}
+                <ArrowRight size={13} className="transition-transform duration-200 group-hover:translate-x-0.5 rtl:rotate-180" />
+              </span>
+            </a>
+          )}
           {showPinBanner && (
             <Link
               to="/dashboard/profile"

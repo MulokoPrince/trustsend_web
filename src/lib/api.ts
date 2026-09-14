@@ -1,5 +1,6 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { getStoredCsrfToken } from "./session";
+import { SANDBOX_API_BASE_URL, isSandboxHost } from "./domains";
 
 /** Reads the CSRF cookie the backend pairs with the httpOnly access-token cookie — deliberately
  * NOT httpOnly (unlike the access token itself) so this same-origin JS can read it and echo it
@@ -26,7 +27,11 @@ const MUTATING_METHODS = new Set(["post", "put", "patch", "delete"]);
 const DEFAULT_API_BASE_URL = "https://api.trustsend.africa/api/v1";
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL,
+  // Un seul build sert la production et la sandbox : sur l'hôte sandbox, l'API sandbox est
+  // imposée, quelle que soit la variable de build, pour qu'aucune session de test ne parle à la prod.
+  baseURL: isSandboxHost
+    ? SANDBOX_API_BASE_URL
+    : import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL,
   timeout: 15000,
   // The access token lives in an httpOnly cookie the backend sets on login — this app never
   // sees or stores it. `withCredentials` makes the browser attach that cookie (and send/receive

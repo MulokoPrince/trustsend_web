@@ -10,9 +10,13 @@
 
 export const BUSINESS_HOST = "business.trustsend.africa";
 export const MARKETING_HOST = "www.trustsend.africa";
+export const SANDBOX_HOST = "sandbox.trustsend.africa";
 
 export const BUSINESS_ORIGIN = `https://${BUSINESS_HOST}`;
 export const MARKETING_ORIGIN = `https://${MARKETING_HOST}`;
+
+/** API de la sandbox : comptes, clés et argent de test, totalement séparés de la production. */
+export const SANDBOX_API_BASE_URL = "https://sandbox-api.trustsend.africa/api/v1";
 
 const hostname = typeof window === "undefined" ? "" : window.location.hostname;
 
@@ -23,7 +27,17 @@ export const isLocalHost =
   hostname.endsWith(".local") ||
   hostname.endsWith(".vercel.app");
 
-export const isBusinessHost = hostname === BUSINESS_HOST || hostname.startsWith("business.");
+/** Espace client de la sandbox : même build, reconnu à son hôte. */
+export const isSandboxHost = hostname === SANDBOX_HOST || hostname.startsWith("sandbox.");
+
+/**
+ * Mode sandbox de l'interface. En local, VITE_APP_MODE=sandbox permet de tester l'affichage
+ * sandbox contre une API locale (VITE_API_BASE_URL) sans passer par le vrai domaine.
+ */
+export const isSandbox = isSandboxHost || import.meta.env.VITE_APP_MODE === "sandbox";
+
+export const isBusinessHost =
+  hostname === BUSINESS_HOST || hostname.startsWith("business.") || isSandboxHost;
 
 /** Routes connexion / inscription / dashboard. */
 export const showBusinessRoutes = isLocalHost || isBusinessHost;

@@ -56,3 +56,15 @@ export function formatRelativeTime(iso: string, locale = "fr-FR"): string {
   }
   return rtf.format(Math.round(diffSeconds / 60), "minute");
 }
+
+// Convertit une saisie utilisateur ("12,50") en centièmes pour l'API. Une devise sans décimales
+// (XAF, RWF…) n'accepte que des unités entières. Renvoie null si la saisie est invalide ou nulle.
+export function toMinorUnits(input: string, decimals: number): string | null {
+  const allowed = Math.min(Math.max(decimals, 0), 2);
+  const normalized = input.trim().replace(",", ".");
+  const pattern = allowed === 0 ? /^\d+$/ : new RegExp(`^\\d+(\\.\\d{1,${allowed}})?$`);
+  if (!pattern.test(normalized)) return null;
+  const [whole, fraction = ""] = normalized.split(".");
+  const minor = BigInt(whole) * 100n + BigInt(fraction.padEnd(2, "0") || "0");
+  return minor > 0n ? minor.toString() : null;
+}
