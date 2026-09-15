@@ -5,8 +5,6 @@ export const navLinks = [
   { label: "Transfers", href: "/transferts-internationaux" },
   // { label: "Savings & Games", href: "#savings" },
   { label: "Partners", href: "#partners" },
-  { label: "Agents", href: "/agents" },
-  { label: "Docs", href: "https://docs.trustsend.africa" },
   { label: "Pricing", href: "/pricing" },
 
 ];
@@ -203,7 +201,6 @@ export const navMegaMenus: Record<string, NavMegaMenu> = {
           },
           {
             label: "Webhooks",
-            href: "https://docs.trustsend.africa/webhooks",
             desc: "Get real-time notifications for every transaction.",
             icon: "/assets/icons/develop/docs.svg",
           },

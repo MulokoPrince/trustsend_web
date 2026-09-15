@@ -10,8 +10,6 @@ export const navLinks = [
   { label: "Transferts", href: "/transferts-internationaux" },
   // { label: "Épargne & Jeux", href: "#epargne" },
   { label: "Partenaires", href: "#partenaires" },
-  { label: "Agents", href: "/agents" },
-  { label: "Docs", href: "https://docs.trustsend.africa" },
   { label: "Tarifs", href: "/pricing" },
 
 ];
