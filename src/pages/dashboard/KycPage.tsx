@@ -34,13 +34,9 @@ const focusRing = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-
 const focusWithinRing =
   "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand";
 
-const VERIFICATION_TYPES: { type: KycVerificationType; icon: LucideIcon }[] = [
-  { type: "document", icon: Building2 },
-  { type: "identity", icon: IdCard },
-  { type: "address", icon: Home },
-  { type: "liveness", icon: ScanFace },
-  { type: "pep_screening", icon: ShieldCheck },
-];
+// Le KYC du dashboard se limite à une pièce d'identité. Chaque choix correspond à une combinaison
+// acceptée par l'API pour verification_type "identity" (app/services/security/kyc_requirements.ts).
+const VERIFICATION_TYPE: KycVerificationType = "identity";
 
 const IDENTITY_METHODS = ["passport", "id_card", "driver_license", "representative_id"] as const;
 type IdentityMethod = (typeof IDENTITY_METHODS)[number];
@@ -51,9 +47,6 @@ const IDENTITY_METHOD_FIELDS: Record<IdentityMethod, KycDocumentField[]> = {
   driver_license: ["driver_license_front", "driver_license_back"],
   representative_id: ["representative_id_front", "representative_id_back"],
 };
-
-const DOCUMENT_METHODS = ["business_registration_certificate", "tax_identification_certificate"] as const;
-type DocumentMethod = (typeof DOCUMENT_METHODS)[number];
 
 const STATUS_VISUAL: Record<string, { icon: LucideIcon; box: string; iconBox: string }> = {
   pending: { icon: Clock3, box: "border-amber-200 bg-amber-50", iconBox: "bg-amber-100 text-amber-700" },
@@ -79,26 +72,13 @@ function documentIcon(doc: string) {
 }
 
 type FormState = {
-  verification_type: KycVerificationType;
   provider: string;
   identityMethod: IdentityMethod;
-  documentMethod: DocumentMethod;
   files: Partial<Record<KycDocumentField, File>>;
 };
 
 function requiredFields(form: FormState): KycDocumentField[] {
-  switch (form.verification_type) {
-    case "identity":
-      return IDENTITY_METHOD_FIELDS[form.identityMethod];
-    case "address":
-      return ["proof_of_address"];
-    case "liveness":
-      return ["selfie"];
-    case "document":
-      return [form.documentMethod];
-    case "pep_screening":
-      return [];
-  }
+  return IDENTITY_METHOD_FIELDS[form.identityMethod];
 }
 
 function validateFile(file: File): string | null {
@@ -394,10 +374,8 @@ export function KycPage() {
   const kyc = useKycStatus();
   const submitKyc = useSubmitKyc();
   const [form, setForm] = useState<FormState>({
-    verification_type: "document",
     provider: "",
     identityMethod: "id_card",
-    documentMethod: "business_registration_certificate",
     files: {},
   });
   const [fileErrors, setFileErrors] = useState<Partial<Record<KycDocumentField, string>>>({});
@@ -424,7 +402,7 @@ export function KycPage() {
     });
   };
 
-  const changeForm = (patch: Partial<Pick<FormState, "verification_type" | "identityMethod" | "documentMethod">>) => {
+  const changeForm = (patch: Partial<Pick<FormState, "identityMethod">>) => {
     clearSubmitError();
     setForm((f) => ({ ...f, ...patch, files: {} }));
     setFileErrors({});
@@ -446,7 +424,7 @@ export function KycPage() {
       if (form.files[field]) documents[field] = form.files[field]!;
     }
     submitKyc.mutate({
-      verification_type: form.verification_type,
+      verification_type: VERIFICATION_TYPE,
       provider: form.provider.trim() || undefined,
       documents,
     });
@@ -496,45 +474,19 @@ export function KycPage() {
     </div>
   );
 
-  let documentsStep: ReactNode;
-  if (form.verification_type === "identity") {
-    documentsStep = (
-      <div className="space-y-5">
-        <MethodPicker
-          name="identity-method"
-          label={t("dashboard.kyc.identityMethodLabel")}
-          options={IDENTITY_METHODS}
-          value={form.identityMethod}
-          onChange={(identityMethod) => changeForm({ identityMethod })}
-          labelFor={(m) => t(`dashboard.kyc.identityMethod.${m}`)}
-        />
-        {renderFiles(IDENTITY_METHOD_FIELDS[form.identityMethod])}
-      </div>
-    );
-  } else if (form.verification_type === "document") {
-    documentsStep = (
-      <div className="space-y-5">
-        <MethodPicker
-          name="document-method"
-          label={t("dashboard.kyc.documentMethodLabel")}
-          options={DOCUMENT_METHODS}
-          value={form.documentMethod}
-          onChange={(documentMethod) => changeForm({ documentMethod })}
-          labelFor={(m) => t(`dashboard.kyc.document.${m}`)}
-        />
-        {renderFiles([form.documentMethod])}
-      </div>
-    );
-  } else if (form.verification_type === "pep_screening") {
-    documentsStep = (
-      <p className="flex items-center gap-2 rounded-xl bg-surface-2 px-4 py-3 text-sm text-muted-2">
-        <CheckCircle2 size={16} className="shrink-0 text-emerald-600" />
-        {t("dashboard.kyc.pepScreeningHint")}
-      </p>
-    );
-  } else {
-    documentsStep = renderFiles(fields);
-  }
+  const documentsStep: ReactNode = (
+    <div className="space-y-5">
+      <MethodPicker
+        name="identity-method"
+        label={t("dashboard.kyc.identityMethodLabel")}
+        options={IDENTITY_METHODS}
+        value={form.identityMethod}
+        onChange={(identityMethod) => changeForm({ identityMethod })}
+        labelFor={(m) => t(`dashboard.kyc.identityMethod.${m}`)}
+      />
+      {renderFiles(fields)}
+    </div>
+  );
 
   return (
     <div className="font-geist mx-auto max-w-2xl">
@@ -628,51 +580,8 @@ export function KycPage() {
           </div>
 
           <div className="divide-y divide-black/[0.06]">
-            <Step n={1} id="kyc-step-type" title={t("dashboard.kyc.verificationTypeLabel")}>
-              <div role="radiogroup" aria-labelledby="kyc-step-type" className="grid gap-2.5 sm:grid-cols-2">
-                {VERIFICATION_TYPES.map(({ type, icon: Icon }) => {
-                  const active = form.verification_type === type;
-                  return (
-                    <label
-                      key={type}
-                      className={`flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-start transition-colors sm:last:col-span-2 ${focusWithinRing} ${
-                        active
-                          ? "border-brand bg-brand-light/50 ring-1 ring-brand"
-                          : "border-black/10 hover:border-black/20 hover:bg-surface"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="kyc-verification-type"
-                        value={type}
-                        checked={active}
-                        onChange={() => changeForm({ verification_type: type })}
-                        className="sr-only"
-                      />
-                      <span
-                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-colors ${
-                          active ? "bg-brand text-white" : "bg-surface-2 text-muted-2"
-                        }`}
-                      >
-                        <Icon size={17} />
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-sm font-medium text-ink">
-                          {t(`dashboard.kyc.verificationType.${type}`)}
-                        </span>
-                        <span className="mt-0.5 block text-xs text-muted">
-                          {t(`dashboard.kyc.verificationTypeDesc.${type}`)}
-                        </span>
-                      </span>
-                      {active && <CheckCircle2 size={17} className="shrink-0 text-brand" />}
-                    </label>
-                  );
-                })}
-              </div>
-            </Step>
-
             <Step
-              n={2}
+              n={1}
               id="kyc-step-documents"
               title={t("dashboard.kyc.documentsLabel")}
               done={fields.length > 0 && canSubmit}
@@ -693,7 +602,7 @@ export function KycPage() {
             </Step>
 
             <Step
-              n={3}
+              n={2}
               id="kyc-step-provider"
               title={t("dashboard.kyc.providerLabel")}
               aside={<span className="text-xs text-muted">{t("dashboard.kyc.providerOptional")}</span>}
