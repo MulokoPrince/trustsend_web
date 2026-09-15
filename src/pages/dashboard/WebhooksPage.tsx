@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
-import { AlertCircle, Loader2, Plus, Trash2, Webhook as WebhookIcon } from "lucide-react";
+import { AlertCircle, Plus, Trash2, Webhook as WebhookIcon } from "lucide-react";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import {
   useWebhooks,
@@ -110,9 +111,7 @@ export function WebhooksPage() {
 
       <div className="mt-6 rounded-2xl border border-surface-2 bg-white">
         {webhooks.isLoading ? (
-          <p className="flex items-center gap-2 px-5 py-8 text-sm text-muted">
-            <Loader2 size={16} className="animate-spin" /> {t("dashboard.webhooks.loading")}
-          </p>
+          <LoadingSpinner label={t("dashboard.webhooks.loading")} />
         ) : webhooks.isError ? (
           <p className="flex items-center gap-1.5 px-5 py-8 text-sm text-red-600">
             <AlertCircle size={15} /> {t("dashboard.webhooks.error")}

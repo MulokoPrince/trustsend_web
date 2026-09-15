@@ -5,6 +5,7 @@ import {
   type InputHTMLAttributes,
   type ReactNode,
 } from "react";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 import {
   AlertCircle,
   AlertTriangle,
@@ -250,11 +251,7 @@ export function ProfilePage() {
   }, [toast]);
 
   if (profile.isLoading) {
-    return (
-      <p className="flex items-center gap-2 text-sm text-muted">
-        <Loader2 size={16} className="animate-spin" /> {t("dashboard.profile.loading")}
-      </p>
-    );
+    return <LoadingSpinner label={t("dashboard.profile.loading")} className="min-h-[50vh]" />;
   }
 
   if (profile.isError || !profile.data) {

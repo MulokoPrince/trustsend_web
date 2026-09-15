@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { AlertCircle, ArrowUpDown, CheckCircle2, Loader2, Plus, RefreshCw } from "lucide-react";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useWallets } from "../../hooks/useWallets";
 import { swapErrorMessage, useExecuteSwap, useSwapQuote } from "../../hooks/useSwap";
@@ -171,11 +172,7 @@ export function SwapPage() {
   };
 
   if (wallets.isLoading) {
-    return (
-      <p className="flex items-center gap-2 text-sm text-muted">
-        <Loader2 size={16} className="animate-spin" /> {t("dashboard.loading")}
-      </p>
-    );
+    return <LoadingSpinner label={t("dashboard.loading")} className="min-h-[50vh]" />;
   }
 
   return (
@@ -337,9 +334,7 @@ export function SwapPage() {
                 <AlertCircle size={15} /> {quoteError}
               </p>
             ) : quoteLoading ? (
-              <p className="flex items-center gap-2 text-muted">
-                <Loader2 size={15} className="animate-spin" /> {t("dashboard.swap.fetchingRate")}
-              </p>
+              <LoadingSpinner label={t("dashboard.swap.fetchingRate")} size={20} className="py-2" />
             ) : (
               <p className="text-muted">{t("dashboard.swap.enterAmount")}</p>
             )}

@@ -32,6 +32,7 @@ import { useWallets } from "../../hooks/useWallets";
 import { useTransactions } from "../../hooks/useTransactions";
 import { useKycStatus } from "../../hooks/useKyc";
 import { isSandbox } from "../../lib/domains";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { planErrorMessage, usePlans, useSubscribePlan } from "../../hooks/usePlans";
 import { getStoredBusiness } from "../../lib/session";
 import { formatMinorUnits } from "../../lib/format";
@@ -310,9 +311,7 @@ function PlanPrompt() {
       {expanded && (
         <div className="mt-4">
           {plans.isLoading ? (
-            <p className="flex items-center gap-2 text-sm text-muted">
-              <Loader2 size={16} className="animate-spin" /> {t("dashboard.loading")}
-            </p>
+            <LoadingSpinner label={t("dashboard.loading")} />
           ) : plans.isError ? (
             <p className="flex items-center gap-1.5 text-sm text-red-600">
               <AlertCircle size={15} /> {t("dashboard.overview.planGate.plansError")}
@@ -414,11 +413,7 @@ export function Overview() {
   const last30 = overview.data?.last_30_days;
 
   if (kyc.isLoading) {
-    return (
-      <p className="flex items-center gap-2 text-sm text-muted">
-        <Loader2 size={16} className="animate-spin" /> {t("dashboard.loading")}
-      </p>
-    );
+    return <LoadingSpinner label={t("dashboard.loading")} className="min-h-[50vh]" />;
   }
 
   // En sandbox, le compte est actif dès l'inscription, sans KYC : l'écran d'attente de
@@ -567,9 +562,7 @@ export function Overview() {
         </div>
 
         {txs.isLoading ? (
-          <p className="flex items-center gap-2 border-t border-black/[0.06] px-5 py-6 text-sm text-muted">
-            <Loader2 size={16} className="animate-spin" /> {t("dashboard.loading")}
-          </p>
+          <LoadingSpinner label={t("dashboard.loading")} className="border-t border-black/[0.06]" />
         ) : txs.isError ? (
           <p className="flex items-center gap-1.5 border-t border-black/[0.06] px-5 py-6 text-sm text-red-600">
             <AlertCircle size={15} /> {t("dashboard.overview.transactionsError")}

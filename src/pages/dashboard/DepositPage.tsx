@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
-import { AlertCircle, ArrowRight, Loader2, Wallet as WalletIcon } from "lucide-react";
+import { AlertCircle, ArrowRight, Wallet as WalletIcon } from "lucide-react";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useCreateDeposit } from "../../hooks/useMobileMoney";
 import { mobileMoneyErrorMessage } from "../../hooks/useMobileMoney";
@@ -32,9 +33,7 @@ export function DepositPage() {
         <h2 className="text-sm font-semibold text-ink">{t("dashboard.deposit.yourWallets")}</h2>
 
         {wallets.isLoading ? (
-          <p className="mt-3 flex items-center gap-2 text-sm text-muted">
-            <Loader2 size={16} className="animate-spin" /> {t("dashboard.deposit.walletsLoading")}
-          </p>
+          <LoadingSpinner label={t("dashboard.deposit.walletsLoading")} className="mt-3" />
         ) : wallets.isError ? (
           <p className="mt-3 flex items-center gap-1.5 text-sm text-red-600">
             <AlertCircle size={15} /> {t("dashboard.deposit.walletsError")}
