@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { AlertCircle, Copy, KeyRound, Loader2, Plus, Trash2 } from "lucide-react";
+import { AlertCircle, Copy, KeyRound, Plus, Trash2 } from "lucide-react";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useApiKeys, useCreateApiKey, useRevokeApiKey } from "../../hooks/useApiKeys";
 import { formatDateTime } from "../../lib/format";
@@ -69,9 +70,7 @@ export function ApiKeysPage() {
 
       <div className="mt-6 rounded-2xl border border-surface-2 bg-white">
         {keys.isLoading ? (
-          <p className="flex items-center gap-2 px-5 py-8 text-sm text-muted">
-            <Loader2 size={16} className="animate-spin" /> {t("dashboard.apiKeys.loading")}
-          </p>
+          <LoadingSpinner label={t("dashboard.apiKeys.loading")} />
         ) : keys.isError ? (
           <p className="flex items-center gap-1.5 px-5 py-8 text-sm text-red-600">
             <AlertCircle size={15} /> {t("dashboard.apiKeys.error")}

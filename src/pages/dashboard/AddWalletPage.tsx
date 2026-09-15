@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { AlertCircle, ArrowLeft, CheckCircle2, Loader2, Plus, Search } from "lucide-react";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useCurrencies } from "../../hooks/useCurrencies";
 import { useWallets, useCreateWallet } from "../../hooks/useWallets";
@@ -53,9 +54,7 @@ export function AddWalletPage() {
         </h2>
 
         {wallets.isLoading ? (
-          <p className="mt-4 flex items-center gap-2 text-sm text-muted">
-            <Loader2 size={16} className="animate-spin" /> {t("dashboard.loading")}
-          </p>
+          <LoadingSpinner label={t("dashboard.loading")} className="mt-4" />
         ) : wallets.isError ? (
           <p className="mt-4 flex items-center gap-1.5 text-sm text-red-600">
             <AlertCircle size={15} /> {t("dashboard.addWallet.walletsError")}
@@ -117,9 +116,7 @@ export function AddWalletPage() {
         </div>
 
         {currencies.isLoading ? (
-          <p className="mt-6 flex items-center gap-2 text-sm text-muted">
-            <Loader2 size={16} className="animate-spin" /> {t("dashboard.addWallet.loadingCurrencies")}
-          </p>
+          <LoadingSpinner label={t("dashboard.addWallet.loadingCurrencies")} className="mt-6" />
         ) : currencies.isError ? (
           <p className="mt-6 flex items-center gap-1.5 text-sm text-red-600">
             <AlertCircle size={15} /> {t("dashboard.addWallet.currenciesError")}

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { AlertCircle, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useTransactions } from "../../hooks/useTransactions";
 import { TransactionRow } from "../../components/dashboard/TransactionRow";
@@ -19,9 +20,7 @@ export function TransactionsPage() {
 
       <div className="mt-6 rounded-2xl border border-surface-2 bg-white">
         {txs.isLoading ? (
-          <p className="flex items-center gap-2 px-5 py-8 text-sm text-muted">
-            <Loader2 size={16} className="animate-spin" /> {t("dashboard.loading")}
-          </p>
+          <LoadingSpinner label={t("dashboard.loading")} />
         ) : txs.isError ? (
           <p className="flex items-center gap-1.5 px-5 py-8 text-sm text-red-600">
             <AlertCircle size={15} /> {t("dashboard.transactions.error")}

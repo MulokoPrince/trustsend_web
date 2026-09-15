@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { AlertCircle, FlaskConical, Loader2, Plus } from "lucide-react";
+import { AlertCircle, FlaskConical, Plus } from "lucide-react";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useWallets } from "../../hooks/useWallets";
 import { formatMinorUnits } from "../../lib/format";
@@ -43,9 +44,7 @@ export function WalletPage() {
       </div>
 
       {wallets.isLoading ? (
-        <p className="mt-6 flex items-center gap-2 text-sm text-muted">
-          <Loader2 size={16} className="animate-spin" /> {t("dashboard.wallet.loading")}
-        </p>
+        <LoadingSpinner label={t("dashboard.wallet.loading")} className="mt-6" />
       ) : wallets.isError ? (
         <p className="mt-6 flex items-center gap-1.5 text-sm text-red-600">
           <AlertCircle size={15} /> {t("dashboard.wallet.error")}

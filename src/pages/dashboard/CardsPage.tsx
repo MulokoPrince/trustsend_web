@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { AlertCircle, CreditCard, Loader2, Plus } from "lucide-react";
+import { AlertCircle, CreditCard, Plus } from "lucide-react";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useCards } from "../../hooks/useCards";
 import { formatMinorUnits } from "../../lib/format";
@@ -33,9 +34,7 @@ export function CardsPage() {
       </div>
 
       {cards.isLoading ? (
-        <p className="mt-6 flex items-center gap-2 text-sm text-muted">
-          <Loader2 size={16} className="animate-spin" /> {t("dashboard.cards.loading")}
-        </p>
+        <LoadingSpinner label={t("dashboard.cards.loading")} className="mt-6" />
       ) : cards.isError ? (
         <p className="mt-6 flex items-center gap-1.5 text-sm text-red-600">
           <AlertCircle size={15} /> {t("dashboard.cards.error")}

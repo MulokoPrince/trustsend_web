@@ -5,13 +5,13 @@ import {
   ArrowLeft,
   Ban,
   CreditCard,
-  Loader2,
   Snowflake,
   PlayCircle,
   PlusCircle,
   MinusCircle,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 import {
   useCards,
   useCardTransactions,
@@ -130,9 +130,7 @@ export function CardDetailPage() {
 
   if (cards.isLoading) {
     return (
-      <p className="flex items-center gap-2 text-sm text-muted">
-        <Loader2 size={16} className="animate-spin" /> {t("dashboard.cards.loading")}
-      </p>
+      <LoadingSpinner label={t("dashboard.cards.loading")} className="min-h-[50vh]" />
     );
   }
 
@@ -241,9 +239,7 @@ export function CardDetailPage() {
           </h2>
         </div>
         {transactions.isLoading ? (
-          <p className="flex items-center gap-2 px-5 py-8 text-sm text-muted">
-            <Loader2 size={16} className="animate-spin" /> {t("dashboard.cards.loading")}
-          </p>
+          <LoadingSpinner label={t("dashboard.cards.loading")} />
         ) : transactions.isError ? (
           <p className="flex items-center gap-1.5 px-5 py-8 text-sm text-red-600">
             <AlertCircle size={15} /> {t("dashboard.cardDetail.transactionsError")}

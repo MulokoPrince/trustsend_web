@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { AlertCircle, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useMarkNotificationRead, useNotifications } from "../../hooks/useNotifications";
 import { NotificationItem } from "../../components/dashboard/NotificationItem";
@@ -30,9 +31,7 @@ export function NotificationsPage() {
 
       <div className="mt-6 rounded-xl border border-black/10 bg-white">
         {notifications.isLoading ? (
-          <p className="flex items-center gap-2 px-5 py-8 text-sm text-muted">
-            <Loader2 size={16} className="animate-spin" /> {t("dashboard.loading")}
-          </p>
+          <LoadingSpinner label={t("dashboard.loading")} />
         ) : notifications.isError ? (
           <p className="flex items-center gap-1.5 px-5 py-8 text-sm text-red-600">
             <AlertCircle size={15} /> {t("dashboard.notifications.error")}
