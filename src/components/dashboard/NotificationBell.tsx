@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bell, Loader2 } from "lucide-react";
+import { Bell } from "lucide-react";
+import { LoadingSpinner } from "../LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useMarkNotificationRead, useNotifications } from "../../hooks/useNotifications";
 import { NotificationItem } from "./NotificationItem";
@@ -74,9 +75,7 @@ export function NotificationBell() {
             </div>
 
             {notifications.isLoading ? (
-              <p className="flex items-center gap-2 px-4 py-6 text-sm text-muted">
-                <Loader2 size={14} className="animate-spin" /> {t("dashboard.loading")}
-              </p>
+              <LoadingSpinner label={t("dashboard.loading")} size={20} className="py-6" />
             ) : notifications.data && notifications.data.data.length > 0 ? (
               <div className="max-h-80 divide-y divide-black/[0.06] overflow-y-auto">
                 {notifications.data.data.map((n) => (

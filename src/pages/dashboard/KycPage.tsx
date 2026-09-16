@@ -18,6 +18,7 @@ import {
   XCircle,
   type LucideIcon,
 } from "lucide-react";
+import { ButtonSpinner } from "../../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useKycStatus, useSubmitKyc } from "../../hooks/useKyc";
 import { ApiError } from "../../lib/api";
@@ -447,7 +448,11 @@ export function KycPage() {
             disabled={kyc.isFetching}
             className={`mt-3 inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-red-200 bg-white px-4 text-sm font-medium text-red-700 transition-colors hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60 ${focusRing}`}
           >
-            {kyc.isFetching ? <Loader2 size={14} className="animate-spin" /> : <RotateCw size={14} />}
+            {kyc.isFetching ? (
+              <Loader2 size={14} className="animate-spin" aria-hidden="true" />
+            ) : (
+              <RotateCw size={14} />
+            )}
             {t("dashboard.kyc.retry")}
           </button>
         </div>
@@ -641,8 +646,11 @@ export function KycPage() {
               aria-busy={submitting || undefined}
               className={`inline-flex h-11 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full bg-brand px-6 text-sm font-semibold text-white transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-50 ${focusRing}`}
             >
-              {submitting && <Loader2 size={15} className="animate-spin" />}
-              {submitting ? t("dashboard.kyc.submitting") : t("dashboard.kyc.submit")}
+              {submitting ? (
+                <ButtonSpinner label={t("dashboard.kyc.submitting")} size={16} />
+              ) : (
+                t("dashboard.kyc.submit")
+              )}
             </button>
           </div>
         </form>

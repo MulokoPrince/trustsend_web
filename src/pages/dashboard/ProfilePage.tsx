@@ -5,7 +5,7 @@ import {
   type InputHTMLAttributes,
   type ReactNode,
 } from "react";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { ButtonSpinner, LoadingSpinner } from "../../components/LoadingSpinner";
 import {
   AlertCircle,
   AlertTriangle,
@@ -16,7 +16,6 @@ import {
   Copy,
   Hash,
   KeyRound,
-  Loader2,
   Lock,
   Mail,
   Phone,
@@ -92,12 +91,14 @@ function ErrorText({ children }: { children: ReactNode }) {
 
 function Button({
   pending,
+  pendingLabel,
   variant = "filled",
   type = "submit",
   onClick,
   children,
 }: {
   pending?: boolean;
+  pendingLabel?: string;
   variant?: "filled" | "text";
   type?: "submit" | "button";
   onClick?: () => void;
@@ -108,14 +109,14 @@ function Button({
       type={type}
       onClick={onClick}
       disabled={pending}
-      className={`inline-flex h-10 items-center gap-2 rounded-full px-6 text-sm font-medium transition-colors disabled:opacity-60 ${
+      aria-busy={pending || undefined}
+      className={`inline-flex h-10 items-center justify-center gap-2 rounded-full px-6 text-sm font-medium transition-colors disabled:opacity-60 ${
         variant === "filled"
           ? "bg-accent text-white hover:bg-accent/90 hover:shadow-sm"
           : "text-accent hover:bg-accent/[0.08]"
       }`}
     >
-      {pending && <Loader2 size={14} className="animate-spin" />}
-      {children}
+      {pending && pendingLabel ? <ButtonSpinner label={pendingLabel} size={16} /> : children}
     </button>
   );
 }
@@ -354,8 +355,11 @@ export function ProfilePage() {
         <Button type="button" variant="text" onClick={close}>
           {t("dashboard.profile.cancel")}
         </Button>
-        <Button pending={updateProfile.isPending && editing === key}>
-          {updateProfile.isPending ? t("dashboard.profile.saving") : t("dashboard.profile.save")}
+        <Button
+          pending={updateProfile.isPending && editing === key}
+          pendingLabel={t("dashboard.profile.saving")}
+        >
+          {t("dashboard.profile.save")}
         </Button>
       </div>
     </form>
@@ -617,14 +621,13 @@ export function ProfilePage() {
                     <Button type="button" variant="text" onClick={close}>
                       {t("dashboard.profile.cancel")}
                     </Button>
-                    <Button pending={pinMutation.isPending}>
-                      {pinSet
-                        ? pinMutation.isPending
-                          ? t("dashboard.profile.changingPin")
-                          : t("dashboard.profile.changePin")
-                        : pinMutation.isPending
-                          ? t("dashboard.profile.settingPin")
-                          : t("dashboard.profile.setPin")}
+                    <Button
+                      pending={pinMutation.isPending}
+                      pendingLabel={
+                        pinSet ? t("dashboard.profile.changingPin") : t("dashboard.profile.settingPin")
+                      }
+                    >
+                      {pinSet ? t("dashboard.profile.changePin") : t("dashboard.profile.setPin")}
                     </Button>
                   </div>
                 </form>
@@ -665,10 +668,11 @@ export function ProfilePage() {
                     <Button type="button" variant="text" onClick={close}>
                       {t("dashboard.profile.cancel")}
                     </Button>
-                    <Button pending={changePassword.isPending}>
-                      {changePassword.isPending
-                        ? t("dashboard.profile.changingPassword")
-                        : t("dashboard.profile.changePasswordSubmit")}
+                    <Button
+                      pending={changePassword.isPending}
+                      pendingLabel={t("dashboard.profile.changingPassword")}
+                    >
+                      {t("dashboard.profile.changePasswordSubmit")}
                     </Button>
                   </div>
                 </form>

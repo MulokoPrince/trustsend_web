@@ -14,6 +14,7 @@ import {
   FlaskConical,
   Home,
   KeyRound,
+  Loader2,
   LogOut,
   Menu,
   Repeat,
@@ -195,12 +196,17 @@ export function DashboardLayout() {
         <button
           onClick={handleLogout}
           disabled={logout.isPending}
+          aria-busy={logout.isPending || undefined}
           title={rail ? t("dashboard.logout") : undefined}
           className={`flex h-9 items-center gap-4 text-sm font-medium text-muted-2 transition-colors hover:bg-black/[0.05] hover:text-ink disabled:opacity-60 ${
             rail ? "mx-auto w-12 justify-center rounded-full" : "w-full rounded-e-full ps-7 pe-4"
           }`}
         >
-          <LogOut size={18} strokeWidth={1.75} className="shrink-0" />
+          {logout.isPending ? (
+            <Loader2 size={18} className="shrink-0 animate-spin" aria-hidden="true" />
+          ) : (
+            <LogOut size={18} strokeWidth={1.75} className="shrink-0" />
+          )}
           <span className={rail ? "sr-only" : "truncate"}>
             {logout.isPending ? t("dashboard.loggingOut") : t("dashboard.logout")}
           </span>

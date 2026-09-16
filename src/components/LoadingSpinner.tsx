@@ -20,3 +20,17 @@ export function LoadingSpinner({
     </div>
   );
 }
+
+/**
+ * Action en cours dans un bouton : le libellé « … en cours » est remplacé par un spinner
+ * qui prend la couleur du texte du bouton. Le libellé reste annoncé aux lecteurs d'écran,
+ * pour que le bouton garde un nom accessible pendant l'attente.
+ */
+export function ButtonSpinner({ label, size = 18 }: { label: string; size?: number }) {
+  return (
+    <>
+      <Loader2 size={size} className="animate-spin" aria-hidden="true" />
+      <span className="sr-only">{label}</span>
+    </>
+  );
+}

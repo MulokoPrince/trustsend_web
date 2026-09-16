@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
-import { AlertCircle, ArrowRight, CheckCircle2, Info, Loader2 } from "lucide-react";
+import { AlertCircle, ArrowRight, CheckCircle2, Info } from "lucide-react";
+import { ButtonSpinner, LoadingSpinner } from "../LoadingSpinner";
 import type { UseMutationResult } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { usePaymentMethods } from "../../hooks/usePaymentMethods";
@@ -228,9 +229,7 @@ export function MobileMoneyForm({
 
   if (methods.isLoading) {
     return (
-      <p className="flex items-center gap-2 text-sm text-muted">
-        <Loader2 size={16} className="animate-spin" /> {t("dashboard.mobileMoneyForm.loadingMethods")}
-      </p>
+      <LoadingSpinner label={t("dashboard.mobileMoneyForm.loadingMethods")} size={20} className="py-6" />
     );
   }
 
@@ -373,11 +372,16 @@ export function MobileMoneyForm({
         <button
           type="submit"
           disabled={mutation.isPending || !canSubmit}
+          aria-busy={mutation.isPending || undefined}
           className="group flex w-full items-center justify-center gap-2 rounded bg-brand px-6 py-3.5 font-semibold text-white shadow-soft transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {mutation.isPending ? pendingLabel : submitLabel}
-          {!mutation.isPending && (
-            <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+          {mutation.isPending ? (
+            <ButtonSpinner label={pendingLabel} />
+          ) : (
+            <>
+              {submitLabel}
+              <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+            </>
           )}
         </button>
       )}
