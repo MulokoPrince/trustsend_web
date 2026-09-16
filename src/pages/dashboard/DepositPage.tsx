@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { AlertCircle, ArrowRight, Wallet as WalletIcon } from "lucide-react";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { ButtonSpinner, LoadingSpinner } from "../../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useCreateDeposit } from "../../hooks/useMobileMoney";
 import { mobileMoneyErrorMessage } from "../../hooks/useMobileMoney";
@@ -155,11 +155,16 @@ export function DepositPage() {
             type="submit"
             form={DEPOSIT_FORM_ID}
             disabled={deposit.isPending || deposit.isSuccess || !preview?.canSubmit}
+            aria-busy={deposit.isPending || undefined}
             className="group mt-6 flex w-full items-center justify-center gap-2 rounded bg-brand px-6 py-3.5 font-semibold text-white shadow-soft transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {deposit.isPending ? t("dashboard.deposit.submitting") : t("dashboard.deposit.submit")}
-            {!deposit.isPending && (
-              <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+            {deposit.isPending ? (
+              <ButtonSpinner label={t("dashboard.deposit.submitting")} />
+            ) : (
+              <>
+                {t("dashboard.deposit.submit")}
+                <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+              </>
             )}
           </button>
         </div>

@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { AlertCircle, ArrowRight, Wallet as WalletIcon } from "lucide-react";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { ButtonSpinner, LoadingSpinner } from "../../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useCreatePayout } from "../../hooks/useMobileMoney";
 import { mobileMoneyErrorMessage } from "../../hooks/useMobileMoney";
@@ -158,11 +158,16 @@ export function WithdrawPage() {
             type="submit"
             form={WITHDRAW_FORM_ID}
             disabled={payout.isPending || payout.isSuccess || !preview?.canSubmit}
+            aria-busy={payout.isPending || undefined}
             className="group mt-6 flex w-full items-center justify-center gap-2 rounded bg-accent px-6 py-3.5 font-semibold text-white shadow-soft transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {payout.isPending ? t("dashboard.withdraw.submitting") : t("dashboard.withdraw.submit")}
-            {!payout.isPending && (
-              <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+            {payout.isPending ? (
+              <ButtonSpinner label={t("dashboard.withdraw.submitting")} />
+            ) : (
+              <>
+                {t("dashboard.withdraw.submit")}
+                <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+              </>
             )}
           </button>
         </div>

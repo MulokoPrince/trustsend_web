@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { AlertCircle, ArrowLeft, CheckCircle2, Eye, EyeOff, FlaskConical, ShieldCheck } from "lucide-react";
+import { ButtonSpinner } from "../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useSignup, useRequestSignupOtp } from "../hooks/useSignup";
 import { ApiError } from "../lib/api";
@@ -232,8 +233,17 @@ export function Signup() {
                     <Link to="/login" className={textButtonClasses}>
                       {t("signup.login")}
                     </Link>
-                    <button type="submit" disabled={requestOtp.isPending} className={primaryButtonClasses}>
-                      {requestOtp.isPending ? t("signup.sendingCode") : t("signup.sendCode")}
+                    <button
+                      type="submit"
+                      disabled={requestOtp.isPending}
+                      aria-busy={requestOtp.isPending || undefined}
+                      className={primaryButtonClasses}
+                    >
+                      {requestOtp.isPending ? (
+                        <ButtonSpinner label={t("signup.sendingCode")} size={16} />
+                      ) : (
+                        t("signup.sendCode")
+                      )}
                     </button>
                   </div>
                 </form>
@@ -290,11 +300,13 @@ export function Signup() {
                     disabled={requestOtp.isPending}
                     className={`${textButtonClasses} mt-2 font-medium`}
                   >
-                    {requestOtp.isPending
-                      ? t("signup.sendingCode")
-                      : requestOtp.isSuccess
-                        ? t("signup.resendOtpSent")
-                        : t("signup.resendOtp")}
+                    {requestOtp.isPending ? (
+                      <ButtonSpinner label={t("signup.sendingCode")} size={16} />
+                    ) : requestOtp.isSuccess ? (
+                      t("signup.resendOtpSent")
+                    ) : (
+                      t("signup.resendOtp")
+                    )}
                   </button>
 
                   {otpInvalid && <ErrorText>{errorMessage(signup.error)}</ErrorText>}
@@ -407,8 +419,17 @@ export function Signup() {
                     <button type="button" onClick={() => setStep("otp")} className={textButtonClasses}>
                       {t("signup.back")}
                     </button>
-                    <button type="submit" disabled={signup.isPending} className={primaryButtonClasses}>
-                      {signup.isPending ? t("signup.submitting") : t("signup.submit")}
+                    <button
+                      type="submit"
+                      disabled={signup.isPending}
+                      aria-busy={signup.isPending || undefined}
+                      className={primaryButtonClasses}
+                    >
+                      {signup.isPending ? (
+                        <ButtonSpinner label={t("signup.submitting")} size={16} />
+                      ) : (
+                        t("signup.submit")
+                      )}
                     </button>
                   </div>
                 </form>

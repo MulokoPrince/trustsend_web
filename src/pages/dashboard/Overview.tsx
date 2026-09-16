@@ -32,7 +32,7 @@ import { useWallets } from "../../hooks/useWallets";
 import { useTransactions } from "../../hooks/useTransactions";
 import { useKycStatus } from "../../hooks/useKyc";
 import { isSandbox } from "../../lib/domains";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { ButtonSpinner, LoadingSpinner } from "../../components/LoadingSpinner";
 import { planErrorMessage, usePlans, useSubscribePlan } from "../../hooks/usePlans";
 import { getStoredBusiness } from "../../lib/session";
 import { formatMinorUnits } from "../../lib/format";
@@ -356,11 +356,14 @@ function PlanPrompt() {
                       type="button"
                       onClick={() => openPinFor(plan)}
                       disabled={subscribe.isPending}
+                      aria-busy={isSubscribingThis || undefined}
                       className="mt-6 flex h-10 items-center justify-center gap-1.5 rounded-full bg-brand px-5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
                     >
-                      {isSubscribingThis
-                        ? t("dashboard.overview.planGate.subscribing")
-                        : t("dashboard.overview.planGate.subscribe")}
+                      {isSubscribingThis ? (
+                        <ButtonSpinner label={t("dashboard.overview.planGate.subscribing")} size={16} />
+                      ) : (
+                        t("dashboard.overview.planGate.subscribe")
+                      )}
                     </button>
                   </div>
                 );

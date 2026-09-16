@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { AlertCircle, Plus, Trash2, Webhook as WebhookIcon } from "lucide-react";
+import { AlertCircle, Loader2, Plus, Trash2, Webhook as WebhookIcon } from "lucide-react";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import {
@@ -102,10 +102,15 @@ export function WebhooksPage() {
         <button
           type="submit"
           disabled={create.isPending || events.length === 0}
+          aria-busy={create.isPending || undefined}
           className="inline-flex items-center gap-2 rounded bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
         >
-          <Plus size={16} />
-          {create.isPending ? t("dashboard.webhooks.creating") : t("dashboard.webhooks.create")}
+          {create.isPending ? (
+            <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+          ) : (
+            <Plus size={16} />
+          )}
+          {t("dashboard.webhooks.create")}
         </button>
       </form>
 
@@ -142,10 +147,15 @@ export function WebhooksPage() {
                 <button
                   onClick={() => del.mutate(w.id)}
                   disabled={del.isPending}
+                  aria-busy={(del.isPending && del.variables === w.id) || undefined}
                   aria-label={t("dashboard.webhooks.delete")}
                   className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-muted-2 transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
                 >
-                  <Trash2 size={15} />
+                  {del.isPending && del.variables === w.id ? (
+                    <Loader2 size={15} className="animate-spin" aria-hidden="true" />
+                  ) : (
+                    <Trash2 size={15} />
+                  )}
                 </button>
               </li>
             ))}

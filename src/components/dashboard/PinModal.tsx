@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { AlertCircle, Lock, X } from "lucide-react";
+import { ButtonSpinner } from "../LoadingSpinner";
 import { useTranslation } from "react-i18next";
 
 const PIN_LENGTH = 4;
@@ -119,9 +120,14 @@ export function PinModal({
           type="button"
           onClick={submit}
           disabled={pin.length !== PIN_LENGTH || loading}
+          aria-busy={loading || undefined}
           className="mt-6 flex w-full items-center justify-center gap-2 rounded bg-brand px-6 py-3 font-semibold text-white shadow-soft transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {loading ? t("dashboard.mobileMoneyForm.pinModalConfirming") : t("dashboard.mobileMoneyForm.pinModalConfirm")}
+          {loading ? (
+            <ButtonSpinner label={t("dashboard.mobileMoneyForm.pinModalConfirming")} />
+          ) : (
+            t("dashboard.mobileMoneyForm.pinModalConfirm")
+          )}
         </button>
       </div>
     </div>

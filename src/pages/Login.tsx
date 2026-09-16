@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AlertCircle, Eye, EyeOff, FlaskConical, ShieldCheck } from "lucide-react";
+import { ButtonSpinner } from "../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useLogin, loginErrorMessage } from "../hooks/useLogin";
 import { isSandbox } from "../lib/domains";
@@ -136,9 +137,14 @@ export function Login() {
               <button
                 type="submit"
                 disabled={login.isPending}
+                aria-busy={login.isPending || undefined}
                 className="ms-auto inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand px-6 text-sm font-semibold text-white transition-colors hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {login.isPending ? t("login.submitting") : t("login.submit")}
+                {login.isPending ? (
+                  <ButtonSpinner label={t("login.submitting")} size={16} />
+                ) : (
+                  t("login.submit")
+                )}
               </button>
             </div>
           </form>

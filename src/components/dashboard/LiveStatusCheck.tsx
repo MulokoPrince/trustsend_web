@@ -26,10 +26,11 @@ export function LiveStatusCheck({ kind, id }: { kind: MobileMoneyKind; id: strin
         type="button"
         onClick={() => liveStatus.refetch()}
         disabled={liveStatus.isFetching}
+        aria-busy={liveStatus.isFetching || undefined}
         className="inline-flex items-center gap-1.5 rounded-full border border-surface-2 px-3.5 py-1.5 text-xs font-semibold text-ink transition-colors hover:border-brand/30 disabled:opacity-60"
       >
         {liveStatus.isFetching ? (
-          <Loader2 size={13} className="animate-spin" />
+          <Loader2 size={13} className="animate-spin" aria-hidden="true" />
         ) : (
           <RefreshCw size={13} />
         )}

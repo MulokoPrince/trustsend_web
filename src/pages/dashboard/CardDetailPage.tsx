@@ -5,6 +5,7 @@ import {
   ArrowLeft,
   Ban,
   CreditCard,
+  Loader2,
   Snowflake,
   PlayCircle,
   PlusCircle,
@@ -97,12 +98,17 @@ function AmountAction({
       <button
         type="submit"
         disabled={!canSubmit || mutation.isPending}
+        aria-busy={mutation.isPending || undefined}
         className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-surface-2 px-3.5 py-2 text-xs font-semibold text-ink transition-colors hover:border-brand/40 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {kind === "topup" ? <PlusCircle size={14} /> : <MinusCircle size={14} />}
-        {mutation.isPending
-          ? t("dashboard.cardDetail.processing")
-          : t(`dashboard.cardDetail.${kind}`)}
+        {mutation.isPending ? (
+          <Loader2 size={14} className="animate-spin" aria-hidden="true" />
+        ) : kind === "topup" ? (
+          <PlusCircle size={14} />
+        ) : (
+          <MinusCircle size={14} />
+        )}
+        {t(`dashboard.cardDetail.${kind}`)}
       </button>
 
       <PinModal

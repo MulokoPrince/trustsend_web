@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { AlertCircle, ArrowLeft, CreditCard } from "lucide-react";
+import { AlertCircle, ArrowLeft, CreditCard, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useWallets } from "../../hooks/useWallets";
 import { useCreateCard, cardErrorMessage } from "../../hooks/useCards";
@@ -160,10 +160,15 @@ export function CreateCardPage() {
         <button
           type="submit"
           disabled={!canSubmit || create.isPending}
+          aria-busy={create.isPending || undefined}
           className="flex w-full items-center justify-center gap-2 rounded bg-brand px-6 py-3.5 font-semibold text-white shadow-soft transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
         >
-          <CreditCard size={16} />
-          {create.isPending ? t("dashboard.createCard.submitting") : t("dashboard.createCard.submit")}
+          {create.isPending ? (
+            <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+          ) : (
+            <CreditCard size={16} />
+          )}
+          {t("dashboard.createCard.submit")}
         </button>
       </form>
 

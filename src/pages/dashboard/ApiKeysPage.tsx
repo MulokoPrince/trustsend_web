@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AlertCircle, Copy, KeyRound, Plus, Trash2 } from "lucide-react";
+import { AlertCircle, Copy, KeyRound, Loader2, Plus, Trash2 } from "lucide-react";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useApiKeys, useCreateApiKey, useRevokeApiKey } from "../../hooks/useApiKeys";
@@ -33,10 +33,15 @@ export function ApiKeysPage() {
         <button
           onClick={() => create.mutate()}
           disabled={create.isPending}
+          aria-busy={create.isPending || undefined}
           className="inline-flex items-center gap-2 rounded bg-brand px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark disabled:opacity-60"
         >
-          <Plus size={16} />
-          {create.isPending ? t("dashboard.apiKeys.generating") : t("dashboard.apiKeys.generate")}
+          {create.isPending ? (
+            <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+          ) : (
+            <Plus size={16} />
+          )}
+          {t("dashboard.apiKeys.generate")}
         </button>
       </div>
 
@@ -105,10 +110,15 @@ export function ApiKeysPage() {
                   <button
                     onClick={() => revoke.mutate(k.id)}
                     disabled={revoke.isPending}
+                    aria-busy={(revoke.isPending && revoke.variables === k.id) || undefined}
                     aria-label={t("dashboard.apiKeys.revoke")}
                     className="flex h-8 w-8 items-center justify-center rounded-full text-muted-2 transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
                   >
-                    <Trash2 size={15} />
+                    {revoke.isPending && revoke.variables === k.id ? (
+                      <Loader2 size={15} className="animate-spin" aria-hidden="true" />
+                    ) : (
+                      <Trash2 size={15} />
+                    )}
                   </button>
                 )}
               </li>

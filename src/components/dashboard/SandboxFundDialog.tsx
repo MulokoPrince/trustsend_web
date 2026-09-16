@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { AlertCircle, CheckCircle2, FlaskConical, X } from "lucide-react";
+import { ButtonSpinner } from "../LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { useSandboxFund } from "../../hooks/useSandbox";
 import { ApiError } from "../../lib/api";
@@ -153,9 +154,14 @@ export function SandboxFundDialog({
         <button
           type="submit"
           disabled={fund.isPending || wallets.length === 0}
+          aria-busy={fund.isPending || undefined}
           className="mt-6 flex w-full items-center justify-center gap-2 rounded bg-brand px-6 py-3 font-semibold text-white shadow-soft transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {fund.isPending ? t("dashboard.wallet.fund.submitting") : t("dashboard.wallet.fund.submit")}
+          {fund.isPending ? (
+            <ButtonSpinner label={t("dashboard.wallet.fund.submitting")} />
+          ) : (
+            t("dashboard.wallet.fund.submit")
+          )}
         </button>
       </form>
     </div>
