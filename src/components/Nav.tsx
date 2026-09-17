@@ -138,7 +138,7 @@ export function Nav() {
           to="/"
           className="flex shrink-0 items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-4"
         >
-          <img src="/assets/icons/logo.png" alt="TrustSend" className="h-28 w-auto sm:h-36 lg:h-46" />
+          <img src="/assets/icons/" alt="TrustSend" className="h-58 w-auto sm:h-36 lg:h-30" />
         </Link>
 
         {/* ---------- Navigation, centrée optiquement ---------- */}
